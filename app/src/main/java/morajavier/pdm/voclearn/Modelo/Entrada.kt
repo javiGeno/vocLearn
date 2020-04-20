@@ -1,6 +1,7 @@
 package morajavier.pdm.voclearn.Modelo
 
 import io.realm.RealmObject
+import io.realm.RealmResults
 import io.realm.annotations.*
 import java.util.*
 
@@ -14,4 +15,7 @@ open class Entrada (
               var audio: String?=null,
               var fechaCreacion : Date= Date()
 
-):RealmObject()
+):RealmObject()/*{
+    @LinkingObjects("Entrada")
+    val fkGrupo: RealmResults<Grupo>? = null
+}*/
