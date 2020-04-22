@@ -2,9 +2,11 @@ package morajavier.pdm.voclearn.BaseDatos
 
 import android.util.Log
 import morajavier.pdm.voclearn.App
+import morajavier.pdm.voclearn.Modelo.Conjunto
 import morajavier.pdm.voclearn.Modelo.Entrada
+import morajavier.pdm.voclearn.Modelo.Grupo
 
-class GestionEntradas {
+class CRUDEntradas {
 
     companion object{
 
@@ -23,13 +25,47 @@ class GestionEntradas {
             //BORRA UNA ENTRADA FILTRADA POR SU ID, Y DEVUELVE  UNA LISTA ACTUALIZADA
             val objetivo=obtenerEntradaPorId(filtro)
 
+            //SI EL OBJETIVO A BORRAR ES DISTINTO DE NULO
+            //BORRA EN CASCADA UTILIZANDO LA LISTA DE LINKING "fkGrupo" y "fkConjunto"
+            objetivo?.let{
+                            App.gestorBD.r.beginTransaction()
+                            it.fkGrupo?.let{borrarFkEnGrupos(it, objetivo) }
+                            it.fkConjunto?.let{ borrarFkEnConjunto(it, objetivo)}
+                            App.gestorBD.r.commitTransaction()
+                         }
+
+
             //SI EL OBJETIVO A BORRAR NO ES NULL BORRAMOS
             objetivo?.let{borrar(it)}
 
             return obtenerTodasEntradas()
         }
 
-        fun borrar(borrar : Entrada)
+        //BORRA LAS REFERENCIAS DE LA ENTRADA EN LA LISTA DE PALABRAS DE LOS GRUPOS DE
+        // LA LISTA PASADA POR PARAMETROS "listaGrupos"
+        fun borrarFkEnGrupos(listaGrupos: List<Grupo>, entradaBorrar:Entrada){
+
+            for(g in listaGrupos)
+            {
+
+                g.palabras?.let{it.remove(entradaBorrar)}
+
+            }
+
+        }
+
+        //BORRA LAS REFERENCIAS DE LA ENTRADA EN LA LISTA DE PALABRAS DE LOS CONJUNTOS DE
+        //LA LISTA PASADA POR PARAMETROS "listaConjuntos"
+        fun borrarFkEnConjunto(listaConjuntos: List<Conjunto>, entradaBorrar:Entrada){
+            for(c in listaConjuntos)
+            {
+
+                c.listaPalabras?.let{it.remove(entradaBorrar)}
+
+            }
+        }
+
+        private fun borrar(borrar : Entrada)
         {
             //BORRA UNA ENTRADA DEL DICCIONARIO
             App.gestorBD.r.beginTransaction()
@@ -40,7 +76,7 @@ class GestionEntradas {
         fun borrarTodasEntradas()
         {
             App.gestorBD.r.executeTransactionAsync({
-                it.deleteAll()
+                it.delete(Entrada::class.java)
             },
                 { Log.i("BORRADO ENTRADAS", "Se han borrado todas las entradas")},
                 {error-> Log.e("ERROR BORRADO ENTRADAS", error.message)})

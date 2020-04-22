@@ -4,10 +4,10 @@ package morajavier.pdm.voclearn
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import io.realm.RealmList
-import morajavier.pdm.voclearn.BaseDatos.GestionEntradas
-import morajavier.pdm.voclearn.BaseDatos.GestionGrupos
-import morajavier.pdm.voclearn.BaseDatos.ManejadorBD
+import morajavier.pdm.voclearn.BaseDatos.CRUDConjuntos
+import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
+import morajavier.pdm.voclearn.BaseDatos.CRUDGrupo
+import morajavier.pdm.voclearn.Modelo.Conjunto
 import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.Modelo.Grupo
 
@@ -37,116 +37,74 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        val e1=GestionEntradas.nuevoId()?.let { Entrada(it) }
-        e1?.let { GestionEntradas?.nuevaOActualizarEntrada(it) }
-        val e2= GestionEntradas.nuevoId()?.let { Entrada(it) }
-        e2?.let { GestionEntradas.nuevaOActualizarEntrada(it) }
-        val e3= GestionEntradas.nuevoId()?.let { Entrada(it) }
-        e3?.let { GestionEntradas.nuevaOActualizarEntrada(it) }
-        val e4= GestionEntradas.nuevoId()?.let { Entrada(it) }
-        e4?.let { GestionEntradas.nuevaOActualizarEntrada(it) }
-        val e5= GestionEntradas.nuevoId()?.let { Entrada(it) }
-        e5?.let { GestionEntradas.nuevaOActualizarEntrada(it) }
-
-        val g1= Grupo("Grupo1")
-        val g2= Grupo("Grupo2")
-        val g3= Grupo("Grupo3")
-
-        GestionGrupos.nuevoOActualizaGrupo(g1)
-        GestionGrupos.nuevoOActualizaGrupo(g2)
-        GestionGrupos.nuevoOActualizaGrupo(g3)
+       /* val e1=CRUDEntradas.nuevoId()?.let { Entrada(it, "casa","", "", 1, "home", "") }
+        e1?.let { CRUDEntradas?.nuevaOActualizarEntrada(it) }
+        val e2= CRUDEntradas.nuevoId()?.let { Entrada(it, "hacer","", "", 1, "make", "") }
+        e2?.let { CRUDEntradas.nuevaOActualizarEntrada(it) }
+        val e3= CRUDEntradas.nuevoId()?.let { Entrada(it, "libre","", "", 1, "free", "") }
+        e3?.let { CRUDEntradas.nuevaOActualizarEntrada(it) }
+        val e4= CRUDEntradas.nuevoId()?.let { Entrada(it, "balon","", "", 1, "ball", "") }
+        e4?.let { CRUDEntradas.nuevaOActualizarEntrada(it) }
+        val e5= CRUDEntradas.nuevoId()?.let { Entrada(it, "tambien","", "", 1, "too", "") }
+        e5?.let { CRUDEntradas.nuevaOActualizarEntrada(it) }
 
 
 
-        var lista=GestionEntradas.obtenerTodasEntradas()
-
-        lista?.let{recorrerEntradas(it)}
-
-        //GestionGrupos.obtenerGrupoPorNombre("Grupo1")?.let { GestionGrupos.borrarUnGrupo(it) }
-        //GestionGrupos.obtenerGrupoPorNombre("Grupo2")?.let { GestionGrupos.borrarUnGrupo(it) }
-
-        GestionGrupos.modificarNombreGrupo("Grupo2", "grupo2nuevo")
-
-        for(g in App.gestorBD.r.where(Grupo::class.java).findAll().toList())
-            println("********"+g.nombreGrupo+"***************")
-
-        GestionEntradas.obtenerEntradaPorId(0)?.let { GestionGrupos.insertarEntradaEnGrupo("Grupo1", it) }
-        GestionEntradas.obtenerEntradaPorId(1)?.let { GestionGrupos.insertarEntradaEnGrupo("Grupo1", it) }
-        GestionEntradas.obtenerEntradaPorId(3)?.let { GestionGrupos.insertarEntradaEnGrupo("Grupo1", it) }
-        println("GESTION GRUPO 1")
-        println("---------------------------")
-        App.gestorBD?.r.where(Grupo::class.java).equalTo("nombreGrupo", "Grupo1").findFirst()?.palabras?.let{recorrerListaEntrada(it)}
-        App.gestorBD?.r.where(Grupo::class.java).equalTo("nombreGrupo", "Grupo1").findFirst()?.listaGrupos?.let{recorrerListaGrupo(it)}
-
-
-        GestionEntradas.obtenerEntradaPorId(4)?.let { GestionGrupos.insertarEntradaEnGrupo("Grupo2", it) }
-        GestionEntradas.obtenerEntradaPorId(2)?.let { GestionGrupos.insertarEntradaEnGrupo("Grupo2", it) }
-        GestionGrupos.obtenerGrupoPorNombre("Grupo1")?.let {
-            GestionGrupos.insertarGrupoEnGrupo("Grupo2",
+        CRUDConjuntos.nuevoId()?.let{Conjunto(it, "Sustantivos")}?.let {
+            CRUDConjuntos.nuevoOActualizaConjunto(
                 it
             )
         }
-        println("GESTION GRUPO 2")
-        println("---------------------------")
-        App.gestorBD?.r.where(Grupo::class.java).equalTo("nombreGrupo", "Grupo2").findFirst()?.palabras?.let{recorrerListaEntrada(it)}
-        App.gestorBD?.r.where(Grupo::class.java).equalTo("nombreGrupo", "Grupo2").findFirst()?.listaGrupos?.let{recorrerListaGrupo(it)}
-
-
-        GestionEntradas.obtenerEntradaPorId(0)?.let { GestionGrupos.insertarEntradaEnGrupo("Grupo3", it) }
-        GestionEntradas.obtenerEntradaPorId(2)?.let { GestionGrupos.insertarEntradaEnGrupo("Grupo3", it) }
-        GestionGrupos.obtenerGrupoPorNombre("Grupo2")?.let {
-            GestionGrupos.insertarGrupoEnGrupo("Grupo3",
+        CRUDConjuntos.nuevoId()?.let{Conjunto(it, "Verbos")}?.let {
+            CRUDConjuntos.nuevoOActualizaConjunto(
                 it
             )
         }
-        println("GESTION GRUPO3")
-        println("---------------------------")
-        App.gestorBD?.r.where(Grupo::class.java).equalTo("nombreGrupo", "Grupo3").findFirst()?.palabras?.let{recorrerListaEntrada(it)}
-        App.gestorBD?.r.where(Grupo::class.java).equalTo("nombreGrupo", "Grupo3").findFirst()?.listaGrupos?.let{recorrerListaGrupo(it)}
+        CRUDConjuntos.nuevoId()?.let{Conjunto(it, "Preposiciones")}?.let {
+            CRUDConjuntos.nuevoOActualizaConjunto(
+                it
+            )
+        }
+
+        CRUDGrupo.nuevoOActualizaGrupo(Grupo("DIFICILES"))
+        CRUDGrupo.nuevoOActualizaGrupo(Grupo("FACILES"))
+
+
+
+        var lista=CRUDEntradas.obtenerTodasEntradas()
+
+        lista?.let{CRUDEntradas.recorrerListaEntrada(it)}*/
+
+        CRUDEntradas.borrarEntradaId(1)
+        CRUDConjuntos.borrarConjuntoId(1)
+
+        /*
+        CRUDGrupo.insertarEntradaEnGrupo("DIFICILES",0)
+        CRUDGrupo.insertarEntradaEnGrupo("FACILES",1)
+        CRUDGrupo.insertarEntradaEnGrupo("FACILES",2)
+        CRUDGrupo.insertarEntradaEnGrupo("DIFICILES",3)
+        CRUDGrupo.insertarEntradaEnGrupo("DIFICILES",4)
+        CRUDGrupo.insertarEntradaEnGrupo("DIFICILES",2)
+
+        CRUDGrupo.insertarConjuntoEnGrupo("DIFICILES", 0)
+        CRUDGrupo.insertarConjuntoEnGrupo("FACILES", 1)
+        CRUDGrupo.insertarConjuntoEnGrupo("FACILES", 2)
+
+        CRUDConjuntos.insertarEntradaEnConjunto(1, 1)
+        CRUDConjuntos.insertarEntradaEnConjunto(0, 0)
+        CRUDConjuntos.insertarEntradaEnConjunto(0, 2)*/
+
+        CRUDGrupo.recorrerListaGrupo(CRUDGrupo.obtenerTodosLosGrupos())
+
+        Log.w("PALABRAS TOTAL", "Palabras registradas")
+        CRUDEntradas.recorrerListaEntrada(CRUDEntradas.obtenerTodasEntradas())
+
 
 
         Log.w("MAIN", "La app entra en on Start")
     }
 
-    fun recorrerEntradas(lista:List<Entrada>)
-    {
-        Log.i("COUNT LISTA Entrada", ""+lista?.count())
 
-        for(i in lista?.let{it}){
-            Log.i(""+i.idEntrada, "" +
-                    ""+i.descripcion+" "+i.significado)
-        }
-    }
-
-    fun recorrerListaEntrada(lista : List<Entrada>)
-    {
-        Log.i("COUNT LIST entradaGrupo", ""+lista?.count())
-
-        for(i in lista?.let{it}){
-            Log.i(""+i.idEntrada, "" +
-                    ""+i.descripcion+" "+i.significado)
-        }
-    }
-
-    fun recorrerListaGrupo(lista : List<Grupo>)
-    {
-
-        Log.i("COUNT LIST GrupoGrupo", ""+lista?.count())
-
-        for(i in lista?.let{it}){
-
-            if(!lista.isEmpty()) {
-
-                i.palabras?.let { recorrerListaEntrada(it) }
-
-                i.listaGrupos?.let{recorrerListaGrupo(it)}
-
-                Log.i(
-                    "" + i.nombreGrupo, "nº Grupos "+i.listaGrupos?.let{it.count()} +" nº Palabras "+i.palabras?.count()
-                )
-            }
-        }
-    }
 
 
 
@@ -219,7 +177,7 @@ class MainActivity : AppCompatActivity() {
             super.onDestroy()
 
             //CREAMOS UNA COPIA DE SEGURIDAD CADA VEZ QUE EL USUARIO SALGA DE LA APP
-            SecurityCopy.hacerCopiaSeguridad(App.gestorBD?.r, this)
+            SecurityCopy.hacerCopiaSeguridad(App.gestorBD.r, this)
         }
 
 

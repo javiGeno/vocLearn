@@ -11,11 +11,7 @@ open class Grupo (
     @PrimaryKey
     var nombreGrupo :String="",
     var palabras :RealmList<Entrada>?=RealmList(),
-    var listaGrupos:RealmList<Grupo>?=RealmList(),
+    var listaConjuntos:RealmList<Conjunto>?=RealmList(),
     var fechaCreacion : Date =Date()
-): RealmObject()/*{
-
-    @LinkingObjects("Grupo")
-    val fkGrupo: RealmResults<Grupo>? = null
-}*/
+): RealmObject()
 
