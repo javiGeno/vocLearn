@@ -15,7 +15,7 @@ class ManejadorBD (appContext:Context){
     //INSTANCIA BD
     lateinit var r: Realm
     //CONTEXTO PARA INICIAR LA BD
-    private  lateinit var contexto:Activity
+    lateinit var contexto:Activity
     companion object{
         //CONFIGURACION BD REALM
         var config: RealmConfiguration?=null
@@ -33,7 +33,7 @@ class ManejadorBD (appContext:Context){
         //SI HAY BASE DE DATOS LOCAL, QUIERE DECIR QUE NO SE HA DESINSTALADO LA APP
         //POR TANTO ACCEDEMOS A LOS DATOS LOCALES
         if (SecurityCopy.hayBDLocal(contexto)) {
-            //Realm.init(contexto)
+
 
                 config = RealmConfiguration.Builder()
                 .name("bdLocal.realm")
@@ -50,7 +50,7 @@ class ManejadorBD (appContext:Context){
             if (SecurityCopy.hayBDExterna(contexto)) {
                 SecurityCopy.restaurarCopiaSeguridad(contexto)
 
-                //Realm.init(contexto)
+
 
                 val config = RealmConfiguration.Builder()
                     .name("bdLocal.realm")
@@ -62,7 +62,7 @@ class ManejadorBD (appContext:Context){
                 Log.w("MAIN", "Se ha restaurado")
 
             } else {
-                //Realm.init(contexto)
+
 
                 val config = RealmConfiguration.Builder()
                     .name("bdLocal.realm")

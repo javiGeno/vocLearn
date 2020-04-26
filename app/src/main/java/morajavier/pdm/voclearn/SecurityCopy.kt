@@ -16,7 +16,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 
-class SecurityCopy(actividad:Activity, clase:MainActivity) {
+class SecurityCopy() {
 
     //LA CLASE LO QUE HACE ES DAR PERMISOS DE ALMACENAMIENTO EXTERNO
     //Y CREAR UN DIRECTORIO, DONDE ALMACENAREMOS UNA COPIA DE SEGURIDAD DE LA BASE DE DATOS

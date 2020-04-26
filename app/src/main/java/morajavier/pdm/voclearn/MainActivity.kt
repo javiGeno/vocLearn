@@ -18,8 +18,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme ( R.style.AppTheme )
         setContentView(R.layout.activity_main)
 
+        //SE COMPRUEBAN LOS PERMISOS DE ALMACENAMIENTO EXTERNO
+        SecurityCopy.comprobarPermisosAlmacenamiento(this)
         //PASAMOS EL CONTEXTO DEL MAINACTIVITY, NOS SERVIRA PARA COMPROBAR
         // LOS PERMISOS DE ESCRITURA Y LECTURA EXTERNA
         App.gestorBD.inyeccionContexto(this)

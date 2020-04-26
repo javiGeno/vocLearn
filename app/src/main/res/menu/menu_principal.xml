@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/carpeta"
+        android:title="@string/folder" />
+
+    <item
+        android:id="@+id/Test"
+        android:icon="@drawable/iconoexamen"
+        android:title="@string/Test" />
+    <item
+        android:id="@+id/dictionary"
+        android:icon="@drawable/lista"
+        android:title="@string/dictionary" />
+</menu>
