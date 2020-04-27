@@ -1,19 +1,51 @@
 package morajavier.pdm.voclearn
 
 
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.navegacion_inferior.*
 import morajavier.pdm.voclearn.BaseDatos.CRUDConjuntos
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
 import morajavier.pdm.voclearn.BaseDatos.CRUDGrupo
 import morajavier.pdm.voclearn.Modelo.Conjunto
 import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.Modelo.Grupo
+import morajavier.pdm.voclearn.Vistas.DictionaryFragment
+import morajavier.pdm.voclearn.Vistas.FolderFragment
+import morajavier.pdm.voclearn.Vistas.TestFragment
+import morajavier.pdm.voclearn.Vistas.menu
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), DictionaryFragment.OnFragmentInteractionListener, FolderFragment.OnFragmentInteractionListener, TestFragment.OnFragmentInteractionListener{
 
 
+    //RECEPTOR PARA LOS ITEM DEL MENÚ DE NAVEGACION INFERIOR
+    private val receptorNavigation= BottomNavigationView.OnNavigationItemSelectedListener {
+
+        when (it.itemId) {
+            R.id.folder -> {
+
+                val fragmento=FolderFragment()
+                cambiarFragmento(fragmento)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.dictionary -> {
+                val fragmento=DictionaryFragment()
+                cambiarFragmento(fragmento)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.Test -> {
+                val fragmento= TestFragment()
+                cambiarFragmento(fragmento)
+                return@OnNavigationItemSelectedListener true
+            }
+
+            else ->  false
+        }
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,10 +63,26 @@ class MainActivity : AppCompatActivity() {
         //OBTENEMOS LA INSTANCIA DE LA BD
         App.gestorBD.crearInstanciaBD()
 
+        //PASAMOS EL RECEPTOR DE NAVEGACION A LA BARRA DE NAVEGACIÓN INFERIOR (navigation) PARA QUE ACTUE SEGUÚN LO QUE PULSE
+        navigation.setOnNavigationItemSelectedListener(receptorNavigation)
+
+
 
         Log.i("MAIN", "La app entra en on create")
 
 
+    }
+
+    private fun cambiarFragmento(fragPrin: Fragment)
+    {
+        //CAMBIA EL FRAGMENTO Y LO INSERTA EN EL CONTENDOR "fragmentsPrincipal"
+        val fragmentTransaction=supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragmentsPrincipal, fragPrin, fragPrin.javaClass.getSimpleName())
+        fragmentTransaction.commit()
+    }
+
+    override fun onFragmentInteraction(uri: Uri) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onStart() {
@@ -76,12 +124,12 @@ class MainActivity : AppCompatActivity() {
 
         var lista=CRUDEntradas.obtenerTodasEntradas()
 
-        lista?.let{CRUDEntradas.recorrerListaEntrada(it)}*/
+        lista?.let{CRUDEntradas.recorrerListaEntrada(it)}
 
         CRUDEntradas.borrarEntradaId(1)
         CRUDConjuntos.borrarConjuntoId(1)
 
-        /*
+
         CRUDGrupo.insertarEntradaEnGrupo("DIFICILES",0)
         CRUDGrupo.insertarEntradaEnGrupo("FACILES",1)
         CRUDGrupo.insertarEntradaEnGrupo("FACILES",2)
@@ -95,7 +143,7 @@ class MainActivity : AppCompatActivity() {
 
         CRUDConjuntos.insertarEntradaEnConjunto(1, 1)
         CRUDConjuntos.insertarEntradaEnConjunto(0, 0)
-        CRUDConjuntos.insertarEntradaEnConjunto(0, 2)*/
+        CRUDConjuntos.insertarEntradaEnConjunto(0, 2)
 
         CRUDGrupo.recorrerListaGrupo(CRUDGrupo.obtenerTodosLosGrupos())
 
@@ -104,59 +152,14 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        Log.w("MAIN", "La app entra en on Start")
+        Log.w("MAIN", "La app entra en on Start")*/
     }
 
 
 
 
 
-    /*fun actualizacionBD() {
-        //SI HAY BASE DE DATOS LOCAL, QUIERE DECIR QUE NO SE HA DESINSTALADO LA APP
-        //POR TANTO ACCEDEMOS A LOS DATOS LOCALES
-        if (SecurityCopy.hayBDLocal(this)) {
-            Realm.init(this)
-
-            val config = RealmConfiguration.Builder()
-                .name("bdLocal.realm")
-                .build()
-
-            Realm.setDefaultConfiguration(config)
-            r = Realm.getDefaultInstance()
-
-            Log.w("MAIN", "Hay bd en local")
-        } else {
-            //SI NO HAY BD LOCAL, PERO SI EXTERNA
-            //LA RESTAURAMOS EN LOCAL
-            //SI NO HAY CONSTANCIA DE NINGUNA DE LAS DOS, CREAMOS LA BD NUEVA
-            if (SecurityCopy.hayBDExterna(this)) {
-                SecurityCopy.restaurarCopiaSeguridad(this)
-
-                Realm.init(this)
-
-                val config = RealmConfiguration.Builder()
-                    .name("bdLocal.realm")
-                    .build()
-
-                Realm.setDefaultConfiguration(config)
-                r = Realm.getDefaultInstance()
-
-                Log.w("MAIN", "Se ha restaurado")
-
-            } else {
-                Realm.init(this)
-
-                val config = RealmConfiguration.Builder()
-                    .name("bdLocal.realm")
-                    .build()
-
-                Realm.setDefaultConfiguration(config)
-                r = Realm.getDefaultInstance()
-
-                Log.w("MAIN", "No hay bd en local, se ha creado una nueva BD")
-            }
-        }
-    }
+    /*
 
         override fun onResume() {
         super.onResume()

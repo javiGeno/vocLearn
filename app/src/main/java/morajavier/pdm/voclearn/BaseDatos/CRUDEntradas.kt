@@ -113,9 +113,9 @@ class CRUDEntradas {
         //RECORRE UNA LISTA DE ENTRADAS
         fun recorrerListaEntrada(lista : List<Entrada>)
         {
-            Log.i("COUNT LISTA entrada", ""+lista?.count())
+            Log.i("COUNT LISTA entrada", ""+lista.count())
 
-            for(i in lista?.let{it}){
+            for(i in lista){
                 Log.i(""+i.idEntrada, "" +
                         ""+i.descripcion+" "+
                         i.significado+" "+
