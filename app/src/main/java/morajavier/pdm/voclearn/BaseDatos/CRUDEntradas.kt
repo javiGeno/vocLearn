@@ -126,5 +126,10 @@ class CRUDEntradas {
                         i.tipo)
             }
         }
+
+        fun hayEntradas() : Boolean{
+            //DEVUELVE VERDADERO SI HAY MAS DE UNA ENTRADA
+            return App.gestorBD.r.where<Entrada>(Entrada::class.java).count()>0
+        }
     }
 }

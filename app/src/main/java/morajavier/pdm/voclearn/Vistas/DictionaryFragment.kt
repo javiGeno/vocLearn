@@ -3,22 +3,27 @@ package morajavier.pdm.voclearn.Vistas
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_dictionary.*
+import kotlinx.android.synthetic.main.navegacion_inferior.*
 import morajavier.pdm.voclearn.Adapter.AdapterDiccionario
+import morajavier.pdm.voclearn.Adapter.EspacioItemRecycler
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
-
 import morajavier.pdm.voclearn.R
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private const val ESPACIO_ITEMS=48
 
 /**
  * A simple [Fragment] subclass.
@@ -40,26 +45,69 @@ open class DictionaryFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+
     }
 
     override fun onStart() {
         super.onStart()
 
-        actualizarRecycleView()
+        //ACTUALIZA EL RECYCLER SOLO SI EXISTEN ENTRADAS
+        if(CRUDEntradas.hayEntradas())
+            actualizarRecycleView()
+
     }
 
     private fun actualizarRecycleView()
     {
-        listaDiccionario.layoutManager = LinearLayoutManager(this.context)
-        listaDiccionario.adapter = AdapterDiccionario(CRUDEntradas.obtenerTodasEntradas())
+
+            val lineaSeparacion = DividerItemDecoration(listaDiccionario.context, DividerItemDecoration.VERTICAL)
+            //GENERA UNA LINEA ENTRE ITEMS DEL RECYCLER
+            listaDiccionario.addItemDecoration(lineaSeparacion)
+            //GENERA UN ESPACIO ENTRE ITEMS DEL RECYCLER
+            listaDiccionario.addItemDecoration(EspacioItemRecycler(ESPACIO_ITEMS))
+
+            listaDiccionario.layoutManager = LinearLayoutManager(this.context)
+            listaDiccionario.adapter = AdapterDiccionario(CRUDEntradas.obtenerTodasEntradas())
+
+
+
+
+
+        //ESTA IMPLEMENTACIÓN PERMITE QUE EL MENU DE LA ACTIVIDAD DESAPAREZCA AL HACER SCROLL HACIA ABAJO EN EL RECYCLER
+        //Y VUELVA A APARECER AL HACER SCROLL HACIA ARRIBA
+        listaDiccionario.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            val barraNavegacion= activity?.navigation
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                Log.e("SCROLL RECYCLE", "eje y: "+dy)
+                if (dy > 0 && barraNavegacion!!.isShown()) {
+                    barraNavegacion.setVisibility(View.GONE)
+                } else if (dy < 0) {
+                    barraNavegacion?.setVisibility(View.VISIBLE)
+
+                }
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+
+                super.onScrollStateChanged(recyclerView, newState)
+            }
+        })
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dictionary, container, false)
+        //SI HAY ENTRADAS INFLAMOS CON LA VISTA QUE CONTIENE EL RECYCLER, EN CASO CONTRARIO INFLAMOS  VISTA DE NO ENCONTRADOS
+        if(CRUDEntradas.hayEntradas()) {
+            // Inflate the layout for this fragment
+            return inflater.inflate(R.layout.fragment_dictionary, container, false)
+        }
+        else
+        {
+            return inflater.inflate(R.layout.not_item_found, container, false)
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

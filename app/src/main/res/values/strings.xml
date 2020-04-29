@@ -3,6 +3,10 @@
     <string name="folder">Carpetas</string>
     <string name="dictionary">Diccionario</string>
     <string name="Test">Prueba</string>
+    <string name="edit">Editar</string>
+    <string name="delete">Borrar</string>
+    <string name="audio">Escuchar</string>
+    <string name="nadaLista">Nada para mostrar</string>
 
 
 </resources>

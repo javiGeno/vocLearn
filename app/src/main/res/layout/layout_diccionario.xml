@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/borde_item_diccionario">
+    >
 
 
     <RelativeLayout
@@ -16,13 +16,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="end">
+            android:gravity="start">
 
             <ImageButton
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:background="@drawable/ic_action_editar"
-                android:layout_margin="5dp"/>
+                android:layout_margin="5dp"
+                android:contentDescription="@string/edit"/>
 
             <androidx.legacy.widget.Space
                 android:layout_width="10dp"
@@ -32,7 +33,8 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:background="@drawable/ic_action_borrar"
-                android:layout_margin="5dp"/>
+                android:layout_margin="5dp"
+                android:contentDescription="@string/delete"/>
 
             <androidx.legacy.widget.Space
                 android:layout_width="10dp"
@@ -44,7 +46,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/azulCielo">
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -63,7 +66,8 @@
                 android:layout_marginEnd="2dp"
                 android:layout_marginRight="2dp"
                 android:layout_marginBottom="2dp"
-                android:background="@drawable/circulo_dif1" />
+                android:background="@drawable/circulo_dif1"
+                />
         </RelativeLayout>
 
         <LinearLayout
@@ -76,16 +80,17 @@
                 android:id="@+id/textView_palabra_ingles"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
                 android:text="TextView"
                 android:textSize="24sp"
-                app:fontFamily="sans-serif-smallcaps" />
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                app:fontFamily="sans-serif-smallcaps"
+                />
 
             <TextView
                 android:id="@+id/textView_traduccion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="TextView"
                 android:textSize="18sp" />
 
@@ -98,11 +103,12 @@
             <MediaController
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:layout_marginBottom="@dimen/margen2"
-                android:layout_marginTop="@dimen/margen2"
+                android:layout_marginBottom="@dimen/margen1"
+                android:layout_marginTop="@dimen/margen1"
                 android:layout_marginLeft="@dimen/margen3"
                 android:layout_marginRight="@dimen/margen3"
-                android:background="@drawable/ic_action_play"/>
+                android:background="@drawable/ic_action_play"
+                android:contentDescription="@string/audio"/>
 
 
         </RelativeLayout>

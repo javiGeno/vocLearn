@@ -4,4 +4,8 @@
     <string name="folder">Folder</string>
     <string name="dictionary">Dictionary</string>
     <string name="Test">Test</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="audio">Audio</string>
+    <string name="nadaLista">Nothing to show</string>
 </resources>
