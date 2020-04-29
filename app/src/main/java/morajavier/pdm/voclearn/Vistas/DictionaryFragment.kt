@@ -7,6 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_dictionary.*
+import morajavier.pdm.voclearn.Adapter.AdapterDiccionario
+import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
 
 import morajavier.pdm.voclearn.R
 
@@ -35,6 +40,18 @@ open class DictionaryFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        actualizarRecycleView()
+    }
+
+    private fun actualizarRecycleView()
+    {
+        listaDiccionario.layoutManager = LinearLayoutManager(this.context)
+        listaDiccionario.adapter = AdapterDiccionario(CRUDEntradas.obtenerTodasEntradas())
     }
 
     override fun onCreateView(

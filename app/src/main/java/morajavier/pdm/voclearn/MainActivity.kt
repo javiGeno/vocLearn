@@ -6,18 +6,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.fragment_dictionary.*
 import kotlinx.android.synthetic.main.navegacion_inferior.*
-import morajavier.pdm.voclearn.BaseDatos.CRUDConjuntos
+import morajavier.pdm.voclearn.Adapter.AdapterDiccionario
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
-import morajavier.pdm.voclearn.BaseDatos.CRUDGrupo
-import morajavier.pdm.voclearn.Modelo.Conjunto
 import morajavier.pdm.voclearn.Modelo.Entrada
-import morajavier.pdm.voclearn.Modelo.Grupo
 import morajavier.pdm.voclearn.Vistas.DictionaryFragment
 import morajavier.pdm.voclearn.Vistas.FolderFragment
 import morajavier.pdm.voclearn.Vistas.TestFragment
-import morajavier.pdm.voclearn.Vistas.menu
 
 class MainActivity : AppCompatActivity(), DictionaryFragment.OnFragmentInteractionListener, FolderFragment.OnFragmentInteractionListener, TestFragment.OnFragmentInteractionListener{
 
@@ -81,8 +79,10 @@ class MainActivity : AppCompatActivity(), DictionaryFragment.OnFragmentInteracti
         fragmentTransaction.commit()
     }
 
+
+
     override fun onFragmentInteraction(uri: Uri) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun onStart() {
@@ -92,14 +92,17 @@ class MainActivity : AppCompatActivity(), DictionaryFragment.OnFragmentInteracti
         e1?.let { CRUDEntradas?.nuevaOActualizarEntrada(it) }
         val e2= CRUDEntradas.nuevoId()?.let { Entrada(it, "hacer","", "", 1, "make", "") }
         e2?.let { CRUDEntradas.nuevaOActualizarEntrada(it) }
-        val e3= CRUDEntradas.nuevoId()?.let { Entrada(it, "libre","", "", 1, "free", "") }
+        val e3= CRUDEntradas.nuevoId()?.let { Entrada(it, "libre","", "", 2, "free", "") }
         e3?.let { CRUDEntradas.nuevaOActualizarEntrada(it) }
-        val e4= CRUDEntradas.nuevoId()?.let { Entrada(it, "balon","", "", 1, "ball", "") }
+        val e4= CRUDEntradas.nuevoId()?.let { Entrada(it, "balon","", "", 3, "ball", "") }
         e4?.let { CRUDEntradas.nuevaOActualizarEntrada(it) }
         val e5= CRUDEntradas.nuevoId()?.let { Entrada(it, "tambien","", "", 1, "too", "") }
         e5?.let { CRUDEntradas.nuevaOActualizarEntrada(it) }
+        */
 
 
+
+        /*
 
         CRUDConjuntos.nuevoId()?.let{Conjunto(it, "Sustantivos")}?.let {
             CRUDConjuntos.nuevoOActualizaConjunto(

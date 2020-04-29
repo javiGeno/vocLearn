@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/borde_item_diccionario">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBeigh"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <ImageButton
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/ic_action_editar"
+                android:layout_margin="5dp"/>
+
+            <androidx.legacy.widget.Space
+                android:layout_width="10dp"
+                android:layout_height="0dp" />
+
+            <ImageButton
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/ic_action_borrar"
+                android:layout_margin="5dp"/>
+
+            <androidx.legacy.widget.Space
+                android:layout_width="10dp"
+                android:layout_height="0dp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.65">
+
+            <ImageView
+                android:id="@+id/probabilidad"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="@dimen/margen2"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/circulo_dif1" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView_palabra_ingles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="TextView"
+                android:textSize="24sp"
+                app:fontFamily="sans-serif-smallcaps" />
+
+            <TextView
+                android:id="@+id/textView_traduccion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TextView"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <MediaController
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="@dimen/margen2"
+                android:layout_marginTop="@dimen/margen2"
+                android:layout_marginLeft="@dimen/margen3"
+                android:layout_marginRight="@dimen/margen3"
+                android:background="@drawable/ic_action_play"/>
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
