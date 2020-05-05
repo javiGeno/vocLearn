@@ -122,8 +122,7 @@ class CRUDEntradas {
                         i.audio+" "+
                         i.escrituraIngles+" "+
                         i.probAcierto+" "+
-                        i.fechaCreacion+" "+
-                        i.tipo)
+                        i.fechaCreacion)
             }
         }
 

@@ -7,6 +7,16 @@
     <string name="delete">Borrar</string>
     <string name="audio">Escuchar</string>
     <string name="nadaLista">Nada para mostrar</string>
+    <string name="nadaBD">No hay palabras almacenadas</string>
+    <string name="marcaBuscar">Buscar palabra</string>
+    <string name="addEntrada">Introduce palabra o expresión en inglés</string>
+    <string name="addTraduccion">Introduce tradución</string>
+    <string name="requerido">Obligatorio rellenar estos dos campos</string>
+    <string name="addDescr">Introduce una descripción</string>
+    <string name="addDescrExpl">La descripción le ayudará a memorizar mejor la palabra aprendida.Puede incluir ejemplos, sinónimos, categoria gramatical etc</string>
+    <string name="addAudio">opcionalmente puede grabar su pronunciación</string>
+    <string name="addLevel">Elige un nivel de dificultad, el sistema te preguntará más veces las palabras difíciles para un aprencizaje más efectivo</string>
+    <string name="guardar">GUARDAR</string>
 
 
 </resources>

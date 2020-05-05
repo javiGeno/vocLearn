@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_dictionary.*
 import kotlinx.android.synthetic.main.navegacion_inferior.*
 import morajavier.pdm.voclearn.Adapter.AdapterDiccionario
@@ -48,7 +49,7 @@ class MainActivity : AppCompatActivity(), DictionaryFragment.OnFragmentInteracti
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme ( R.style.AppTheme )
+        //setTheme ( R.style.AppTheme ) QUITAR SI NO SE VA USAR
         setContentView(R.layout.activity_main)
 
         //SE COMPRUEBAN LOS PERMISOS DE ALMACENAMIENTO EXTERNO
@@ -61,9 +62,12 @@ class MainActivity : AppCompatActivity(), DictionaryFragment.OnFragmentInteracti
         //OBTENEMOS LA INSTANCIA DE LA BD
         App.gestorBD.crearInstanciaBD()
 
+
+
         //PASAMOS EL RECEPTOR DE NAVEGACION A LA BARRA DE NAVEGACIÓN INFERIOR (navigation) PARA QUE ACTUE SEGUÚN LO QUE PULSE
         navigation.setOnNavigationItemSelectedListener(receptorNavigation)
-
+        //AÑADIMOS FRAGMENT POR DEFECTO AL PULSAR AUTOMÁTICAMENTE EL BOTON
+        navigation.selectedItemId=R.id.dictionary
 
 
         Log.i("MAIN", "La app entra en on create")

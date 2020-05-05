@@ -4,6 +4,8 @@
     <!-- Para poder hacer una copia de seguridad de la base de datos fuera del proyecto -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--Permisos para grabar audio-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
     <application
         android:name=".App"
@@ -14,9 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Vistas.activity_test"></activity>
-        <activity android:name=".Vistas.activity_dictionary" />
-        <activity android:name=".Vistas.activity_folder" />
+        <activity android:name=".Vistas.AddActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:theme="@style/SplashTema"> <!-- Para la pantalla de bienvenida -->

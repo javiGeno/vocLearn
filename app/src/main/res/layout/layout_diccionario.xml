@@ -19,22 +19,24 @@
             android:gravity="start">
 
             <ImageButton
+                android:id="@+id/btn_editar"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:background="@drawable/ic_action_editar"
                 android:layout_margin="5dp"
-                android:contentDescription="@string/edit"/>
+                android:background="@android:drawable/ic_menu_edit"
+                android:contentDescription="@string/edit" />
 
             <androidx.legacy.widget.Space
                 android:layout_width="10dp"
                 android:layout_height="0dp" />
 
             <ImageButton
+                android:id="@+id/btn_borrar"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:background="@drawable/ic_action_borrar"
                 android:layout_margin="5dp"
-                android:contentDescription="@string/delete"/>
+                android:background="@android:drawable/ic_menu_delete"
+                android:contentDescription="@string/delete" />
 
             <androidx.legacy.widget.Space
                 android:layout_width="10dp"
@@ -84,15 +86,16 @@
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
-                app:fontFamily="sans-serif-smallcaps"
-                />
+                app:fontFamily="sans-serif-smallcaps" /><!--MAYÚSCULAS-->
 
             <TextView
                 android:id="@+id/textView_traduccion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textSize="18sp" />
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/grisOscuro"/>
 
         </LinearLayout>
 
@@ -100,15 +103,18 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
-            <MediaController
-                android:layout_height="match_parent"
+
+            <Button
+                android:id="@+id/btn_audio"
                 android:layout_width="match_parent"
-                android:layout_marginBottom="@dimen/margen1"
-                android:layout_marginTop="@dimen/margen1"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/margen3"
+                android:layout_marginTop="@dimen/margen1"
                 android:layout_marginRight="@dimen/margen3"
-                android:background="@drawable/ic_action_play"
-                android:contentDescription="@string/audio"/>
+                android:layout_marginBottom="@dimen/margen1"
+                android:background="@android:drawable/ic_media_play"
+                android:contentDescription="@string/audio"
+                android:visibility="gone"/>
 
 
         </RelativeLayout>

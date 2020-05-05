@@ -10,7 +10,6 @@ open class Entrada (
     @PrimaryKey var idEntrada : Int=0,
     var significado: String="",
     var descripcion: String?=null,
-    var tipo: String?=null,
     var probAcierto:Int=0,
     var escrituraIngles:String?=null,
     var audio: String?=null,

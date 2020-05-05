@@ -1,15 +1,27 @@
 <resources>
+    <!-- Base application theme.-->
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
+
 
     <style name="SplashTema" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_inicio</item>
+    </style>
+
+    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <!-- icono del SearchView-->
+        <item name="searchIcon">@android:drawable/ic_menu_search</item>
+        <!-- linea buscador -->
+        <item name="queryBackground">@color/colorIconos</item>
+        <!-- Elimina el icono de búsqueda cuando se expande el cuadro de texto-->
+        <item name="searchHintIcon">@null</item>
+        <!-- Marca de agua del buscador -->
+        <item name="queryHint">@string/marcaBuscar</item>
+
     </style>
 
 </resources>

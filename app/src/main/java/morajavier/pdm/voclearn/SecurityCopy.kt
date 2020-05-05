@@ -70,6 +70,7 @@ class SecurityCopy() {
                 val ficheroOrigen =
                     File(act.getApplicationContext().getFilesDir(), FILE_TO_RECOVERY)
 
+                //COPIA LA ACTUAL BASE DE DATOS
                 val rutaCopiada = volcarFichero(ficheroDestino, ficheroOrigen)
                 val msg = "Fichero almacenado en la ruta: " + rutaCopiada
                 Log.d(TAG, msg)

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/azulCielo"
+    tools:context=".Vistas.AddActivity">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorIconos">
+
+
+        <ImageButton
+            android:id="@+id/btn_atras"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="@dimen/margen1"
+            android:layout_marginLeft="@dimen/margen1"
+            android:layout_marginTop="@dimen/margen1"
+            android:layout_marginEnd="@dimen/margen1"
+            android:layout_marginRight="@dimen/margen1"
+            android:layout_marginBottom="@dimen/margen1"
+            android:background="@drawable/ic_action_back" />
+
+        <Button
+            android:id="@+id/btn_guardar"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="@dimen/margen1"
+            android:layout_marginLeft="@dimen/margen1"
+            android:layout_marginTop="@dimen/margen1"
+            android:layout_marginEnd="@dimen/margen1"
+            android:layout_marginRight="@dimen/margen1"
+            android:layout_marginBottom="@dimen/margen1"
+            android:background="@android:drawable/ic_menu_save"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+            android:id="@+id/layout_prin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/azulCielo"
+            android:orientation="vertical"
+            android:focusable="true">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margen1"
+                android:background="@drawable/borde2"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/field_word"
+                    android:layout_width="300dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="@dimen/margen2"
+                    android:hint="@string/addEntrada"
+                    android:maxLength="50"
+                    android:textColor="@color/grisOscuro"
+                    android:textSize="15dp"
+                   />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/field_traduccion"
+                    android:layout_width="300dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="@dimen/margen2"
+                    android:hint="@string/addTraduccion"
+                    android:maxLength="50"
+                    android:textSize="15dp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margen2"
+                    android:layout_marginRight="@dimen/margen2"
+                    android:layout_marginBottom="@dimen/margen2"
+                    android:text="@string/requerido"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textSize="12sp"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margen1"
+                android:background="@drawable/borde2"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/field_descri"
+                    android:layout_width="300dp"
+                    android:layout_height="75dp"
+                    android:layout_margin="@dimen/margen2"
+                    android:hint="@string/addDescr"
+                    android:maxLength="150"
+                    android:textSize="15dp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margen2"
+                    android:layout_marginRight="@dimen/margen2"
+                    android:layout_marginBottom="@dimen/margen2"
+                    android:text="@string/addDescrExpl"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textSize="12sp"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margen1"
+                android:background="@drawable/borde2"
+                android:orientation="vertical">
+
+                <RadioGroup
+                    android:id="@+id/grupo_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radio_dif"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margen1"
+                        android:background="@drawable/circulo_dif1" />
+
+                    <RadioButton
+                        android:id="@+id/radio_med"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margen1"
+                        android:background="@drawable/circulo_dif2"
+                        android:checked="false" />
+
+                    <RadioButton
+                        android:id="@+id/radio_fac"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margen1"
+                        android:background="@drawable/circulo_dif3"
+                        android:checked="false" />
+
+                </RadioGroup>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margen2"
+                    android:layout_marginRight="@dimen/margen2"
+                    android:layout_marginBottom="@dimen/margen2"
+                    android:text="@string/addLevel"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textSize="12sp"
+                    android:textStyle="italic" />
+
+                <Button
+                    android:id="@+id/btn_grabar"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="@dimen/margen3"
+                    android:layout_marginTop="@dimen/margen1"
+                    android:layout_marginRight="@dimen/margen3"
+                    android:layout_marginBottom="@dimen/margen1"
+                    android:background="@drawable/ic_action_grabar"
+                    android:contentDescription="@string/audio"
+                    android:textColor="@color/grisOscuro" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margen2"
+                    android:layout_marginRight="@dimen/margen2"
+                    android:layout_marginBottom="@dimen/margen2"
+                    android:text="@string/addAudio"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textSize="12sp"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+      </ScrollView>
+</LinearLayout>

@@ -8,4 +8,14 @@
     <string name="delete">Delete</string>
     <string name="audio">Audio</string>
     <string name="nadaLista">Nothing to show</string>
+    <string name="nadaBD">There not stored words</string>
+    <string name="marcaBuscar">Search word</string>
+    <string name="addEntrada">Add word or expresión in English</string>
+    <string name="requerido">You have to fill this fields</string>
+    <string name="addTraduccion">Add translation</string>
+    <string name="addDescr">Add description</string>
+    <string name="addDescrExpl">The description will help you to memorized better the learned word. You can include examples,  grammatical category, syonym...etc</string>
+    <string name="addAudio">you can optionally record its pronounce</string>
+    <string name="addLevel">you choose a dificulty level, the system will ask you more times the hard words to a learning more effective</string>
+    <string name="guardar">SAVE</string>
 </resources>
