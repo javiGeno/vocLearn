@@ -17,6 +17,8 @@
     <string name="addAudio">opcionalmente puede grabar su pronunciación</string>
     <string name="addLevel">Elige un nivel de dificultad, el sistema te preguntará más veces las palabras difíciles para un aprencizaje más efectivo</string>
     <string name="guardar">GUARDAR</string>
+    <string name="cancelar">CANCELAR</string>
+    <string name="borrado">PALABRA BORRADA</string>
 
 
 </resources>

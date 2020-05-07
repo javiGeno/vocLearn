@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:animateLayoutChanges="true"
     tools:context=".Vistas.DictionaryFragment">
 
     <include
@@ -21,6 +22,7 @@
         layout="@layout/not_item_found"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         />
 
     <include

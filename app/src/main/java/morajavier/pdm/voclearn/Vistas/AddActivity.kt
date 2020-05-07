@@ -118,6 +118,10 @@ class AddActivity : AppCompatActivity() {
         field_descri.setText("")
         grupo_radio.check(R.id.radio_dif)
         rutaAudio=""
+
+        field_descri.clearFocus()
+        field_traduccion.clearFocus()
+        field_word.clearFocus()
     }
 
 
@@ -142,7 +146,7 @@ class AddActivity : AppCompatActivity() {
     }
 
     //EN ESTE MÉTODO COMPROBAMOS SI EL BOTON DE GRABAR ESTA PULSADO O NO PARA GRABAR O DEJAR DE GRABAR
-    //ADEMÁS AÑADIMOS UNA ANIMACIÓN EN ESCALA PRA QUE MIENTRAS ESTE GRABANDO EL MICRÓFONO ESTE ANIMADO
+    //ADEMÁS AÑADIMOS UNA ANIMACIÓN EN ESCALA PARA QUE MIENTRAS ESTE GRABANDO EL MICRÓFONO ESTE ANIMADO
     fun eventoBotonGrabar()
     {
 
@@ -183,9 +187,12 @@ class AddActivity : AppCompatActivity() {
         var handler = Handler()
         handler.postDelayed( {
 
-            btn_grabar.setBackgroundResource(R.drawable.ic_action_grabar)
-            btn_grabar.clearAnimation()
-            Toast.makeText(this,"Grabación detendida", Toast.LENGTH_SHORT).show()
+            //SI PASA EL TIEMPO DE GRABACIÓN Y AÚN SIGUE GRABANDO, SE CAMBIA EL BOTÓN Y SE NOTIFICA AL USUARIO
+            if(btn_grabar.id==R.drawable.ic_action_grabando) {
+                btn_grabar.setBackgroundResource(R.drawable.ic_action_grabar)
+                btn_grabar.clearAnimation()
+                Toast.makeText(this, "Grabación detendida", Toast.LENGTH_SHORT).show()
+            }
 
 
         }, 20000);
@@ -210,17 +217,20 @@ class AddActivity : AppCompatActivity() {
         //ALMACENAMOS
         grabacion.setOutputFile(ficheroAlmacenamientoAudio)
 
+
         try{
             //PREPARAMOS MICRO
             grabacion.prepare()
             //COMIENZA A GRABAR
             grabacion.start()
+
+            Toast.makeText(this,"Mantén pulsado para grabar durante un máx de 20 segundos", Toast.LENGTH_SHORT).show()
+
         }catch(e: IOException)
         {
             Log.e("ERROR AUDIO", "Ha ocurrido un error al grabar el audio")
         }
 
-        Toast.makeText(this,"Mantén pulsado para grabar durante un máx de 20 segundos", Toast.LENGTH_SHORT).show()
     }
 
     fun stopAudio(grabacion:MediaRecorder)

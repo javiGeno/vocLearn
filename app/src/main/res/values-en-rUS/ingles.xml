@@ -18,4 +18,6 @@
     <string name="addAudio">you can optionally record its pronounce</string>
     <string name="addLevel">you choose a dificulty level, the system will ask you more times the hard words to a learning more effective</string>
     <string name="guardar">SAVE</string>
+    <string name="cancelar">CANCELL </string>
+    <string name="borrado">DELETED WORD</string>
 </resources>

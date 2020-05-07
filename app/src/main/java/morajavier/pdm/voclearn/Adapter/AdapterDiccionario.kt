@@ -1,24 +1,33 @@
 package morajavier.pdm.voclearn.Adapter
 
+
 import android.media.MediaPlayer
 import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_dictionary.*
 import kotlinx.android.synthetic.main.layout_diccionario.view.*
+import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
 import morajavier.pdm.voclearn.FuncionesExtension.cambioImagen
 import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.R
+import morajavier.pdm.voclearn.Vistas.DictionaryFragment
 import java.io.IOException
 
 //CREAMOS UNA CLASE ADAPTER, PARA LA LISTA DE ENTRADAS QUE INGRESE EL USUARIO
 //IMPLEMENTAMOS LOS MÉTODOS QUE HACEN FALTA AL EXTENDER DE RecyclerView.Adapter<"clase creada interna que extiende de RecyclerView.ViewHolder">
-class AdapterDiccionario(val items: List<Entrada>): RecyclerView.Adapter<AdapterDiccionario.ViewHolderDatosDic>() {
+//RECIBE UN OBJETO ANY, COMO EL CONTENEDOR DE ESTE RECYCLER, QUE PUEDE SER UNA ACTIVITY, FRAGMENTS...ETC
+class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): RecyclerView.Adapter<AdapterDiccionario.ViewHolderDatosDic>() {
 
 
-     var listaItems:List<Entrada> = items
+     var listaItems = items
+     var contenedorPadre=contenedorPadre as DictionaryFragment
+
 
     //INFLAMOS EL LAYOUT CREADO PARA ESTE RECYCLER "layout_diccionario"
     //GUARDAMOS EN UNA VARIABLE QUE PASAREMOS A LA INSTANCIA DE NUESTRA CLASE VIEWHOLDER INTERNA
@@ -35,6 +44,8 @@ class AdapterDiccionario(val items: List<Entrada>): RecyclerView.Adapter<Adapter
         return listaItems.size
     }
 
+
+
     //CONECTA LOS DATOS DE CADA ELEMENTO DE LA LISTA, CON CADA CAJITA DE MUESTRA DE DATOS INDIVIDUAL
     override fun onBindViewHolder(holder: ViewHolderDatosDic, position: Int) {
 
@@ -42,6 +53,8 @@ class AdapterDiccionario(val items: List<Entrada>): RecyclerView.Adapter<Adapter
         holder.cambiarColor(entradaActual.probAcierto)
         holder.palabra.text=entradaActual.escrituraIngles
         holder.traduccion.text=entradaActual.significado
+
+
 
         //SI LA ENTRADA DE AUDIO ES NULA O ES UNA CADENA VACÍA, HACEMOS DESAPARECER EL BOTON DEL PLAY,
         // POR LO CONTRARIO LO MOSTRAMOS
@@ -81,15 +94,65 @@ class AdapterDiccionario(val items: List<Entrada>): RecyclerView.Adapter<Adapter
 
             }
 
+            //CUANDO TERMINE DE REPRODUCIRSE EL AUDIO, CAMBIAMOS EL ICONO
             reproducirAudio.setOnCompletionListener {
                 holder.mediaAudio.setBackgroundResource(android.R.drawable.ic_media_play)
             }
 
         }
 
-        holder.
+        holder.borrar.setOnClickListener{
+
+            borrarElemento(entradaActual, position)
+
+         }
+
+
+
+
+
 
     }
+
+    fun borrarElemento(entradaActual:Entrada, position:Int)
+    {
+        //BORRAMOS DE LA BD, Y NOTIFICAMOS CAMBIOS AL VOLVER A OBTENER LA LISTA DE LA BD
+        //HEMOS TENIDO QUE BORRAR ANTES EN LE BD Y VOLVER A OBTENER TODA LA LISTA
+        //BORRAR EN LA BD, Y EN LA LISTA DEL RECYCLER PARALELAMENTE NOS DABA PROBLEMAS
+        //CREAMOS UN OBJETO DE RECUPERACIÓN POR SI EL USUARIO SE ARREPIENTE DE BORRAR, VOLVER A REINSERTARLO
+        val objetoRecovery=Entrada(entradaActual.idEntrada,
+            entradaActual.significado,
+            entradaActual.descripcion,
+            entradaActual.probAcierto,
+            entradaActual.escrituraIngles,
+            entradaActual.audio)
+        CRUDEntradas.borrarEntradaId(entradaActual.idEntrada)
+        this.listaItems= CRUDEntradas.obtenerTodasEntradas()
+        notifyItemRemoved(position)
+
+        //SI NO HAY ITMES, NOTIFICAMOS TAMBIÉN AL USUARIO
+        if(itemCount==0)
+        {
+            contenedorPadre.listaDiccionario.visibility= View.GONE
+            contenedorPadre.layout_no_almacen.visibility= View.VISIBLE
+
+        }
+
+        //ESTE SNACKBAR CANCELA EL BORRADO, REINSERTANDO DE NUEVO EL OBJETO EN LA BASE DE DATOS
+        //LA FORMA DE BORRADO QUE HEMOS USADO NOS OBLIGA A REINSERTAR DE NUEVO EL OBJETO CON LOS DATOS QUE TENEMOS
+        //BORRAR EN LA LISTA DEL RECYCLER ANTES QUE EN LA BASE DE DATOS NOS DABA PROBLEMAS
+        Snackbar.make(contenedorPadre.listaDiccionario, R.string.borrado, 3000)
+            .setAction(R.string.cancelar, {
+                    _ -> CRUDEntradas.nuevaOActualizarEntrada(objetoRecovery)
+                this.listaItems= CRUDEntradas.obtenerTodasEntradas()
+                notifyItemInserted(position)
+                contenedorPadre.listaDiccionario.visibility= View.VISIBLE
+                contenedorPadre.layout_no_almacen.visibility= View.GONE
+            }).show()
+
+    }
+
+
 
     //CLASE DE LAS VISTAS DEL LAYOUT UTILIZADO PARA ESTE ADAPTADOR
     class ViewHolderDatosDic(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -98,8 +161,8 @@ class AdapterDiccionario(val items: List<Entrada>): RecyclerView.Adapter<Adapter
         val traduccion=itemView.textView_traduccion
         val circuloColor=itemView.probabilidad
         val mediaAudio=itemView.btn_audio
-        val editar=itemView.btn
-        val borrar=
+        val editar=itemView.btn_editar
+        val borrar=itemView.btn_borrar
 
         fun cambiarColor( probabilidad:Int)
         {
@@ -130,7 +193,7 @@ class AdapterDiccionario(val items: List<Entrada>): RecyclerView.Adapter<Adapter
     fun actualizaLista(listanueva :List<Entrada>)
     {
 
-        listaItems=listanueva
+        listaItems= listanueva
         notifyDataSetChanged()
     }
 

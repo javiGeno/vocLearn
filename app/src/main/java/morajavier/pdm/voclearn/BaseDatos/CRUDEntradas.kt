@@ -97,7 +97,7 @@ class CRUDEntradas {
         {
             //OBTENEMOS UNA LISTA CON TODAS LAS ENTRADAS ORDENADAS POR FECHA DE CREACIÓN
             return  App.gestorBD.r.where<Entrada>(Entrada::class.java)
-                .findAll().sort("fechaCreacion").toList()
+                .findAll().sort("idEntrada").toList()
 
         }
 

@@ -11,15 +11,14 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import kotlinx.android.synthetic.main.fragment_dictionary.*
 import kotlinx.android.synthetic.main.navegacion_inferior.*
 import kotlinx.android.synthetic.main.search_and_add.*
 import morajavier.pdm.voclearn.Adapter.AdapterDiccionario
 import morajavier.pdm.voclearn.Adapter.EspacioItemRecycler
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
+import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.R
 
 
@@ -54,6 +53,11 @@ open class DictionaryFragment : Fragment(),
     override fun onStart() {
         super.onStart()
 
+       comprobarEntradas()
+    }
+
+    fun comprobarEntradas()
+    {
         //ACTUALIZA EL RECYCLER SOLO SI EXISTEN ENTRADAS
         if(CRUDEntradas.hayEntradas()) {
 
@@ -62,7 +66,7 @@ open class DictionaryFragment : Fragment(),
             buscador.setOnQueryTextListener(this)
             buscador.setOnCloseListener(this)
 
-            //HACEMOS VISIBLE EL RECYCLER Y QUITAMOS EL LAYOUT QUE INDICA QUE HAY ELEMENTOS EN LA BD
+            //HACEMOS VISIBLE EL RECYCLER Y QUITAMOS EL LAYOUT QUE INDICA QUE NO HAY ELEMENTOS EN LA BD
             listaDiccionario.visibility=VISIBLE
             layout_no_almacen.visibility= GONE
         }
@@ -85,24 +89,50 @@ open class DictionaryFragment : Fragment(),
 
     }
 
-    private fun actualizarRecycleView()
-    {
-            //PARA QUE AÑADA LA SEPARACIÓN ENTRE ITEMS UNA SOLA VEZ
-            if(!separacionAniadida) {
-                val lineaSeparacion =
-                    DividerItemDecoration(listaDiccionario.context, DividerItemDecoration.VERTICAL)
-                //GENERA UNA LINEA ENTRE ITEMS DEL RECYCLER
-                listaDiccionario.addItemDecoration(lineaSeparacion)
-                //GENERA UN ESPACIO ENTRE ITEMS DEL RECYCLER
-                listaDiccionario.addItemDecoration(EspacioItemRecycler(ESPACIO_ITEMS))
-                separacionAniadida=true
+
+
+    private fun actualizarRecycleView() {
+        //PARA QUE AÑADA LA SEPARACIÓN ENTRE ITEMS UNA SOLA VEZ
+        if (!separacionAniadida) {
+            val lineaSeparacion =
+                DividerItemDecoration(listaDiccionario.context, DividerItemDecoration.VERTICAL)
+            //GENERA UNA LINEA ENTRE ITEMS DEL RECYCLER
+            listaDiccionario.addItemDecoration(lineaSeparacion)
+            //GENERA UN ESPACIO ENTRE ITEMS DEL RECYCLER
+            listaDiccionario.addItemDecoration(EspacioItemRecycler(ESPACIO_ITEMS))
+            separacionAniadida = true
+            //ANIMACIÓN PARA LOS CAMBIOS EN EL RECYCLER
+            listaDiccionario.setItemAnimator(DefaultItemAnimator())
+
+        }
+
+        listaDiccionario.layoutManager = LinearLayoutManager(this.context)
+        this.adaptaor = AdapterDiccionario(CRUDEntradas.obtenerTodasEntradas(), this)
+        listaDiccionario.adapter = this.adaptaor
+
+        //PARA ARRASTRAR LOS ITEM DEL RECYCLER VIEW Y PODER BORRARLOS
+        val mySimpleCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            )
+                    : Boolean = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
+                val posicionElemento = viewHolder.adapterPosition
+                var entradaActual= adaptaor!!.listaItems.get(posicionElemento)
+                println(posicionElemento)
+                adaptaor!!.borrarElemento(entradaActual,posicionElemento)
+
             }
 
-            listaDiccionario.layoutManager = LinearLayoutManager(this.context)
-            this.adaptaor= AdapterDiccionario(CRUDEntradas.obtenerTodasEntradas())
-            listaDiccionario.adapter =this.adaptaor
 
-
+        }
+        //ASIGNAMOS LA CONFIGURACIÓN DEL ItemTouchHelper AL NUESTRO RECYCLER
+        ItemTouchHelper(mySimpleCallback).attachToRecyclerView(listaDiccionario)
 
 
 
@@ -139,6 +169,8 @@ open class DictionaryFragment : Fragment(),
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_dictionary, container, false)
 
+
+
     }
 
     //MÉTODOS IMPLEMENTADOS AL IMPLEMENTAR LAS INTERFACES DEL SEARCHVIEW (BUSCADOR)
@@ -152,22 +184,31 @@ open class DictionaryFragment : Fragment(),
         Log.e("SEARCH", ""+newText)
         println(""+newText)
 
-        var listaFiltrada=this.adaptaor?.items?.filter {
-             it.escrituraIngles?.toLowerCase()!!.contains(newText.toString())
-                     || it.significado.toLowerCase().contains(newText.toString())}
 
-        //SI LA LISTA FILTRADA ESTA VACIA QUITAMOS EL RECYCLER, Y MOSTRAMOS LA CAPA DE ABAJO EL  "layout_nothing"
-        //SI ESTA LLENA LLAMAMOS AL MÉTODO DEL ADAPTADOR, QUE ACTUALIZA LA LISTA.
-        if(!(listaFiltrada!!.isEmpty())) {
-            listaDiccionario.setVisibility(VISIBLE)
-            adaptaor!!.actualizaLista(listaFiltrada!!)
-            println("listaLLena")
+        if(this.adaptaor?.listaItems?.size!!>0)
+        {
+            var listaFiltrada = this.adaptaor?.listaItems?.filter {
+                it.escrituraIngles?.toLowerCase()!!.contains(newText.toString())
+                        || it.significado.toLowerCase().contains(newText.toString())
+            }
+
+            //SI LA LISTA FILTRADA ESTA VACIA QUITAMOS EL RECYCLER, Y MOSTRAMOS LA CAPA DE ABAJO EL  "layout_nothing"
+            //SI ESTA LLENA LLAMAMOS AL MÉTODO DEL ADAPTADOR, QUE ACTUALIZA LA LISTA.
+            if (!(listaFiltrada!!.isEmpty())) {
+                listaDiccionario.setVisibility(VISIBLE)
+                layout_nothing.setVisibility(GONE)
+                adaptaor!!.actualizaLista(listaFiltrada!!)
+                println("lista buscada LLena")
+
+            } else {
+                listaDiccionario.setVisibility(GONE)
+                layout_nothing.setVisibility(VISIBLE)
+                println("lista buscada Vacia")
+            }
         }
-        else {
-            listaDiccionario.setVisibility(GONE)
-            layout_nothing.setVisibility(VISIBLE)
-            println("listaVacia")
-        }
+
+
+
 
         return true
     }
