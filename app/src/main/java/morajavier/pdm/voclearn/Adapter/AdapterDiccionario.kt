@@ -1,13 +1,15 @@
 package morajavier.pdm.voclearn.Adapter
 
 
+import android.content.Context
 import android.media.MediaPlayer
 import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ItemTouchHelper
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_dictionary.*
@@ -150,6 +152,9 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
                 contenedorPadre.layout_no_almacen.visibility= View.GONE
             }).show()
 
+        //ESCONDEMOS EL TECLADO CUANDO SE MUESTRA EL SNACKBAR
+        val imm = contenedorPadre.activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(contenedorPadre.listaDiccionario.getWindowToken(), 0)
     }
 
 

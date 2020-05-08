@@ -1,8 +1,6 @@
 package morajavier.pdm.voclearn.Vistas
 
 import android.Manifest
-import android.animation.Animator
-import android.animation.AnimatorSet
 import android.content.Context
 import android.content.pm.PackageManager
 import android.media.MediaRecorder
@@ -28,6 +26,7 @@ import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
 import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.R
 import java.io.IOException
+import java.lang.RuntimeException
 
 class AddActivity : AppCompatActivity() {
 
@@ -36,6 +35,8 @@ class AddActivity : AppCompatActivity() {
     var grabacion: MediaRecorder? =null
     //RUTA GRABACIÓN AUDIO
     var rutaAudio:String=""
+    //BANDERA QUE COMPRUEBA SI EL BOTON DE GRABAR ESTÁ PULSADO O NO
+    var botonGrabarPush=false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -162,8 +163,11 @@ class AddActivity : AppCompatActivity() {
                     v.setBackgroundResource(R.drawable.ic_action_grabando)
                     var animacionMicro= AnimationUtils.loadAnimation(this, R.anim.anim_micro)
                     v.startAnimation(animacionMicro)
+                    botonGrabarPush=true
 
                     grabacion?.let { grabandoAudio(it) }
+                    //PASAMOS EL ENTERO DE LA TECLA BTN PULSADO, PARA QUE, SI SIGUE PULSADO A LOS 20SEGUNDOS
+                    //FUERCE A AVISAR AL USUARIO QUE LA GRABACIÓN SE HA DETENIDO. LA GRABACIÓN ESTA CONFIGURADA A 20 SEG MAX
                     tiempoDuracionAudio()
 
                     return@setOnTouchListener true
@@ -171,9 +175,10 @@ class AddActivity : AppCompatActivity() {
                 MotionEvent.ACTION_UP -> {
                     v.setBackgroundResource(R.drawable.ic_action_grabar)
                     v.clearAnimation()
-                    Toast.makeText(this,"Grabación terminada", Toast.LENGTH_SHORT).show()
-
                     grabacion?.let { stopAudio(it) }
+                    botonGrabarPush=false
+
+
                     return@setOnTouchListener true
                 }
                 else-> false
@@ -188,7 +193,7 @@ class AddActivity : AppCompatActivity() {
         handler.postDelayed( {
 
             //SI PASA EL TIEMPO DE GRABACIÓN Y AÚN SIGUE GRABANDO, SE CAMBIA EL BOTÓN Y SE NOTIFICA AL USUARIO
-            if(btn_grabar.id==R.drawable.ic_action_grabando) {
+            if(botonGrabarPush==true){
                 btn_grabar.setBackgroundResource(R.drawable.ic_action_grabar)
                 btn_grabar.clearAnimation()
                 Toast.makeText(this, "Grabación detendida", Toast.LENGTH_SHORT).show()
@@ -235,11 +240,20 @@ class AddActivity : AppCompatActivity() {
 
     fun stopAudio(grabacion:MediaRecorder)
     {
+        try {
+            //PARAMOS GRABACIÓN
+            grabacion.stop()
+            //LIBERAMOS RECURSOS
+            grabacion.release()
 
-        //PARAMOS GRABACIÓN
-        grabacion.stop()
-        //LIBERAMOS RECURSOS
-        grabacion.release()
+            Toast.makeText(this,"Grabación terminada", Toast.LENGTH_SHORT).show()
+
+        }
+        catch (e: RuntimeException)
+        {
+            Toast.makeText(this,"Debe mantener pulsado para grabar", Toast.LENGTH_SHORT).show()
+
+        }
     }
 
     //ESTE MÉTODO CHEQUEA QUE LOS DOS CAMPOS OBLIGATORIOS ESTEN RELLENOS, Y EN EL CASO DE QUE LO ESTÉN,

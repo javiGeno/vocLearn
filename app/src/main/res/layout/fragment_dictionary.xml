@@ -8,8 +8,14 @@
     android:animateLayoutChanges="true"
     tools:context=".Vistas.DictionaryFragment">
 
+
+
+
     <include
         layout="@layout/search_and_add"/>
+
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listaDiccionario"
@@ -30,5 +36,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         layout="@layout/no_items_save"/>
+
 
 </LinearLayout>

@@ -2,7 +2,14 @@ package morajavier.pdm.voclearn.Vistas
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,14 +18,18 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.view.Window
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.*
+import kotlinx.android.synthetic.main.activity_add.*
 import kotlinx.android.synthetic.main.fragment_dictionary.*
+import kotlinx.android.synthetic.main.layout_diccionario.*
 import kotlinx.android.synthetic.main.navegacion_inferior.*
 import kotlinx.android.synthetic.main.search_and_add.*
 import morajavier.pdm.voclearn.Adapter.AdapterDiccionario
 import morajavier.pdm.voclearn.Adapter.EspacioItemRecycler
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
-import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.R
 
 
@@ -84,6 +95,8 @@ open class DictionaryFragment : Fragment(),
 
             val intentLista= Intent(activity, AddActivity::class.java)
             startActivity(intentLista)
+            //RESTABLECE EL BUSCADOR A SU ESTADO INICIAL
+            buscador.onActionViewCollapsed()
 
         }
 
@@ -110,29 +123,10 @@ open class DictionaryFragment : Fragment(),
         this.adaptaor = AdapterDiccionario(CRUDEntradas.obtenerTodasEntradas(), this)
         listaDiccionario.adapter = this.adaptaor
 
-        //PARA ARRASTRAR LOS ITEM DEL RECYCLER VIEW Y PODER BORRARLOS
-        val mySimpleCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            )
-                    : Boolean = false
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-
-                val posicionElemento = viewHolder.adapterPosition
-                var entradaActual= adaptaor!!.listaItems.get(posicionElemento)
-                println(posicionElemento)
-                adaptaor!!.borrarElemento(entradaActual,posicionElemento)
-
-            }
 
 
-        }
         //ASIGNAMOS LA CONFIGURACIÓN DEL ItemTouchHelper AL NUESTRO RECYCLER
-        ItemTouchHelper(mySimpleCallback).attachToRecyclerView(listaDiccionario)
+        ItemTouchHelper(getConfiguracionSwiped()).attachToRecyclerView(listaDiccionario)
 
 
 
@@ -159,6 +153,67 @@ open class DictionaryFragment : Fragment(),
     }
 
 
+    fun getConfiguracionSwiped():ItemTouchHelper.SimpleCallback
+    {
+        //PARA ARRASTRAR LOS ITEM DEL RECYCLER VIEW Y PODER BORRARLOS
+        val mySimpleCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            )
+                    : Boolean = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
+                val posicionElemento = viewHolder.adapterPosition
+                var entradaActual= adaptaor!!.listaItems.get(posicionElemento)
+                println(posicionElemento)
+                adaptaor!!.borrarElemento(entradaActual,posicionElemento)
+
+            }
+
+            //PERMITE DIBUJAR UN FONDO PARA CUANDO SE ARRASTRE EL ITEM DEL RECYLER INFORME AL USUARIO DE LO QUE VA HACER
+            override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+
+                //OBTENEMOS EL ITEMVIEW DEL VIEWHOLDER Y EL DESPLAZAMIENTO SOBRE EL EJEX DEL MISMO
+                var itemView = viewHolder.itemView
+                var translationX = dX
+
+                //OBTENEMOS EL ICONO QUE PONDREMOS DE FONDO
+                val trashBinIcon =resources.getDrawable(R.drawable.ic_delete_black_50dp)
+
+                //ASIGNAMOS LA POSICION QUE TENDRÁ DENTRO DEL CANVAS
+                trashBinIcon.setBounds(
+                    itemView.right-trashBinIcon.intrinsicWidth,
+                    itemView.top +itemView.height/4,
+                    itemView.right+0,
+                    itemView.top + trashBinIcon.intrinsicHeight+itemView.height/4)
+
+                //CREAMOS EL RECTÁNGULO QUE SE PINTARÁ CONFORME SE DESPLACE EL ITEM
+                val background = RectF(
+                    itemView.right.toFloat() + translationX,
+                    itemView.top.toFloat(),
+                    itemView.right.toFloat(),
+                    itemView.bottom.toFloat()
+                )
+                //PINTAMOS EL RECTÁNGULO EN EL CANVAS
+                c.clipRect(background)
+                //AÑADIMOS EL COLOR
+                c.drawColor(Color.RED)
+                //AÑADIMOS EL ICONO QUE CREAMOS ANTERIORMENTE
+                trashBinIcon.draw(c)
+
+
+
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+            }
+
+        }
+
+        return mySimpleCallback
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -214,12 +269,11 @@ open class DictionaryFragment : Fragment(),
     }
 
 
-
+    //EVENTO QUE SE DISPARA CUANDO SE CIERRA EL BUSCADOR
     override fun onClose(): Boolean {
         Log.e("SEARCH", "onClose()")
 
         //RESTABLECE EL BUSCADOR A SU ESTADO INICIAL
-
         buscador.onActionViewCollapsed()
 
         return true

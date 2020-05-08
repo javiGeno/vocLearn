@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/barra_search_add"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:background="@color/colorIconos">
+    android:background="@color/colorIconos"
+    android:orientation="horizontal">
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/buscador"
@@ -19,8 +20,7 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_margin="@dimen/margen1"
-        android:background="@drawable/ic_action_add"
-        />
+        android:background="@drawable/ic_action_add" />
 
 
 </LinearLayout>

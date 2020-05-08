@@ -10,6 +10,9 @@
 
     <style name="SplashTema" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_inicio</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
     <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
