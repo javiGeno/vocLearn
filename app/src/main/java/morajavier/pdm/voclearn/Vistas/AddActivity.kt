@@ -35,8 +35,7 @@ class AddActivity : AppCompatActivity() {
     var grabacion: MediaRecorder? =null
     //RUTA GRABACIÓN AUDIO
     var rutaAudio:String=""
-    //BANDERA QUE COMPRUEBA SI EL BOTON DE GRABAR ESTÁ PULSADO O NO
-    var botonGrabarPush=false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -151,6 +150,8 @@ class AddActivity : AppCompatActivity() {
     //ADEMÁS AÑADIMOS UNA ANIMACIÓN EN ESCALA PARA QUE MIENTRAS ESTE GRABANDO EL MICRÓFONO ESTE ANIMADO
     fun eventoBotonGrabar()
     {
+        //VARIABLE QUE UTILIZAREMOS PARA EL CONTROL DE LOS 20 SEGUNDOS DE DURACIÓN DEL AUDIO
+        var handler = Handler()
 
         btn_grabar.setOnTouchListener { v, event ->
 
@@ -160,19 +161,22 @@ class AddActivity : AppCompatActivity() {
                 v.setBackgroundResource(R.drawable.ic_action_grabando)
                 var animacionMicro = AnimationUtils.loadAnimation(this, R.anim.anim_micro)
                 v.startAnimation(animacionMicro)
-                botonGrabarPush = true
 
                 grabacion?.let { grabandoAudio(it) }
 
                 //FUERCE A AVISAR AL USUARIO QUE LA GRABACIÓN SE HA DETENIDO. LA GRABACIÓN ESTA CONFIGURADA A 20 SEG MAX
-                tiempoDuracionAudio()
+                 tiempoDuracionAudio(handler)
+
                 return@setOnTouchListener true
 
             } else if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL ) {
                 v.setBackgroundResource(R.drawable.ic_action_grabar)
                 v.clearAnimation()
                 grabacion?.let { stopAudio(it) }
-                botonGrabarPush = false
+
+                //CANCELAMOS CUALQUIER POSTDELAY QUE ESTÉ A LA ESPERA, LLAMADO EN EL METEDO tiempoDuracion ANTERIOR
+                handler.removeCallbacksAndMessages(null)
+
                 return@setOnTouchListener true
             }
             else
@@ -185,20 +189,18 @@ class AddActivity : AppCompatActivity() {
     }
 
     //ESTA FUNCIÓN HARÁ QUE A LOS 20 SEGUNDOS EL BOTÓN VUELVA A SU ESTADO ORIGINAL AUNQUE SE MANTENGA PULSADO
-    fun tiempoDuracionAudio()
+    fun tiempoDuracionAudio(handler: Handler)
     {
-        var handler = Handler()
+
         handler.postDelayed( {
 
             //SI PASA EL TIEMPO DE GRABACIÓN Y AÚN SIGUE GRABANDO, SE CAMBIA EL BOTÓN Y SE NOTIFICA AL USUARIO
-            if(botonGrabarPush==true){
-                btn_grabar.setBackgroundResource(R.drawable.ic_action_grabar)
-                btn_grabar.clearAnimation()
-                Toast.makeText(this, R.string.grabDetenida, Toast.LENGTH_SHORT).show()
-            }
+            btn_grabar.setBackgroundResource(R.drawable.ic_action_grabar)
+            btn_grabar.clearAnimation()
+            Toast.makeText(this, R.string.grabDetenida, Toast.LENGTH_SHORT).show()
 
+        }, 20000)
 
-        }, 20000);
     }
 
     fun grabandoAudio(grabacion:MediaRecorder)
@@ -250,6 +252,8 @@ class AddActivity : AppCompatActivity() {
         catch (e: RuntimeException)
         {
             Toast.makeText(this, R.string.grabFallo, Toast.LENGTH_SHORT).show()
+            //NO GUARDAMOS NADA EN LA RUTA PORQUE HA FALLADO AL CREARSE
+            rutaAudio=""
             e.printStackTrace()
         }
     }

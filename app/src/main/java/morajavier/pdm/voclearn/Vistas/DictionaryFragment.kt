@@ -240,13 +240,13 @@ open class DictionaryFragment : Fragment(),
         println(""+newText)
 
 
-        if(this.adaptaor?.listaItems?.size!!>0)
+        if(CRUDEntradas.hayEntradas())
         {
-            var listaFiltrada = this.adaptaor?.items?.filter {
+            var listaFiltrada = this.adaptaor?.obtenerListaCompleta()?.filter {
                 it.escrituraIngles?.toLowerCase()!!.contains(newText.toString())
                         || it.significado.toLowerCase().contains(newText.toString())
             }
-            println(listaFiltrada)
+            println("LISTA FILTRADA: "+listaFiltrada)
 
             //SI LA LISTA FILTRADA ESTA VACIA QUITAMOS EL RECYCLER, Y MOSTRAMOS LA CAPA DE ABAJO EL  "layout_nothing"
             //SI ESTA LLENA LLAMAMOS AL MÉTODO DEL ADAPTADOR, QUE ACTUALIZA LA LISTA.
@@ -276,8 +276,6 @@ open class DictionaryFragment : Fragment(),
 
         //RESTABLECE EL BUSCADOR A SU ESTADO INICIAL
         buscador.onActionViewCollapsed()
-        //CUANDO CIERRA EL BUSCADOR RESTABLECE LA LISTA DE NUEVO
-        adaptaor?.restablecerLista()
 
         return true
     }

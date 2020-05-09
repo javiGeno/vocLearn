@@ -20,6 +20,7 @@ import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.R
 import morajavier.pdm.voclearn.Vistas.DictionaryFragment
 import java.io.IOException
+import kotlin.contracts.Returns
 
 //CREAMOS UNA CLASE ADAPTER, PARA LA LISTA DE ENTRADAS QUE INGRESE EL USUARIO
 //IMPLEMENTAMOS LOS MÉTODOS QUE HACEN FALTA AL EXTENDER DE RecyclerView.Adapter<"clase creada interna que extiende de RecyclerView.ViewHolder">
@@ -55,7 +56,7 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
         holder.cambiarColor(entradaActual.probAcierto)
         holder.palabra.text=entradaActual.escrituraIngles
         holder.traduccion.text=entradaActual.significado
-
+        var reproducirAudio: MediaPlayer? =null
 
 
         //SI LA ENTRADA DE AUDIO ES NULA O ES UNA CADENA VACÍA, HACEMOS DESAPARECER EL BOTON DEL PLAY,
@@ -68,23 +69,26 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
             {
                 holder.mediaAudio.setVisibility( View.GONE)
             }
+
+            //PREPARAMOS EL AUDIO CORRESPONDIENTE A ESTA PALABRA, QUE SE ENCUENTRA EN LA
+            //MEMORIA INTERNA DEL MÓVIL.
+            reproducirAudio=MediaPlayer()
+            preparacionAudio(reproducirAudio!!,entradaActual)
         }?:holder.mediaAudio.setVisibility(View.GONE)
 
-        //PREPARAMOS EL AUDIO CORRESPONDIENTE A ESTA PALABRA, QUE SE ENCUENTRA EN LA
-        //MEMORIA INTERNA DEL MÓVIL.
-        val reproducirAudio=MediaPlayer()
-        preparacionAudio(reproducirAudio,entradaActual)
 
-        //CUANDO TERMINE DE REPRODUCIRSE EL AUDIO, CAMBIAMOS EL ICONO
-        reproducirAudio.setOnCompletionListener {
+
+        //CUANDO TERMINE DE REPRODUCIRSE EL AUDIO, CAMBIAMOS EL ICONO Y LIBERAMOS RECURSOS
+        reproducirAudio!!.setOnCompletionListener {
             holder.mediaAudio.setBackgroundResource(android.R.drawable.ic_media_play)
+            reproducirAudio!!.release()
         }
 
         holder.mediaAudio.setOnClickListener{
 
             //FUNCIÓN DE EXTENSIÓN QUE PONE EN PAUSA O EN PLAY SEGÚN SU ESTADO Y ADEMÁS
             //CAMBIA LA IMAGEN DEL BOTÓN REPRODUCCÍON
-            it.cambioImagen(reproducirAudio)
+            it.cambioImagen(reproducirAudio!!)
 
         }
 
@@ -131,6 +135,9 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
         CRUDEntradas.borrarEntradaId(entradaActual.idEntrada)
         this.listaItems= CRUDEntradas.obtenerTodasEntradas()
         notifyItemRemoved(position)
+        println("LISLOC AFTERDELETE: "+ listaItems)
+        println("LISIT AFTERDELETE: "+ items)
+        println("LISLBD AFTERDELETE: "+ CRUDEntradas.obtenerTodasEntradas())
 
         //SI NO HAY ITMES, NOTIFICAMOS TAMBIÉN AL USUARIO
         if(itemCount==0)
@@ -148,6 +155,10 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
                     _ -> CRUDEntradas.nuevaOActualizarEntrada(objetoRecovery)
                 this.listaItems= CRUDEntradas.obtenerTodasEntradas()
                 notifyItemInserted(position)
+                println("LISLOC AFTERreinserccion: "+ listaItems)
+                println("LISIT AFTERreinserccion: "+ items)
+                println("LISLBD AFTERreinserccion: "+ CRUDEntradas.obtenerTodasEntradas())
+
                 contenedorPadre.listaDiccionario.visibility= View.VISIBLE
                 contenedorPadre.layout_no_almacen.visibility= View.GONE
             }).show()
@@ -155,6 +166,10 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
         //ESCONDEMOS EL TECLADO CUANDO SE MUESTRA EL SNACKBAR
         val imm = contenedorPadre.activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(contenedorPadre.listaDiccionario.getWindowToken(), 0)
+
+        println("LISLOC AFTERresultante: "+ listaItems)
+        println("LISIT AFTERresultante: "+ items)
+        println("LISLBD AFTERresultante: "+ CRUDEntradas.obtenerTodasEntradas())
     }
 
 
@@ -197,7 +212,6 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
     //AÑADIMOS LA LISTA FILTRADA A LA LISTA PRINCIPAL Y NOTIFICAMOS LOS CAMBIOS
     fun actualizaLista(listanueva :List<Entrada>)
     {
-
         listaItems= listanueva
         notifyDataSetChanged()
     }
@@ -205,8 +219,14 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
     //RESTABLECE LA LISTA
     fun restablecerLista()
     {
-        listaItems=items
+        listaItems=CRUDEntradas.obtenerTodasEntradas()
         notifyDataSetChanged()
+    }
+
+    //UTILIZAMOS LA LISTA DEVUELTA POR ESTE MÉTODO, PARA FILTRAR EN EL BUSCADOR
+    fun obtenerListaCompleta():List<Entrada>
+    {
+        return CRUDEntradas.obtenerTodasEntradas()
     }
 
 
