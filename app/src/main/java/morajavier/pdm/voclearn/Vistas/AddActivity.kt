@@ -85,10 +85,11 @@ class AddActivity : AppCompatActivity() {
         grupo_radio.check(R.id.radio_dif)
         eventoBotonGrabar()
 
-
+        //GUARDAMOS EL NUEVO OBJETO Y VOLVEMOS A LA ACTIVITY ANTERIOR
         btn_guardar.setOnClickListener{
 
             guardarObjetoEnBD()
+            finish()
         }
 
     }
@@ -151,38 +152,35 @@ class AddActivity : AppCompatActivity() {
     fun eventoBotonGrabar()
     {
 
-
         btn_grabar.setOnTouchListener { v, event ->
 
+            println("ACTION BOTON"+ event.action)
+            if (event.action == MotionEvent.ACTION_DOWN ) {
+                grabacion = MediaRecorder()
+                v.setBackgroundResource(R.drawable.ic_action_grabando)
+                var animacionMicro = AnimationUtils.loadAnimation(this, R.anim.anim_micro)
+                v.startAnimation(animacionMicro)
+                botonGrabarPush = true
 
+                grabacion?.let { grabandoAudio(it) }
 
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
+                //FUERCE A AVISAR AL USUARIO QUE LA GRABACIÓN SE HA DETENIDO. LA GRABACIÓN ESTA CONFIGURADA A 20 SEG MAX
+                tiempoDuracionAudio()
+                return@setOnTouchListener true
 
-                    grabacion=MediaRecorder()
-                    v.setBackgroundResource(R.drawable.ic_action_grabando)
-                    var animacionMicro= AnimationUtils.loadAnimation(this, R.anim.anim_micro)
-                    v.startAnimation(animacionMicro)
-                    botonGrabarPush=true
-
-                    grabacion?.let { grabandoAudio(it) }
-                    //PASAMOS EL ENTERO DE LA TECLA BTN PULSADO, PARA QUE, SI SIGUE PULSADO A LOS 20SEGUNDOS
-                    //FUERCE A AVISAR AL USUARIO QUE LA GRABACIÓN SE HA DETENIDO. LA GRABACIÓN ESTA CONFIGURADA A 20 SEG MAX
-                    tiempoDuracionAudio()
-
-                    return@setOnTouchListener true
-                }
-                MotionEvent.ACTION_UP -> {
-                    v.setBackgroundResource(R.drawable.ic_action_grabar)
-                    v.clearAnimation()
-                    grabacion?.let { stopAudio(it) }
-                    botonGrabarPush=false
-
-
-                    return@setOnTouchListener true
-                }
-                else-> false
+            } else if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL ) {
+                v.setBackgroundResource(R.drawable.ic_action_grabar)
+                v.clearAnimation()
+                grabacion?.let { stopAudio(it) }
+                botonGrabarPush = false
+                return@setOnTouchListener true
             }
+            else
+            {
+                return@setOnTouchListener false
+            }
+
+
         }
     }
 
@@ -196,7 +194,7 @@ class AddActivity : AppCompatActivity() {
             if(botonGrabarPush==true){
                 btn_grabar.setBackgroundResource(R.drawable.ic_action_grabar)
                 btn_grabar.clearAnimation()
-                Toast.makeText(this, "Grabación detendida", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.grabDetenida, Toast.LENGTH_SHORT).show()
             }
 
 
@@ -229,7 +227,7 @@ class AddActivity : AppCompatActivity() {
             //COMIENZA A GRABAR
             grabacion.start()
 
-            Toast.makeText(this,"Mantén pulsado para grabar durante un máx de 20 segundos", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,R.string.grabAviso, Toast.LENGTH_SHORT).show()
 
         }catch(e: IOException)
         {
@@ -246,13 +244,13 @@ class AddActivity : AppCompatActivity() {
             //LIBERAMOS RECURSOS
             grabacion.release()
 
-            Toast.makeText(this,"Grabación terminada", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,R.string.grabTerminada, Toast.LENGTH_SHORT).show()
 
         }
         catch (e: RuntimeException)
         {
-            Toast.makeText(this,"Debe mantener pulsado para grabar", Toast.LENGTH_SHORT).show()
-
+            Toast.makeText(this, R.string.grabFallo, Toast.LENGTH_SHORT).show()
+            e.printStackTrace()
         }
     }
 

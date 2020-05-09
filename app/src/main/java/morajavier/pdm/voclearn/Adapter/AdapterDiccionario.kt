@@ -70,36 +70,21 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
             }
         }?:holder.mediaAudio.setVisibility(View.GONE)
 
-        //CUANDO PINCHAMOS EN EL PLAY, PREPARAMOS EL AUDIO CORRESPONDIENTE A ESTA PALABRA, QUE SE ENCUENTRA EN LA
+        //PREPARAMOS EL AUDIO CORRESPONDIENTE A ESTA PALABRA, QUE SE ENCUENTRA EN LA
         //MEMORIA INTERNA DEL MÓVIL.
+        val reproducirAudio=MediaPlayer()
+        preparacionAudio(reproducirAudio,entradaActual)
+
+        //CUANDO TERMINE DE REPRODUCIRSE EL AUDIO, CAMBIAMOS EL ICONO
+        reproducirAudio.setOnCompletionListener {
+            holder.mediaAudio.setBackgroundResource(android.R.drawable.ic_media_play)
+        }
+
         holder.mediaAudio.setOnClickListener{
-            val reproducirAudio=MediaPlayer()
 
-            try {
-                reproducirAudio.setDataSource(
-                    Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_MUSIC
-                    ).absolutePath + entradaActual.idEntrada + ".mp3"
-                )
-
-                //PREPARAMOS EL AUDIO
-                reproducirAudio.prepare()
-
-                //FUNCIÓN DE EXTENSIÓN QUE PONE EN PAUSA O EN PLAY SEGÚN SU ESTADO Y ADEMÁS
-                //CAMBIA LA IMAGEN DEL BOTÓN REPRODUCCÍON
-                it.cambioImagen(reproducirAudio)
-
-
-            }
-            catch (e: IOException){
-                Log.e("ERROR AUDIO", "Ha ocurrido un error al reproducir el audio")
-
-            }
-
-            //CUANDO TERMINE DE REPRODUCIRSE EL AUDIO, CAMBIAMOS EL ICONO
-            reproducirAudio.setOnCompletionListener {
-                holder.mediaAudio.setBackgroundResource(android.R.drawable.ic_media_play)
-            }
+            //FUNCIÓN DE EXTENSIÓN QUE PONE EN PAUSA O EN PLAY SEGÚN SU ESTADO Y ADEMÁS
+            //CAMBIA LA IMAGEN DEL BOTÓN REPRODUCCÍON
+            it.cambioImagen(reproducirAudio)
 
         }
 
@@ -109,10 +94,25 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
 
          }
 
+    }
 
+    fun preparacionAudio(reproducirAudio:MediaPlayer, entradaActual: Entrada)
+    {
+        try {
+            reproducirAudio.setDataSource(
+                Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_MUSIC
+                ).absolutePath + entradaActual.idEntrada + ".mp3"
+            )
 
+            //PREPARAMOS EL AUDIO
+            reproducirAudio.prepare()
 
+        }
+        catch (e: IOException){
+            Log.e("ERROR AUDIO", "Ha ocurrido un error al reproducir el audio")
 
+        }
 
     }
 
@@ -199,6 +199,13 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
     {
 
         listaItems= listanueva
+        notifyDataSetChanged()
+    }
+
+    //RESTABLECE LA LISTA
+    fun restablecerLista()
+    {
+        listaItems=items
         notifyDataSetChanged()
     }
 

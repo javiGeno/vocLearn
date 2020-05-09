@@ -242,10 +242,11 @@ open class DictionaryFragment : Fragment(),
 
         if(this.adaptaor?.listaItems?.size!!>0)
         {
-            var listaFiltrada = this.adaptaor?.listaItems?.filter {
+            var listaFiltrada = this.adaptaor?.items?.filter {
                 it.escrituraIngles?.toLowerCase()!!.contains(newText.toString())
                         || it.significado.toLowerCase().contains(newText.toString())
             }
+            println(listaFiltrada)
 
             //SI LA LISTA FILTRADA ESTA VACIA QUITAMOS EL RECYCLER, Y MOSTRAMOS LA CAPA DE ABAJO EL  "layout_nothing"
             //SI ESTA LLENA LLAMAMOS AL MÉTODO DEL ADAPTADOR, QUE ACTUALIZA LA LISTA.
@@ -275,6 +276,8 @@ open class DictionaryFragment : Fragment(),
 
         //RESTABLECE EL BUSCADOR A SU ESTADO INICIAL
         buscador.onActionViewCollapsed()
+        //CUANDO CIERRA EL BUSCADOR RESTABLECE LA LISTA DE NUEVO
+        adaptaor?.restablecerLista()
 
         return true
     }
