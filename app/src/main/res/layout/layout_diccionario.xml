@@ -1,50 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
 
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorBeigh"
-        >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="start">
-
-            <ImageButton
-                android:id="@+id/btn_editar"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_margin="5dp"
-                android:background="@android:drawable/ic_menu_edit"
-                android:contentDescription="@string/edit" />
-
-            <androidx.legacy.widget.Space
-                android:layout_width="10dp"
-                android:layout_height="0dp" />
-
-            <ImageButton
-                android:id="@+id/btn_borrar"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_margin="5dp"
-                android:background="@android:drawable/ic_menu_delete"
-                android:contentDescription="@string/delete" />
-
-            <androidx.legacy.widget.Space
-                android:layout_width="10dp"
-                android:layout_height="0dp" />
-        </LinearLayout>
-
-    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,30 +14,27 @@
         android:background="@color/azulCielo">
 
         <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.65">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
 
             <ImageView
                 android:id="@+id/probabilidad"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_centerHorizontal="true"
-                android:layout_margin="@dimen/margen2"
-                android:layout_marginStart="2dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_marginBottom="2dp"
-                android:background="@drawable/circulo_dif1"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center"
+                android:padding="@dimen/margen0"
+                android:layout_margin="@dimen/margen0"
                 />
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_weight="2"
+            android:layout_weight="4"
             android:layout_width="0dp"
-            android:layout_height="70dp"
+            android:layout_height="80dp"
             android:orientation="vertical">
 
             <TextView
@@ -84,6 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
+                android:padding="@dimen/margen0"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
@@ -93,6 +52,7 @@
                 android:id="@+id/textView_traduccion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/margen0"
                 android:text="TextView"
                 android:textStyle="bold"
                 android:textSize="18sp"
@@ -101,14 +61,14 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
 
             <Button
                 android:id="@+id/btn_audio"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginLeft="@dimen/margen3"
                 android:layout_marginTop="@dimen/margen1"
                 android:layout_marginRight="@dimen/margen3"
@@ -121,5 +81,5 @@
         </RelativeLayout>
 
     </LinearLayout>
+</RelativeLayout>
 
-</LinearLayout>

@@ -12,6 +12,7 @@ open class Entrada (
     var descripcion: String?=null,
     var probAcierto:Int=0,
     var escrituraIngles:String?=null,
+    var imagen: String?=null,
     var audio: String?=null,
     var fechaCreacion : Date= Date()
 

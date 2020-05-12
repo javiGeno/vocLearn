@@ -136,6 +136,39 @@
                 android:background="@drawable/borde2"
                 android:orientation="vertical">
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/img_click"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/margen2"
+                    android:padding="5dp"
+                    android:background="@drawable/borde_image_add"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:srcCompat="@mipmap/ic_launcher_no_image" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margen2"
+                    android:layout_marginRight="@dimen/margen2"
+                    android:layout_marginBottom="@dimen/margen2"
+                    android:text="@string/adImg"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textSize="12sp"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margen1"
+                android:background="@drawable/borde2"
+                android:orientation="vertical">
+
                 <RadioGroup
                     android:id="@+id/grupo_radio"
                     android:layout_width="wrap_content"

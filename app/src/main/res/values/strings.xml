@@ -16,13 +16,16 @@
     <string name="addDescrExpl">La descripción le ayudará a memorizar mejor la palabra aprendida.Puede incluir ejemplos, sinónimos, categoria gramatical etc</string>
     <string name="addAudio">opcionalmente puede grabar su pronunciación, manteniendo pulsado el botón</string>
     <string name="addLevel">Elige un nivel de dificultad, el sistema te preguntará más veces las palabras difíciles para un aprencizaje más efectivo</string>
-    <string name="guardar">GUARDAR</string>
+    <string name="adImg">Añade una imagen opcionalmente para un aprendizaje más eficaz</string>
     <string name="cancelar">CANCELAR</string>
     <string name="borrado">PALABRA BORRADA</string>
     <string name="grabAviso">Mantén pulsado para grabar durante un máx de 20 segundos</string>
     <string name="grabDetenida">Grabación detendida</string>
     <string name="grabTerminada">Grabación terminada</string>
     <string name="grabFallo">Debe mantener pulsado para grabar</string>
+    <string name="galeria">Galeria</string>
+    <string name="camara">Cámara</string>
+    <string name="opciones">Elige una opción</string>
 
 
 </resources>

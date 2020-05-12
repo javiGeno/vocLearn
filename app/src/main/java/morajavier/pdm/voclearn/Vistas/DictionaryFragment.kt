@@ -58,13 +58,22 @@ open class DictionaryFragment : Fragment(),
 
 
 
+
     }
 
 
     override fun onStart() {
         super.onStart()
 
-       comprobarEntradas()
+        configuracionRecyclerView()
+        comprobarEntradas()
+    }
+
+    fun configuracionRecyclerView()
+    {
+        listaDiccionario.setHasFixedSize(true)
+        listaDiccionario.setItemViewCacheSize(20)
+
     }
 
     fun comprobarEntradas()
@@ -112,7 +121,7 @@ open class DictionaryFragment : Fragment(),
             //GENERA UNA LINEA ENTRE ITEMS DEL RECYCLER
             listaDiccionario.addItemDecoration(lineaSeparacion)
             //GENERA UN ESPACIO ENTRE ITEMS DEL RECYCLER
-            listaDiccionario.addItemDecoration(EspacioItemRecycler(ESPACIO_ITEMS))
+            //listaDiccionario.addItemDecoration(EspacioItemRecycler(ESPACIO_ITEMS))
             separacionAniadida = true
             //ANIMACIÓN PARA LOS CAMBIOS EN EL RECYCLER
             listaDiccionario.setItemAnimator(DefaultItemAnimator())
@@ -120,7 +129,7 @@ open class DictionaryFragment : Fragment(),
         }
 
         listaDiccionario.layoutManager = LinearLayoutManager(this.context)
-        this.adaptaor = AdapterDiccionario(CRUDEntradas.obtenerTodasEntradas(), this)
+        this.adaptaor = this.activity?.let { AdapterDiccionario(CRUDEntradas.obtenerTodasEntradas(), it) }
         listaDiccionario.adapter = this.adaptaor
 
 
@@ -139,7 +148,7 @@ open class DictionaryFragment : Fragment(),
                 Log.e("SCROLL RECYCLE", "eje y: "+dy)
                 if (dy > 0 && barraNavegacion!!.isShown()) {
                     barraNavegacion.setVisibility(View.GONE)
-                } else if (dy < 0) {
+                } else if (dy <= 0) {
                     barraNavegacion?.setVisibility(View.VISIBLE)
 
                 }

@@ -1,6 +1,7 @@
 package morajavier.pdm.voclearn.Adapter
 
 
+
 import android.content.Context
 import android.media.MediaPlayer
 import android.os.Environment
@@ -9,27 +10,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
+import android.widget.Toast
+import androidx.constraintlayout.solver.widgets.ConstraintWidget.VISIBLE
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_dictionary.*
 import kotlinx.android.synthetic.main.layout_diccionario.view.*
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
 import morajavier.pdm.voclearn.FuncionesExtension.cambioImagen
+import morajavier.pdm.voclearn.FuncionesExtension.cargarImagen
+import morajavier.pdm.voclearn.MainActivity
 import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.R
 import morajavier.pdm.voclearn.Vistas.DictionaryFragment
 import java.io.IOException
-import kotlin.contracts.Returns
+import java.lang.NullPointerException
+
 
 //CREAMOS UNA CLASE ADAPTER, PARA LA LISTA DE ENTRADAS QUE INGRESE EL USUARIO
 //IMPLEMENTAMOS LOS MÉTODOS QUE HACEN FALTA AL EXTENDER DE RecyclerView.Adapter<"clase creada interna que extiende de RecyclerView.ViewHolder">
 //RECIBE UN OBJETO ANY, COMO EL CONTENEDOR DE ESTE RECYCLER, QUE PUEDE SER UNA ACTIVITY, FRAGMENTS...ETC
-class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): RecyclerView.Adapter<AdapterDiccionario.ViewHolderDatosDic>() {
+class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : FragmentActivity): RecyclerView.Adapter<AdapterDiccionario.ViewHolderDatosDic>() {
 
 
      var listaItems = items
-     var contenedorPadre=contenedorPadre as DictionaryFragment
+     var contenedorPadre=contenedorPadre
 
 
     //INFLAMOS EL LAYOUT CREADO PARA ESTE RECYCLER "layout_diccionario"
@@ -54,6 +60,12 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
 
         val entradaActual=listaItems.get(position)
         holder.cambiarColor(entradaActual.probAcierto)
+        entradaActual.imagen?.let {
+            if(!(it.isEmpty()))
+                holder.circuloColor.cargarImagen(it)
+        }
+
+
         holder.palabra.text=entradaActual.escrituraIngles
         holder.traduccion.text=entradaActual.significado
         var reproducirAudio: MediaPlayer? =null
@@ -64,25 +76,28 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
         entradaActual.audio?.let{
             if(!it.isEmpty()) {
                 holder.mediaAudio.setVisibility(View.VISIBLE)
+
+                //PREPARAMOS EL AUDIO CORRESPONDIENTE A ESTA PALABRA, QUE SE ENCUENTRA EN LA
+                //MEMORIA INTERNA DEL MÓVIL.
+                reproducirAudio=MediaPlayer()
+                preparacionAudio(reproducirAudio!!, entradaActual)
+
+                //CUANDO TERMINE DE REPRODUCIRSE EL AUDIO, CAMBIAMOS EL ICONO
+                reproducirAudio!!.setOnCompletionListener {
+                    holder.mediaAudio.setBackgroundResource(android.R.drawable.ic_media_play)
+
+                }
             }
             else
             {
                 holder.mediaAudio.setVisibility( View.GONE)
             }
 
-            //PREPARAMOS EL AUDIO CORRESPONDIENTE A ESTA PALABRA, QUE SE ENCUENTRA EN LA
-            //MEMORIA INTERNA DEL MÓVIL.
-            reproducirAudio=MediaPlayer()
-            preparacionAudio(reproducirAudio!!,entradaActual)
+
         }?:holder.mediaAudio.setVisibility(View.GONE)
 
 
 
-        //CUANDO TERMINE DE REPRODUCIRSE EL AUDIO, CAMBIAMOS EL ICONO Y LIBERAMOS RECURSOS
-        reproducirAudio!!.setOnCompletionListener {
-            holder.mediaAudio.setBackgroundResource(android.R.drawable.ic_media_play)
-            reproducirAudio!!.release()
-        }
 
         holder.mediaAudio.setOnClickListener{
 
@@ -90,13 +105,10 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
             //CAMBIA LA IMAGEN DEL BOTÓN REPRODUCCÍON
             it.cambioImagen(reproducirAudio!!)
 
+
         }
 
-        holder.borrar.setOnClickListener{
 
-            borrarElemento(entradaActual, position)
-
-         }
 
     }
 
@@ -106,7 +118,7 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
             reproducirAudio.setDataSource(
                 Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_MUSIC
-                ).absolutePath + entradaActual.idEntrada + ".mp3"
+                ).absolutePath +"/AudioVocLearn"+ entradaActual.idEntrada +".mp3"
             )
 
             //PREPARAMOS EL AUDIO
@@ -131,22 +143,39 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
             entradaActual.descripcion,
             entradaActual.probAcierto,
             entradaActual.escrituraIngles,
+            entradaActual.imagen,
             entradaActual.audio)
         CRUDEntradas.borrarEntradaId(entradaActual.idEntrada)
         this.listaItems= CRUDEntradas.obtenerTodasEntradas()
         notifyItemRemoved(position)
+        notifyItemChanged(position)
         println("LISLOC AFTERDELETE: "+ listaItems)
         println("LISIT AFTERDELETE: "+ items)
-        println("LISLBD AFTERDELETE: "+ CRUDEntradas.obtenerTodasEntradas())
+        println("LISLBD AFTERDELETE: "+CRUDEntradas.recorrerListaEntrada(CRUDEntradas.obtenerTodasEntradas()))
 
         //SI NO HAY ITMES, NOTIFICAMOS TAMBIÉN AL USUARIO
         if(itemCount==0)
         {
-            contenedorPadre.listaDiccionario.visibility= View.GONE
-            contenedorPadre.layout_no_almacen.visibility= View.VISIBLE
+            contenedorPadre?.let{it.listaDiccionario.setVisibility(View.GONE)}
+            contenedorPadre?.let{it.layout_no_almacen.setVisibility(View.VISIBLE)}
 
         }
 
+        //MUESTRA EL SNACKBAR AL BORRAR UN ELEMENTO
+        muestraSnack(position, objetoRecovery)
+
+        //ESCONDEMOS EL TECLADO CUANDO SE MUESTRA EL SNACKBAR
+        val imm = contenedorPadre.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(contenedorPadre.listaDiccionario.getWindowToken(), 0)
+
+        println("LISLOC AFTERresultante: "+ listaItems)
+        println("LISIT AFTERresultante: "+ items)
+        println("LISLBD AFTERresultante: "+ CRUDEntradas.recorrerListaEntrada(CRUDEntradas.obtenerTodasEntradas()))
+    }
+
+
+    fun muestraSnack(position: Int, objetoRecovery:Entrada)
+    {
         //ESTE SNACKBAR CANCELA EL BORRADO, REINSERTANDO DE NUEVO EL OBJETO EN LA BASE DE DATOS
         //LA FORMA DE BORRADO QUE HEMOS USADO NOS OBLIGA A REINSERTAR DE NUEVO EL OBJETO CON LOS DATOS QUE TENEMOS
         //BORRAR EN LA LISTA DEL RECYCLER ANTES QUE EN LA BASE DE DATOS NOS DABA PROBLEMAS
@@ -155,24 +184,23 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
                     _ -> CRUDEntradas.nuevaOActualizarEntrada(objetoRecovery)
                 this.listaItems= CRUDEntradas.obtenerTodasEntradas()
                 notifyItemInserted(position)
+                notifyItemChanged(position)
                 println("LISLOC AFTERreinserccion: "+ listaItems)
                 println("LISIT AFTERreinserccion: "+ items)
-                println("LISLBD AFTERreinserccion: "+ CRUDEntradas.obtenerTodasEntradas())
+                println("LISLBD AFTERreinserccion: "+ CRUDEntradas.recorrerListaEntrada(CRUDEntradas.obtenerTodasEntradas()))
 
-                contenedorPadre.listaDiccionario.visibility= View.VISIBLE
-                contenedorPadre.layout_no_almacen.visibility= View.GONE
+                try {
+                    contenedorPadre?.let { it.listaDiccionario.setVisibility(View.VISIBLE) }
+                    contenedorPadre?.let { it.layout_no_almacen.setVisibility(View.GONE) }
+                }
+                catch(nulo:NullPointerException)
+                {
+                    Toast.makeText(contenedorPadre, "Fallo en visibilizar recycler", Toast.LENGTH_SHORT)
+                }
             }).show()
 
-        //ESCONDEMOS EL TECLADO CUANDO SE MUESTRA EL SNACKBAR
-        val imm = contenedorPadre.activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(contenedorPadre.listaDiccionario.getWindowToken(), 0)
 
-        println("LISLOC AFTERresultante: "+ listaItems)
-        println("LISIT AFTERresultante: "+ items)
-        println("LISLBD AFTERresultante: "+ CRUDEntradas.obtenerTodasEntradas())
     }
-
-
 
     //CLASE DE LAS VISTAS DEL LAYOUT UTILIZADO PARA ESTE ADAPTADOR
     class ViewHolderDatosDic(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -181,8 +209,6 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
         val traduccion=itemView.textView_traduccion
         val circuloColor=itemView.probabilidad
         val mediaAudio=itemView.btn_audio
-        val editar=itemView.btn_editar
-        val borrar=itemView.btn_borrar
 
         fun cambiarColor( probabilidad:Int)
         {
@@ -216,12 +242,6 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : Any): Recyc
         notifyDataSetChanged()
     }
 
-    //RESTABLECE LA LISTA
-    fun restablecerLista()
-    {
-        listaItems=CRUDEntradas.obtenerTodasEntradas()
-        notifyDataSetChanged()
-    }
 
     //UTILIZAMOS LA LISTA DEVUELTA POR ESTE MÉTODO, PARA FILTRAR EN EL BUSCADOR
     fun obtenerListaCompleta():List<Entrada>
