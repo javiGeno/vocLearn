@@ -285,6 +285,8 @@ open class DictionaryFragment : Fragment(),
 
         //RESTABLECE EL BUSCADOR A SU ESTADO INICIAL
         buscador.onActionViewCollapsed()
+        //MOSTRAMOS EL MENÚ POR SI SE CONGELA EN INVISIBLE
+        activity?.navigation?.visibility= VISIBLE
 
         return true
     }

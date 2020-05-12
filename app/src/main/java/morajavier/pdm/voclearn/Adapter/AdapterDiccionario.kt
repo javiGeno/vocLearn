@@ -20,9 +20,11 @@ import kotlinx.android.synthetic.main.layout_diccionario.view.*
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
 import morajavier.pdm.voclearn.FuncionesExtension.cambioImagen
 import morajavier.pdm.voclearn.FuncionesExtension.cargarImagen
+import morajavier.pdm.voclearn.FuncionesExtension.cargarImagenCircle
 import morajavier.pdm.voclearn.MainActivity
 import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.R
+import morajavier.pdm.voclearn.Sonido
 import morajavier.pdm.voclearn.Vistas.DictionaryFragment
 import java.io.IOException
 import java.lang.NullPointerException
@@ -62,7 +64,7 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : FragmentAct
         holder.cambiarColor(entradaActual.probAcierto)
         entradaActual.imagen?.let {
             if(!(it.isEmpty()))
-                holder.circuloColor.cargarImagen(it)
+                holder.circuloColor.cargarImagenCircle(it)
         }
 
 
@@ -80,7 +82,7 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : FragmentAct
                 //PREPARAMOS EL AUDIO CORRESPONDIENTE A ESTA PALABRA, QUE SE ENCUENTRA EN LA
                 //MEMORIA INTERNA DEL MÓVIL.
                 reproducirAudio=MediaPlayer()
-                preparacionAudio(reproducirAudio!!, entradaActual)
+                Sonido.preparacionAudio(reproducirAudio!!, entradaActual.idEntrada)
 
                 //CUANDO TERMINE DE REPRODUCIRSE EL AUDIO, CAMBIAMOS EL ICONO
                 reproducirAudio!!.setOnCompletionListener {
@@ -112,25 +114,7 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : FragmentAct
 
     }
 
-    fun preparacionAudio(reproducirAudio:MediaPlayer, entradaActual: Entrada)
-    {
-        try {
-            reproducirAudio.setDataSource(
-                Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_MUSIC
-                ).absolutePath +"/AudioVocLearn"+ entradaActual.idEntrada +".mp3"
-            )
 
-            //PREPARAMOS EL AUDIO
-            reproducirAudio.prepare()
-
-        }
-        catch (e: IOException){
-            Log.e("ERROR AUDIO", "Ha ocurrido un error al reproducir el audio")
-
-        }
-
-    }
 
     fun borrarElemento(entradaActual:Entrada, position:Int)
     {
