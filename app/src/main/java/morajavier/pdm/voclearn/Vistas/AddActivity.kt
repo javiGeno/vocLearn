@@ -18,8 +18,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import kotlinx.android.synthetic.main.activity_add.*
+import kotlinx.android.synthetic.main.barra_guardar_atras.*
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
 import morajavier.pdm.voclearn.FuncionesExtension.cargarImagen
+import morajavier.pdm.voclearn.FuncionesExtension.cargarNotCache
+import morajavier.pdm.voclearn.FuncionesExtension.crearSpinnerCarga
 import morajavier.pdm.voclearn.Imagen
 import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.R
@@ -37,8 +40,8 @@ class AddActivity : AppCompatActivity() {
     var rutaImagen:String=""
     //FICHERO DONDE SE ALMACENARA LA IMAGEN OBTENIDA POR LA CAMARA O GALERIA
     var ficheroAlmacenImagen:File?=null
-    //OBJETO PARA LA GRABACIÓN DEL AUDIO
-    var gestionSondio=Sonido(this)
+    //OBJETO PARA LA GRABACIÓN DEL AUDIO PASAMOS EL CONTEXTO, Y EL ID DEL NUEVO AUDIO,  QUE SON LOS REQUERIDOS
+    var gestionSondio=Sonido(this, CRUDEntradas.nuevoId()!!)
 
     companion object{
         //CONSTANTES PARA LA ELECCIÓN DE LA FUENTE DE IMAGEN, QUE PUEDE SER DESDE LA GALERIA O DE LA CAMARA
@@ -52,36 +55,8 @@ class AddActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
 
-        //PERMISOS DE ACCESO A MICRÓFONO EN ESTA ACTIVITY, Y DE ALMACENAMIENTO
-        if (ActivityCompat.checkSelfPermission(applicationContext, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(applicationContext,Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED
-        )
-        {
-            ActivityCompat.requestPermissions(
-                this@AddActivity,
-                arrayOf(
-                    Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                ),
-                1000
-            )
-        }
-        else
-        {
-            Log.e("PERMISOS", "los permisos de escritura y micrófono ya fueron concedidos")
+        SecurityCopy.comprobarPermisosCamMicro(this)
 
-        }
-
-
-        //ESCONDEMOS EL TECLADO CUANDO PINCHAMOS FUERA DE LOS VIEW, Y QUITAMOS EL FOCO DE LOS CAMPOS DE TEXTO
-        layout_prin.setOnClickListener{
-
-           esconderTeclado(it)
-            limpiarFocos()
-
-        }
 
 
         //AL PULSAR EL BOTON ATRÁS VOLVEMOS AL FRAGMENT PADRE
@@ -110,7 +85,8 @@ class AddActivity : AppCompatActivity() {
         img_click.setOnClickListener{
 
             //OBTENEMOS EL FICHERO DONDE SE ALMACENARÁ LA IMAGEN OBTENIDA POR GALERIA O CÁMARA
-            ficheroAlmacenImagen=Imagen.creacionFicheroImagen()
+            //PASÁNDOLE UN NUEVO ID
+            ficheroAlmacenImagen=Imagen.creacionFicheroImagen(CRUDEntradas.nuevoId()!!)
             Imagen.seleccionarFuenteImagen(this, ficheroAlmacenImagen!!)
         }
 
@@ -140,7 +116,7 @@ class AddActivity : AppCompatActivity() {
                 println("IMAGEN RESPUESTA GALERIA "+rutaImagen)
 
                 //FUNCIÓN DE EXTENSION QUE CARGA LA IMAGEN CON GLIDE(LIBRERIA)
-                img_click.cargarImagen(rutaImagen)
+                img_click.cargarNotCache(rutaImagen, this.crearSpinnerCarga(5f, 30f))
 
 
 
@@ -159,7 +135,7 @@ class AddActivity : AppCompatActivity() {
 
                 //FUNCIÓN DE EXTENSION QUE CARGA LA IMAGEN CON GLIDE(LIBRERIA)
                 rutaImagen=ficheroAlmacenImagen!!.absolutePath
-                img_click.cargarImagen(rutaImagen)
+                img_click.cargarNotCache(rutaImagen, this.crearSpinnerCarga(5f, 30f))
 
 
             }
@@ -186,18 +162,6 @@ class AddActivity : AppCompatActivity() {
 
     }
 
-    fun limpiarFocos()
-    {
-        field_descri.clearFocus()
-        field_traduccion.clearFocus()
-        field_word.clearFocus()
-    }
-
-    fun esconderTeclado(it: View)
-    {
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(it.getWindowToken(), 0)
-    }
 
     fun vaciarCampos()
     {
@@ -242,6 +206,9 @@ class AddActivity : AppCompatActivity() {
     //SE MUESTRA EL BÓTON DE GUARDAR LA PALABRA
     fun eventosCamposObligatorios()
     {
+        //PONEMOS EL BOTÓN DE GUARDAR INVISIBLE MIENTRAS QUE NO SE RELLENEN LOS DOS CAMPOS OBLIGATORIOS
+        btn_guardar.visibility=GONE
+
         field_traduccion.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
                 println(" afterTextChanged "+ p0)

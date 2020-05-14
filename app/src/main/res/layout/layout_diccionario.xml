@@ -8,44 +8,44 @@
 
 
     <LinearLayout
+        android:id="@+id/click_detalle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/azulCielo">
+        android:background="@color/azulCielo"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/probabilidad"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_centerHorizontal="true"
-                android:scaleType="fitCenter"
-                android:adjustViewBounds="true"
                 android:layout_gravity="center"
-                android:padding="@dimen/margen0"
                 android:layout_margin="@dimen/margen0"
-                />
+                android:adjustViewBounds="true"
+                android:padding="@dimen/margen0"
+                android:scaleType="fitCenter" />
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_weight="4"
             android:layout_width="0dp"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView_palabra_ingles"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView"
                 android:padding="@dimen/margen0"
-                android:textSize="24sp"
-                android:textStyle="bold"
                 android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 app:fontFamily="sans-serif-smallcaps" /><!--MAYÚSCULAS-->
 
             <TextView
@@ -53,17 +53,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/margen0"
-                android:text="TextView"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="@color/grisOscuro"/>
+                android:textColor="@color/grisOscuro"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/btn_audio"
@@ -75,7 +73,7 @@
                 android:layout_marginBottom="@dimen/margen1"
                 android:background="@android:drawable/ic_media_play"
                 android:contentDescription="@string/audio"
-                android:visibility="gone"/>
+                android:visibility="invisible" />
 
 
         </RelativeLayout>

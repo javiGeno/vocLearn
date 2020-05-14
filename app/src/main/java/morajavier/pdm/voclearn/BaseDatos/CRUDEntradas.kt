@@ -20,6 +20,37 @@ class CRUDEntradas {
 
         }
 
+        fun actualizarPropiedadObjeto(entradaActualizar:Entrada, campo:String, dato:String)
+        {
+
+
+            App.gestorBD.r.executeTransaction({
+                when (campo) {
+                    "palabra" -> {
+
+                        entradaActualizar.escrituraIngles= dato
+
+                    }
+                    "traduccion" -> {
+
+                        entradaActualizar.significado=dato
+                    }
+                    "descripcion" -> {
+
+                        entradaActualizar.descripcion=dato
+                    }
+                    "imagen"->{
+                        entradaActualizar.imagen=dato
+                    }
+                    "audio"->{
+                        entradaActualizar.audio=dato
+
+                    }
+                    else ->  false
+                }
+            })
+        }
+
         fun borrarEntradaId(filtro: Int): List<Entrada>
         {
             //BORRA UNA ENTRADA FILTRADA POR SU ID, Y DEVUELVE  UNA LISTA ACTUALIZADA
@@ -91,6 +122,11 @@ class CRUDEntradas {
                 .equalTo("idEntrada", idEntrada)
                 .findFirst()
 
+        }
+
+        fun tamEntradas():Int
+        {
+            return obtenerTodasEntradas().size
         }
 
         fun obtenerTodasEntradas() : List<Entrada>

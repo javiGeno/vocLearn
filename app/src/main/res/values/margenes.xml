@@ -4,4 +4,10 @@
     <dimen name="margen1">10dp</dimen>
     <dimen name="margen2">15dp</dimen>
     <dimen name="margen3">20dp</dimen>
+    <dimen name="margen4">25dp</dimen>
+    <dimen name="margen5">30dp</dimen>
+    <dimen name="margen6">35dp</dimen>
+    <dimen name="margen8">40dp</dimen>
+    <dimen name="margen9">45dp</dimen>
+    <dimen name="margen10">50dp</dimen>
 </resources>

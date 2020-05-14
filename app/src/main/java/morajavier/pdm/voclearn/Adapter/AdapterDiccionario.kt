@@ -3,6 +3,7 @@ package morajavier.pdm.voclearn.Adapter
 
 
 import android.content.Context
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Environment
 import android.util.Log
@@ -16,15 +17,15 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_dictionary.*
+import kotlinx.android.synthetic.main.layout_diccionario.*
 import kotlinx.android.synthetic.main.layout_diccionario.view.*
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
-import morajavier.pdm.voclearn.FuncionesExtension.cambioImagen
-import morajavier.pdm.voclearn.FuncionesExtension.cargarImagen
-import morajavier.pdm.voclearn.FuncionesExtension.cargarImagenCircle
+import morajavier.pdm.voclearn.FuncionesExtension.*
 import morajavier.pdm.voclearn.MainActivity
 import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.R
 import morajavier.pdm.voclearn.Sonido
+import morajavier.pdm.voclearn.Vistas.DetailActivity
 import morajavier.pdm.voclearn.Vistas.DictionaryFragment
 import java.io.IOException
 import java.lang.NullPointerException
@@ -63,8 +64,10 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : FragmentAct
         val entradaActual=listaItems.get(position)
         holder.cambiarColor(entradaActual.probAcierto)
         entradaActual.imagen?.let {
-            if(!(it.isEmpty()))
-                holder.circuloColor.cargarImagenCircle(it)
+            if(!(it.isEmpty())) {
+                println("RUTA IMAGEN ADAPTER " + it)
+                holder.circuloColor.cargarImagenCircleNoCache(it, contenedorPadre.crearSpinnerCarga(5f, 30f))
+            }
         }
 
 
@@ -110,7 +113,14 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : FragmentAct
 
         }
 
+        //CUANDO PULSAMOS EN EL LAYOUT CON EL ID click_detalle NOS LLEVA A LA ACTIVIDAD DONDE SE MOSTRARÁN
+        //LOS DATOS DE LA ENTRADA EN LA QUE SE HA PINCHADO
+        holder.itemView.click_detalle.setOnClickListener {
 
+            val intent=Intent(contenedorPadre, DetailActivity::class.java)
+            intent.putExtra("idEntrada", entradaActual.idEntrada)
+            contenedorPadre.startActivity(intent)
+        }
 
     }
 
@@ -133,6 +143,8 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : FragmentAct
         this.listaItems= CRUDEntradas.obtenerTodasEntradas()
         notifyItemRemoved(position)
         notifyItemChanged(position)
+
+        //PRINT DE CONTROL
         println("LISLOC AFTERDELETE: "+ listaItems)
         println("LISIT AFTERDELETE: "+ items)
         println("LISLBD AFTERDELETE: "+CRUDEntradas.recorrerListaEntrada(CRUDEntradas.obtenerTodasEntradas()))
@@ -152,6 +164,7 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : FragmentAct
         val imm = contenedorPadre.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(contenedorPadre.listaDiccionario.getWindowToken(), 0)
 
+        //PRINT DE CONTROL
         println("LISLOC AFTERresultante: "+ listaItems)
         println("LISIT AFTERresultante: "+ items)
         println("LISLBD AFTERresultante: "+ CRUDEntradas.recorrerListaEntrada(CRUDEntradas.obtenerTodasEntradas()))
@@ -169,6 +182,8 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : FragmentAct
                 this.listaItems= CRUDEntradas.obtenerTodasEntradas()
                 notifyItemInserted(position)
                 notifyItemChanged(position)
+
+                //PRINT DE CONTROL
                 println("LISLOC AFTERreinserccion: "+ listaItems)
                 println("LISIT AFTERreinserccion: "+ items)
                 println("LISLBD AFTERreinserccion: "+ CRUDEntradas.recorrerListaEntrada(CRUDEntradas.obtenerTodasEntradas()))

@@ -6,42 +6,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/azulCielo"
-    tools:context=".Vistas.AddActivity">
+    tools:context=".Vistas.AddActivity"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
-    <RelativeLayout
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorIconos">
-
-
-        <ImageButton
-            android:id="@+id/btn_atras"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="@dimen/margen1"
-            android:layout_marginLeft="@dimen/margen1"
-            android:layout_marginTop="@dimen/margen1"
-            android:layout_marginEnd="@dimen/margen1"
-            android:layout_marginRight="@dimen/margen1"
-            android:layout_marginBottom="@dimen/margen1"
-            android:background="@drawable/ic_action_back" />
-
-        <Button
-            android:id="@+id/btn_guardar"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginStart="@dimen/margen1"
-            android:layout_marginLeft="@dimen/margen1"
-            android:layout_marginTop="@dimen/margen1"
-            android:layout_marginEnd="@dimen/margen1"
-            android:layout_marginRight="@dimen/margen1"
-            android:layout_marginBottom="@dimen/margen1"
-            android:background="@android:drawable/ic_menu_save"
-            android:visibility="gone" />
-
-    </RelativeLayout>
+    <include
+        layout="@layout/barra_guardar_atras"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -71,7 +41,7 @@
                     android:layout_height="40dp"
                     android:layout_margin="@dimen/margen2"
                     android:hint="@string/addEntrada"
-                    android:maxLength="50"
+                    android:maxLength="35"
                     android:textColor="@color/grisOscuro"
                     android:textSize="15dp"
                    />
@@ -82,7 +52,7 @@
                     android:layout_height="40dp"
                     android:layout_margin="@dimen/margen2"
                     android:hint="@string/addTraduccion"
-                    android:maxLength="50"
+                    android:maxLength="35"
                     android:textSize="15dp" />
 
                 <androidx.appcompat.widget.AppCompatTextView

@@ -100,7 +100,7 @@ class Imagen {
             }
         }
 
-        fun creacionFicheroImagen():File
+        fun creacionFicheroImagen(idImagen:Int):File
         {
             //CREAMOS UN DIRECTORIO PARA GUARDAR LA IMAGENES OBTENIDAS YA SEA CÁMARA O GALERIA
             val dirAlmacenamientoImagen=File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"/ImagenesVocLearn")
@@ -109,7 +109,7 @@ class Imagen {
                 dirAlmacenamientoImagen.mkdirs()
 
             //CREAMOS EL FICHERO DONDE SE ALMACENARÁ LA IMAGEN NUEVA
-            val ficheroImg="IMG"+ CRUDEntradas.nuevoId()+".jpg"
+            val ficheroImg="IMG"+idImagen+".jpg"
             var ficheroAlmacenamientoImagen=File(dirAlmacenamientoImagen,ficheroImg)
 
             return ficheroAlmacenamientoImagen
