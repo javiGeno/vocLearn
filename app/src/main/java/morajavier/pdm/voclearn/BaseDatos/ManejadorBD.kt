@@ -44,10 +44,11 @@ class ManejadorBD (appContext:Context){
 
             Log.w("MAIN", "Hay bd en local")
         } else {
-            //SI NO HAY BD LOCAL, PERO SI EXTERNA
-            //LA RESTAURAMOS EN LOCAL
+            //SI NO HAY BD LOCAL, PERO SI EXTERNA Y ADEMÁS TENEMOS PERMISOS
+            //LA RESTAURAMOS
             //SI NO HAY CONSTANCIA DE NINGUNA DE LAS DOS, CREAMOS LA BD NUEVA
-            if (SecurityCopy.hayBDExterna(contexto)) {
+            if (SecurityCopy.hayBDExterna() && SecurityCopy.perAceptados) {
+
                 SecurityCopy.restaurarCopiaSeguridad(contexto)
 
 

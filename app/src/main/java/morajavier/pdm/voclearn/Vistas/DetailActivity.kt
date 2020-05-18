@@ -3,11 +3,13 @@ package morajavier.pdm.voclearn.Vistas
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.media.MediaScannerConnection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -26,6 +28,7 @@ import morajavier.pdm.voclearn.FuncionesExtension.cargarNotCache
 import morajavier.pdm.voclearn.FuncionesExtension.crearSpinnerCarga
 import morajavier.pdm.voclearn.Modelo.Entrada
 import java.io.File
+import java.util.jar.Manifest
 
 class DetailActivity : AppCompatActivity() {
 
@@ -44,7 +47,9 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        SecurityCopy.comprobarPermisosCamMicro(this)
+        //SE COMPRUEBAN LOS PERMISOS DE ALMACENAMIENTO EXTERNO Y MICRO
+        SecurityCopy.comprobarTodosPermisos(this)
+
 
 
         limpiarFocos()
@@ -70,24 +75,36 @@ class DetailActivity : AppCompatActivity() {
             it.cambioImagen(reproducirAudio)
         }
 
-        //CARGA UNA NUEVA IMAGEN
+        //CARGA UNA NUEVA IMAGEN, PARA ELLO DEBE TENER PERMISOS
         card_imagen.setOnClickListener {
+            if(SecurityCopy.perAceptados){
             //OBTENEMOS EL FICHERO DONDE SE ALMACENARÁ LA IMAGEN OBTENIDA POR GALERIA O CÁMARA
-            //PASAMOS EL ID DEL OBJETO QUE SE VA A MODIFICAR
-            ficheroAlmacenImagen = Imagen.creacionFicheroImagen(idEntrada)
-            Imagen.seleccionarFuenteImagen(this, ficheroAlmacenImagen!!)
+                //PASAMOS EL ID DEL OBJETO QUE SE VA A MODIFICAR
+                ficheroAlmacenImagen = Imagen.creacionFicheroImagen(idEntrada)
+                Imagen.seleccionarFuenteImagen(this, ficheroAlmacenImagen!!)
+            }else{
+                Toast.makeText(it.context,  getString(R.string.perImagenDenegado), Toast.LENGTH_SHORT).show()
+
+            }
 
         }
 
         //ESTE EVENTO LLAMA A LA GRABADORA, SI ESTA PULSADO EL BOTÓN, GRABA, SI LO SUELTA DEJA DE GRABAR
         //SI LA GRABACIÓN SE REALIZA, isGuardado SE PONE A TRUE, Y SE LE PASAA GUARDAR AUDIO
+        //PARA ELLO DEBE TENER LOS PERMISOS ASIGNADOS
         btn_record.setOnTouchListener{v, event->
-
-            val isGrabado=gestionSondio.grabadora(v, event)
-            guardarAudio(isGrabado)
-            return@setOnTouchListener isGrabado
+            if(SecurityCopy.perAceptados) {
+                val isGrabado = gestionSondio.grabadora(v, event)
+                guardarAudio(isGrabado)
+                return@setOnTouchListener isGrabado
+            }
+            else{
+                Toast.makeText(v.context,  getString(R.string.permisosMicro), Toast.LENGTH_SHORT).show()
+                return@setOnTouchListener false
+            }
 
         }
+
 
 
 
@@ -104,7 +121,7 @@ class DetailActivity : AppCompatActivity() {
             //Y VOLVEMOS A CARGAR EL MEDIA PLAYER PARA EL NUEVO AUDIO
             cargaAudio()
         }
-        
+
 
     }
 
@@ -234,6 +251,49 @@ class DetailActivity : AppCompatActivity() {
 
 
         }?:btn_audio.setVisibility(View.GONE)
+
+    }
+
+    //RESPUESTA PERMISOS
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    )
+    {
+        //MENSAJE CONTROL PARÁMETROS
+        for(p in permissions  )
+            Log.e("ARRAY DE PERMISOS ",""+p)
+        for(p in grantResults  )
+            Log.e("RESULTADOS ",""+p)
+        Log.e("RESPUESTA CODE ", ""+requestCode)
+        when (requestCode) {
+            SecurityCopy.REQUEST_EXTERNAL_STORAGE -> {
+                //SI LOS PERMISOS DE ALMACENAMIENTO EXTERNO NO SE ACEPTARON
+                //LEVANTAMOS LA VANDERA DE LOS PERMISOS Y NOTIFICANOS POR CONSOLA
+                if ((grantResults.isEmpty() ||
+                     grantResults[0] != PackageManager.PERMISSION_GRANTED ||
+                     grantResults[1] != PackageManager.PERMISSION_GRANTED)||
+                     grantResults[2] != PackageManager.PERMISSION_GRANTED) {
+
+                    SecurityCopy.perAceptados=false
+
+
+                }
+                else
+                {
+                    SecurityCopy.perAceptados=true
+
+
+                }
+                return
+            }
+
+            else -> {
+
+            }
+
+        }
 
     }
 

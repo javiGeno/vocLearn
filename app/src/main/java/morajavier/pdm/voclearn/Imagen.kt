@@ -8,8 +8,10 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
+import androidx.core.content.FileProvider
 import morajavier.pdm.voclearn.Vistas.AddActivity
 import java.io.File
 
@@ -65,18 +67,29 @@ class Imagen {
 
         }
 
+
+
         fun abrirActivityCamara(act:Activity, ficheroAlmacenImagen: File)
         {
 
-
+            //OBTENEMOS LA URI CON EL FILE PROVIDER CREADO
+            var imageUri=FileProvider.getUriForFile(act, "com.example.android.fileprovider", ficheroAlmacenImagen)
             //IGUAL QUE CON LA OPCIÓN DE GALERIA, COMPROBAMOS SI EL INTENT NO ES NULO, SI NO LO ES
             //LANZAMOS EL startActivityForResult CON EL OBJETO INTENT
             Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
                 takePictureIntent.resolveActivity(act.packageManager)?.also {
                     //PASAMOS POR EL putExtra EL FICHERO DONDE SE ALMACENARÁ LA CAPTURA DE LA FOTO
                     //INDICANDO CON EL MediaStore.EXTRA_OUTPUT QUE REALICE ESA ACCIÓN
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(ficheroAlmacenImagen))
-                    act.startActivityForResult(takePictureIntent, AddActivity.RESPUESTA_CAMARA)
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+                    try {
+                        act.startActivityForResult(takePictureIntent, AddActivity.RESPUESTA_CAMARA)
+                    }
+                    catch(e:Exception)
+                    {
+                        Toast.makeText(act, "Error al abrir la cámara:"+e.toString(), Toast.LENGTH_SHORT)
+                            .show()
+                        Log.e("Cámara ", e.toString())
+                    }
                 }
             }
 
@@ -99,6 +112,7 @@ class Imagen {
                 )
             }
         }
+
 
         fun creacionFicheroImagen(idImagen:Int):File
         {

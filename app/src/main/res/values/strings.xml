@@ -18,6 +18,12 @@
     <string name="addLevel">Elige un nivel de dificultad, el sistema te preguntará más veces las palabras difíciles para un aprencizaje más efectivo</string>
     <string name="adImg">Añade una imagen opcionalmente para un aprendizaje más eficaz</string>
     <string name="cancelar">CANCELAR</string>
+    <string name="aceptar">ACEPTAR</string>
+    <string name="necesidadPermisos">PERMISOS NECESARIOS</string>
+    <string name="permisosMicro">"Para poder almacenar la pronunciación de las palabras necesitas aceptar los permisos de micrófono"</string>
+    <string name="permisos">"Para crear una copia de seguridad y guardar imágenes relacionadas con su  vocabulario, necesita aceptar los permisos, así, si desinstala la app, no perderá lo que ha avanzado"</string>
+    <string name="perMicroDenegados">"No tiene permisos suficientes para grabar"</string>
+    <string name="perImagenDenegado">"No tiene permisos suficientes para guardar imagenes"</string>
     <string name="borrado">PALABRA BORRADA</string>
     <string name="grabAviso">Mantén pulsado para grabar durante un máx de 20 segundos</string>
     <string name="grabDetenida">Grabación detendida</string>

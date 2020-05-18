@@ -31,7 +31,7 @@ import morajavier.pdm.voclearn.Sonido
 import java.io.File
 
 
-class AddActivity : AppCompatActivity() {
+class AddActivity : AppCompatActivity(),  ActivityCompat.OnRequestPermissionsResultCallback {
 
 
 
@@ -55,7 +55,9 @@ class AddActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
 
-        SecurityCopy.comprobarPermisosCamMicro(this)
+        //SE COMPRUEBAN LOS PERMISOS DE ALMACENAMIENTO EXTERNO
+        SecurityCopy.comprobarTodosPermisos(this)
+
 
 
 
@@ -76,34 +78,41 @@ class AddActivity : AppCompatActivity() {
         }
 
         btn_grabar.setOnTouchListener{v, event->
-            gestionSondio.grabadora(v, event )
+            if(SecurityCopy.perAceptados) {
+                gestionSondio.grabadora(v, event )
+            }else{
+                Toast.makeText(v.context, getString(R.string.permisosMicro), Toast.LENGTH_SHORT).show()
+                return@setOnTouchListener false
+            }
+
+
         }
 
 
 
-        //EVENTO PARA CUANDO PULSE EL IMAGEVIEW
+        //EVENTO PARA CUANDO PULSE EL IMAGEVIEW PARA ELLO DEBE TENER PERMISOS
         img_click.setOnClickListener{
+            if(SecurityCopy.perAceptados) {
+                //OBTENEMOS EL FICHERO DONDE SE ALMACENARÁ LA IMAGEN OBTENIDA POR GALERIA O CÁMARA
+                //PASÁNDOLE UN NUEVO ID
+                ficheroAlmacenImagen=Imagen.creacionFicheroImagen(CRUDEntradas.nuevoId()!!)
+                Imagen.seleccionarFuenteImagen(this, ficheroAlmacenImagen!!)
+            }else{
+                Toast.makeText(it.context,  getString(R.string.perImagenDenegado), Toast.LENGTH_SHORT).show()
 
-            //OBTENEMOS EL FICHERO DONDE SE ALMACENARÁ LA IMAGEN OBTENIDA POR GALERIA O CÁMARA
-            //PASÁNDOLE UN NUEVO ID
-            ficheroAlmacenImagen=Imagen.creacionFicheroImagen(CRUDEntradas.nuevoId()!!)
-            Imagen.seleccionarFuenteImagen(this, ficheroAlmacenImagen!!)
+            }
         }
 
 
     }
 
 
-
-
-
+    //RESPUESTA PARA IMAGEN
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(resultCode== Activity.RESULT_OK)
         {
-
-
             if(requestCode== RESPUESTA_GALERIA)
             {
 
@@ -128,10 +137,11 @@ class AddActivity : AppCompatActivity() {
                 //arrayOf(ficheroAlmacenImagen!!.absolutePath) -->RUTA DONDE SE ALMACENÓ LA IMAGEN AL CAPTURAR LA FOTO
                 //ficheroAlmacenImagen-->LO PASAMOS POR EL PutExtra eN EL INTENT
                 MediaScannerConnection.scanFile(this, arrayOf(ficheroAlmacenImagen!!.absolutePath) , null,
-                                                { path, uri ->
+                    { path, uri ->
 
-                                                    println("IMAGEN RESPUESTA FOTO "+ path)
-                                                })
+                        println("IMAGEN RESPUESTA FOTO "+ path)
+                        println("IMAGEN RESPUESTA FOTO uri "+ uri)
+                    })
 
                 //FUNCIÓN DE EXTENSION QUE CARGA LA IMAGEN CON GLIDE(LIBRERIA)
                 rutaImagen=ficheroAlmacenImagen!!.absolutePath
@@ -141,8 +151,6 @@ class AddActivity : AppCompatActivity() {
             }
         }
     }
-
-
 
     fun guardarObjetoEnBD()
     {
@@ -198,8 +206,50 @@ class AddActivity : AppCompatActivity() {
         return 1
     }
 
+    //RESPUESTA PERMISOS
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    )
+    {
+        //MENSAJE CONTROL PARÁMETROS
+        for(p in permissions  )
+            Log.e("ARRAY DE PERMISOS ",""+p)
+        for(p in grantResults  )
+            Log.e("RESULTADOS ",""+p)
+        Log.e("RESPUESTA CODE ", ""+requestCode)
+        when (requestCode) {
+            SecurityCopy.REQUEST_EXTERNAL_STORAGE -> {
+                //SI LOS PERMISOS DE ALMACENAMIENTO EXTERNO NO SE ACEPTARON
+                //LEVANTAMOS LA VANDERA DE LOS PERMISOS Y NOTIFICANOS POR CONSOLA
+                if (grantResults.isEmpty() ||
+                    (grantResults[0] != PackageManager.PERMISSION_GRANTED &&
+                            grantResults[1] != PackageManager.PERMISSION_GRANTED)||
+                    grantResults[2] != PackageManager.PERMISSION_GRANTED) {
+
+                    SecurityCopy.perAceptados=false
+                    Log.e("PERMISOS DENEGADOS ","permiso denegado")
 
 
+                }
+                else
+                {
+                    SecurityCopy.perAceptados=true
+                    Log.e("PERMISOS ACEPTADOS ","permiso aceptado")
+
+
+                }
+                return
+            }
+
+            else -> {
+
+            }
+
+        }
+
+    }
 
 
     //ESTE MÉTODO CHEQUEA QUE LOS DOS CAMPOS OBLIGATORIOS ESTEN RELLENOS, Y EN EL CASO DE QUE LO ESTÉN,

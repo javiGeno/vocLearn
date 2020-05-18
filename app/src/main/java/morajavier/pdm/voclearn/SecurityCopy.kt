@@ -1,15 +1,22 @@
 package morajavier.pdm.voclearn
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.os.Environment
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import io.realm.Realm
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
+import androidx.core.content.res.TypedArrayUtils.getString
+import androidx.core.content.res.TypedArrayUtils.getText
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
 import morajavier.pdm.voclearn.Modelo.Entrada
 import java.io.File
@@ -18,7 +25,8 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 
-class SecurityCopy() {
+class SecurityCopy  {
+
 
     //LA CLASE LO QUE HACE ES DAR PERMISOS DE ALMACENAMIENTO EXTERNO
     //Y CREAR UN DIRECTORIO, DONDE ALMACENAREMOS UNA COPIA DE SEGURIDAD DE LA BASE DE DATOS
@@ -42,14 +50,18 @@ class SecurityCopy() {
         val REQUEST_EXTERNAL_STORAGE = 1
         val PERMISSIONS_STORAGE = arrayOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.RECORD_AUDIO
         )
+        //BANDERA QUE INDICA QUE TODOS LOS PERMISOS FUERON CONCEDIDOS(FOTOS, MICRO, COPIA SEGURIDAD)
+        var perAceptados=false
+
 
 
         fun hacerCopiaSeguridad(real :Realm?, act:Activity) {
 
             // PRIMERO COMPRUEBA LOS PERMISOS DE ALMACENAMIENTO
-            comprobarPermisosAlmacenamiento(act)
+            comprobarPermisoAlmacenamiento(act)
 
 
             //FICHERO DONDE SE REALIZARÁ LA COPIA DE SEGURIDAD
@@ -90,7 +102,8 @@ class SecurityCopy() {
         }
 
         fun restaurarCopiaSeguridad(act:Activity) {
-            comprobarPermisosAlmacenamiento(act);
+
+            comprobarPermisoAlmacenamiento(act)
 
             //RUTA PARA OBTENER LA RESTAURACION
             val restoreFilePath = PATH_TO_WRITE.path + "/" + FILE_TO_WRITE
@@ -125,74 +138,122 @@ class SecurityCopy() {
 
                     bytesRead = flujoEntrada.read(buf)
                 }
-                flujoSalida.close();
+                flujoSalida.close()
 
                 //DEVUELVE LA RUTA DONDE SE HA RESTAURADO EL ARCHIVO BD
                 return ficheroSalida.getAbsolutePath();
 
             } catch (e: IOException) {
-                e.printStackTrace();
+                e.printStackTrace()
             }
             return "";
         }
 
+        fun comprobarPermisoAlmacenamiento(act:Activity)
+        {
+            // comprueba si se han escrito los permisos
+            val permisosEscritura = ActivityCompat.checkSelfPermission(act, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            val permisosLectura = ActivityCompat.checkSelfPermission(act, Manifest.permission.READ_EXTERNAL_STORAGE)
 
-        fun comprobarPermisosAlmacenamiento(act:Activity) {
+
+
+            if ((permisosEscritura != PackageManager.PERMISSION_GRANTED && permisosLectura != PackageManager.PERMISSION_GRANTED)) {
+
+                permisosSiNo(act,  act.getString(R.string.permisos), PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE)
+
+                Log.e("PERMISOS", "permisos asignados en tiempo de ejecucion ")
+
+
+            } else {
+                Log.e("PERMISOS", "los permisos de almacenamiento externo fueron concedidos")
+
+
+            }
+        }
+
+        fun comprobarTodosPermisos(act:Activity) {
 
             // comprueba si se han escrito los permisos
-            val permisos =
-                ActivityCompat.checkSelfPermission(act, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            val permisosEscritura = ActivityCompat.checkSelfPermission(act, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            val permisosLectura = ActivityCompat.checkSelfPermission(act, Manifest.permission.READ_EXTERNAL_STORAGE)
+            val permisosAudio = ActivityCompat.checkSelfPermission(act, Manifest.permission.RECORD_AUDIO)
 
-            if (permisos != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(
-                    act,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
-                )
+
+            if ((permisosEscritura != PackageManager.PERMISSION_GRANTED
+                && permisosLectura != PackageManager.PERMISSION_GRANTED)
+                || permisosAudio != PackageManager.PERMISSION_GRANTED) {
+
+                permisosSiNo(act,  act.getString(R.string.permisos), PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE)
 
                 Log.e("PERMISOS", "permisos asignados en tiempo de ejecucion para escribir")
 
 
             } else {
-                Log.e("PERMISOS", "los permisos de escritura ya fueron concedidos")
+                Log.e("PERMISOS", "Todos los permisos fueron concedidos")
+                perAceptados=true
 
             }
         }
 
-        fun comprobarPermisosCamMicro(act: Activity)
-        {
-            //PERMISOS DE ACCESO A MICRÓFONO EN ESTA ACTIVITY, Y DE ALMACENAMIENTO
-            if (ActivityCompat.checkSelfPermission(act.applicationContext, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(act.applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(act.applicationContext,Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(act.applicationContext,Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED
-            )
-            {
-                ActivityCompat.requestPermissions(
-                    act,
-                    arrayOf(
-                        Manifest.permission.RECORD_AUDIO,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.CAMERA
-                    ),
-                    1000
-                )
-            }
-            else
-            {
-                Log.e("PERMISOS", "los permisos de escritura y micrófono ya fueron concedidos")
 
+        fun permisosSiNo(act: Activity, explicacion:String, permisos:Array<String>, codigoPermiso:Int) {
+
+            //IF UNO DE LOS PERMISOS DEL CONJUNTO DE PERMISOS PEDIDOS AL USUARIO, FUE DENEGADO SE LE DA UNA EXPLICACIÓN
+            //ANTES DE LA SOLICITUD DE PERMISOS
+            //EN CASO CONTRARIO SE LE MUESTRA LA SOLICITUD DE PERMISOS DIRECTAMENTE
+            if (shouldShowRequestPermissionRationale(act, permisos[0])) {
+                //LECTURA ESCRITURA
+                AlertDialog.Builder(act)
+                    .setTitle(R.string.necesidadPermisos)
+                    .setMessage(explicacion)
+                    .setPositiveButton(
+                        R.string.aceptar,
+                        { dialogInterface: DialogInterface, i: Int ->
+
+                            ActivityCompat.requestPermissions(act, permisos, codigoPermiso)
+
+                        })
+                    .setNegativeButton(R.string.cancelar,
+                        { dialogInterface: DialogInterface, i: Int ->
+
+                            dialogInterface.dismiss()
+
+                        })
+                    .create().show()
             }
+            else if(shouldShowRequestPermissionRationale(act, permisos[2])){
+                    //MICROFONO
+                AlertDialog.Builder(act)
+                    .setTitle(R.string.necesidadPermisos)
+                    .setMessage(act.getString(R.string.permisosMicro))
+                    .setPositiveButton(
+                        R.string.aceptar,
+                        { dialogInterface: DialogInterface, i: Int ->
+
+                            ActivityCompat.requestPermissions(act, permisos, codigoPermiso)
+
+                        })
+                    .setNegativeButton(R.string.cancelar,
+                        { dialogInterface: DialogInterface, i: Int ->
+
+                            dialogInterface.dismiss()
+
+                        })
+                    .create().show()
+            } else {
+                ActivityCompat.requestPermissions(act, permisos, codigoPermiso)
+            }
+
 
         }
+
 
         fun hayBDLocal (act:Activity) : Boolean
         {
             return File(act.getApplicationContext().getFilesDir(), FILE_TO_RECOVERY).exists()
         }
 
-        fun hayBDExterna (act:Activity) : Boolean
+        fun hayBDExterna () : Boolean
         {
             return File(PATH_TO_WRITE, FILE_TO_WRITE).exists()
         }
@@ -200,8 +261,15 @@ class SecurityCopy() {
         //MÉTODO PARA BORRAR ARCHIVOS DE IMÁGENES Y AUDIO SI NINGÚN OBJETO DE LA LISTA APUNTA A ELLOS
         fun limpiezaDisco()
         {
-            val listaAudios= getListaFicheros(FOLDER_MUSIC)
-            val listaImagenes= getListaFicheros(FOLDER_IMAGES)
+            var listaAudios : Array<File>?= null
+            var listaImagenes: Array<File>?= null
+
+            if(FOLDER_IMAGES.exists() )
+                 listaImagenes =getListaFicheros(FOLDER_IMAGES)
+
+            if(FOLDER_MUSIC.exists())
+                listaAudios =getListaFicheros(FOLDER_MUSIC)
+
             var entrada: Entrada?
             var idExtraido:Int?
 
@@ -247,8 +315,7 @@ class SecurityCopy() {
             if(carpeta.exists()) {
                 listaFicheros = carpeta.listFiles()
 
-                for(fich in listaFicheros)
-                    println(fich.name)
+
             }
 
             return listaFicheros
