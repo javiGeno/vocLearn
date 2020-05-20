@@ -1,34 +1,25 @@
 package morajavier.pdm.voclearn.Vistas
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.media.MediaPlayer
 import android.media.MediaScannerConnection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_add.*
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.activity_detail.field_traduccion
-import kotlinx.android.synthetic.main.activity_detail.layout_prin
 import kotlinx.android.synthetic.main.barra_guardar_atras.*
 import morajavier.pdm.voclearn.*
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
 import morajavier.pdm.voclearn.FuncionesExtension.cambioImagen
-import morajavier.pdm.voclearn.FuncionesExtension.cargarImagen
 import morajavier.pdm.voclearn.FuncionesExtension.cargarNotCache
 import morajavier.pdm.voclearn.FuncionesExtension.crearSpinnerCarga
 import morajavier.pdm.voclearn.Modelo.Entrada
 import java.io.File
-import java.util.jar.Manifest
 
 class DetailActivity : AppCompatActivity() {
 

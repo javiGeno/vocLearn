@@ -33,7 +33,7 @@ import java.lang.NullPointerException
 
 //CREAMOS UNA CLASE ADAPTER, PARA LA LISTA DE ENTRADAS QUE INGRESE EL USUARIO
 //IMPLEMENTAMOS LOS MÉTODOS QUE HACEN FALTA AL EXTENDER DE RecyclerView.Adapter<"clase creada interna que extiende de RecyclerView.ViewHolder">
-//RECIBE UN OBJETO ANY, COMO EL CONTENEDOR DE ESTE RECYCLER, QUE PUEDE SER UNA ACTIVITY, FRAGMENTS...ETC
+//RECIBE LA REFERENCIA AL CONTENEDOR PADRE
 class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : FragmentActivity): RecyclerView.Adapter<AdapterDiccionario.ViewHolderDatosDic>() {
 
 
@@ -188,14 +188,9 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : FragmentAct
                 println("LISIT AFTERreinserccion: "+ items)
                 println("LISLBD AFTERreinserccion: "+ CRUDEntradas.recorrerListaEntrada(CRUDEntradas.obtenerTodasEntradas()))
 
-                try {
+
                     contenedorPadre?.let { it.listaDiccionario.setVisibility(View.VISIBLE) }
-                    contenedorPadre?.let { it.layout_no_almacen.setVisibility(View.GONE) }
-                }
-                catch(nulo:NullPointerException)
-                {
-                    Toast.makeText(contenedorPadre, "Fallo en visibilizar recycler", Toast.LENGTH_SHORT)
-                }
+
             }).show()
 
 

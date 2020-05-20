@@ -37,7 +37,8 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'//Para implementar Recycle View
     implementation 'androidx.cardview:cardview:1.0.0'//Para usar cardView
-    implementation 'com.github.bumptech.glide:glide:3.7.0'//Para el tratamiento de imagenes mas eficiente
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+//Para el tratamiento de imagenes mas eficiente
     implementation 'jp.wasabeef:glide-transformations:2.0.1'//Para poder hacer imagenes redondas
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

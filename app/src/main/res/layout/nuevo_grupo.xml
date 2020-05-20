@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/borde2"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/img_grupo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:textAlignment="center"
+            android:background="@mipmap/ic_launcher_folder_blue" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/nombre_carp_nuevo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="@dimen/margen3"
+                android:layout_marginStart="@dimen/margen3"
+                android:layout_marginLeft="@dimen/margen3"
+                android:layout_marginTop="@dimen/margen3"
+                android:layout_marginEnd="@dimen/margen3"
+                android:layout_marginRight="@dimen/margen3"
+                android:layout_marginBottom="@dimen/margen3"
+                android:background="@android:color/transparent"
+                android:hint="@string/nuevoGrupo"
+                android:textColor="@color/colorPrimary"
+                android:textColorHint="@color/colorBeigh"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:typeface="normal"
+                app:fontFamily="sans-serif-smallcaps" />
+
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/check_borrar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margen10"
+        android:layout_marginTop="@dimen/margen3"
+        android:layout_marginRight="@dimen/margen10"
+        android:layout_marginBottom="@dimen/margen3"
+        android:textColor="@color/colorPrimary"
+        android:text="@string/borrarGrupo"
+        android:visibility="gone" />
+
+</LinearLayout>

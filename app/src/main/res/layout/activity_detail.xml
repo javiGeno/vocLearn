@@ -13,7 +13,8 @@
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
     tools:context=".Vistas.DetailActivity">
-
+    <!--descendantFocusability Y focusableInTouchMode, PARA QUE CUANDO SE ABRA LA ACTIVIDAD NO ENFOQUE AL TEXT VIEW
+        POR DEFECTO-->
     <include layout="@layout/barra_guardar_atras"
         />
 

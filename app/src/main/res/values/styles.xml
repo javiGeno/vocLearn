@@ -1,13 +1,13 @@
 <resources>
-    <!-- Base application theme.-->
 
+    <!--Tema app-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
-
+    <!--Tema para la pantalla de bienvenida-->
     <style name="SplashTema" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_inicio</item>
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -15,6 +15,7 @@
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
+    <!--Tema para el buscador-->
     <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
         <!-- icono del SearchView-->
         <item name="searchIcon">@android:drawable/ic_menu_search</item>
@@ -28,10 +29,21 @@
 
     </style>
 
+    <!--Tema Para Barra opciones-->
     <style name="barraOpciones" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+    <!--Tema para los AlertDialog-->
+    <style name="AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!-- Para botones -->
+        <item name="colorAccent">@color/colorPrimary</item>
+        <!-- Titulo y texto -->
+        <item name="android:textColorPrimary">@color/grisOscuro</item>
+        <!-- Color fondo -->
+        <item name="android:background">@color/azulCielo</item>
     </style>
 
 </resources>

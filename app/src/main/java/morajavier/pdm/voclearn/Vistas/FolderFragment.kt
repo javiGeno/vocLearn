@@ -1,46 +1,266 @@
 package morajavier.pdm.voclearn.Vistas
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.ContextWrapper
+import android.content.DialogInterface
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.view.ContextThemeWrapper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.widget.Toast
+import androidx.recyclerview.widget.*
+import kotlinx.android.synthetic.main.fragment_folder.*
+import kotlinx.android.synthetic.main.navegacion_inferior.*
+import kotlinx.android.synthetic.main.nuevo_grupo.view.*
+import kotlinx.android.synthetic.main.search_and_add.*
+import morajavier.pdm.voclearn.Adapter.AdapterFolder
+import morajavier.pdm.voclearn.BaseDatos.CRUDGrupo
+import morajavier.pdm.voclearn.Modelo.Grupo
 
 import morajavier.pdm.voclearn.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [FolderFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [FolderFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class FolderFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+class FolderFragment : Fragment() ,
+    androidx.appcompat.widget.SearchView.OnCloseListener,
+    androidx.appcompat.widget.SearchView.OnQueryTextListener{
+
     private var listener: OnFragmentInteractionListener? = null
+    private lateinit var adaptador: AdapterFolder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
+
+    override fun onStart() {
+        super.onStart()
+
+        //HACEMOS VISIBLE EL BOTÓN QUE NOS INTERESA EN EL MENÚ PARA QUE LA IMAGEN CAMBIE SEGUN EL FRAGMENT
+        btn_add.visibility= View.GONE
+        btn_add_2.visibility= View.VISIBLE
+
+        comprobarGrupos()
+
+        btn_add_2.setOnClickListener {
+            //EL SEGUNDO Y TERCER PARÁMETRO, ES CUANDO SE QUIERA MODIFICAR
+            alertaNuevoEditaGrupo(it, null, -1)
+        }
+
+
+
+    }
+
+   fun alertaNuevoEditaGrupo(it:View, carpeta: Grupo?, posicionEditar:Int) {
+
+
+
+        val inflater= requireActivity().layoutInflater
+        val vistaDialogo=inflater.inflate(R.layout.nuevo_grupo, null)
+        //SI SE VA A AÑADIR NUEVA CARPETA SE MANTIENE EN FALSO, EN CASO DE QUE CARPETA
+        //NO SEA NULO, QUIERE DECIR QUE LA CARPETA SE VA A EDITAR O BORRAR
+        //POR TANTO SE LEVANTA LA BANDERA
+        var carpetaEditable=false
+
+        //SI NOMBRE NO ES NULO QUIERE DECIR QUE VA A INSERTAR UNA NUEVA CARPETA, NO EDITAR SU NOMBRE
+        //SI NO ES NULO LLENAMOS EL CAMPO CON EL NOMBRE ACTUAL, ADEMÁS VISIBILIZAMOS EL CHECKBOS QUE PERMITE BORRAR
+        //LA CARPETA
+        carpeta?.let{vistaDialogo.nombre_carp_nuevo.setText(it.nombreGrupo)
+                        vistaDialogo.check_borrar.visibility=VISIBLE
+                     carpetaEditable=true}?:let{carpetaEditable=false}
+
+        AlertDialog.Builder(ContextThemeWrapper(it.context, R.style.AlertDialog))
+            .setView(vistaDialogo)
+            .setPositiveButton(
+                R.string.aceptar,
+                { dialogInterface: DialogInterface, i: Int ->
+
+                    //BORRAMOS LA CARPETA SI EL USUARIO A CHECKEADO PARA BORRAR
+                    //SI NO CHECKEA EDITAMOS O INSERTAMOS
+                    if(vistaDialogo.check_borrar.isChecked) {
+                        carpeta?.let { CRUDGrupo.borrarUnGrupo(it) }
+                        adaptador.items= CRUDGrupo.obtenerTodosLosGrupos() as MutableList<Grupo>
+                        adaptador.notifyItemRemoved(posicionEditar)
+                        adaptador.notifyItemChanged(posicionEditar)
+
+                    }
+                    else {
+                        val nombreNuevo = vistaDialogo.nombre_carp_nuevo.text.toString()
+                        if (!CRUDGrupo.existeGrupo(nombreNuevo)) {
+
+                              //SI EL MÉTODO SE HA LLAMADO PARA EDITAR, COMO INDICA LA VARIABLE carpetaEditable,
+                              //SE MODIFICA EL NOMBRE, EN CASO CONTRARIO SE INSERTA
+                               if(carpetaEditable) {
+                                   CRUDGrupo.modificarNombreGrupo(carpeta!!.nombreGrupo, nombreNuevo)
+                                   adaptador.items= CRUDGrupo.obtenerTodosLosGrupos() as MutableList<Grupo>
+                                   adaptador.notifyItemChanged(posicionEditar)
+
+                               }
+                               else {
+                                   CRUDGrupo.nuevoOActualizaGrupo(Grupo(nombreNuevo))
+                                   adaptador.items= CRUDGrupo.obtenerTodosLosGrupos() as MutableList<Grupo>
+                                   adaptador.notifyItemInserted(adaptador.itemCount-1)
+                                   adaptador.notifyItemChanged(adaptador.itemCount-1)
+
+
+                               }
+
+
+
+                        } else {
+                            Toast.makeText(it.context, R.string.grupoExistente, Toast.LENGTH_LONG)
+                                .show()
+                        }
+                    }
+
+                })
+            .setNegativeButton(R.string.cancelar,
+                { dialogInterface: DialogInterface, i: Int ->
+
+                    dialogInterface.dismiss()
+
+                })
+            .create().show()
+
+
+    }
+
+
+
+    fun comprobarGrupos()
+    {
+        //ACTUALIZA EL RECYCLER SOLO SI EXISTEN GRUPOS
+        if(CRUDGrupo.hayGrupos()) {
+
+            actualizarRecycleView()
+            //INDICAMOS EL ESCUCHADOR DEL BUSCADOR, ESTE FRAGMENTO
+            buscador.setOnQueryTextListener(this)
+            buscador.setOnCloseListener(this)
+
+            //HACEMOS VISIBLE EL RECYCLER Y QUITAMOS EL LAYOUT QUE INDICA QUE NO HAY ELEMENTOS EN LA BD
+            listaCarpetas.visibility= View.VISIBLE
+            layout_no_almacen_folder.visibility= View.GONE
+        }
+        else
+        {
+            //SI NO HAY GRUPOS HACEMOS INVISIBLE EL RECYCLER Y VISIBLE AL LAYOUT QUE INDICA QUE NO HAY NADA EN LA BD
+            listaCarpetas.visibility= View.GONE
+            layout_no_almacen_folder.visibility= View.VISIBLE
+        }
+
+
+
+
+
+
+
+    }
+
+
+    private fun actualizarRecycleView() {
+
+
+
+        listaCarpetas.layoutManager = GridLayoutManager(this.context, 2)
+        this.adaptador = this.activity?.let{AdapterFolder(CRUDGrupo.obtenerTodosLosGrupos() as MutableList<Grupo>,this)}!!
+        listaCarpetas.adapter = this.adaptador
+
+
+
+        //ASIGNAMOS LA CONFIGURACIÓN DEL ItemTouchHelper AL NUESTRO RECYCLER
+       // ItemTouchHelper(getConfiguracionSwiped()).attachToRecyclerView(listaDiccionario)
+
+
+
+        //ESTA IMPLEMENTACIÓN PERMITE QUE EL MENU DE LA ACTIVIDAD DESAPAREZCA AL HACER SCROLL HACIA ABAJO EN EL RECYCLER
+        //Y VUELVA A APARECER AL HACER SCROLL HACIA ARRIBA
+        listaCarpetas.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            val barraNavegacion= activity?.navigation
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                Log.e("SCROLL RECYCLE", "eje y: "+dy)
+                if (dy > 0 && barraNavegacion!!.isShown()) {
+                    barraNavegacion.setVisibility(View.GONE)
+                } else if (dy <= 0) {
+                    barraNavegacion?.setVisibility(View.VISIBLE)
+
+                }
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+
+                super.onScrollStateChanged(recyclerView, newState)
+            }
+        })
+    }
+
+    //MÉTODOS IMPLEMENTADOS AL IMPLEMENTAR LAS INTERFACES DEL SEARCHVIEW (BUSCADOR)
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        Log.e("SEARCH", ""+query)
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        Log.e("SEARCH", ""+newText)
+        println(""+newText)
+
+
+        if(this.adaptador.listaTotalItems.isNotEmpty())
+        {
+            var listaFiltrada = this.adaptador?.listaTotalItems?.filter{
+                it.nombreGrupo?.toLowerCase()!!.contains(newText.toString())
+            }
+            println("LISTA FILTRADA: "+listaFiltrada)
+
+            //SI LA LISTA FILTRADA ESTA VACIA QUITAMOS EL RECYCLER, Y MOSTRAMOS LA CAPA DE ABAJO EL  "layout_nothing"
+            //SI ESTA LLENA LLAMAMOS AL MÉTODO DEL ADAPTADOR, QUE ACTUALIZA LA LISTA.
+            if (!(listaFiltrada!!.isEmpty())) {
+                listaCarpetas.setVisibility(View.VISIBLE)
+                layout_nothing_folder.setVisibility(View.GONE)
+                adaptador!!.actualizar(listaFiltrada as MutableList<Grupo>)
+
+                println("lista buscada LLena")
+
+            } else {
+                listaCarpetas.setVisibility(View.GONE)
+                layout_nothing_folder.setVisibility(View.VISIBLE)
+                println("lista buscada Vacia")
+            }
+        }
+
+
+
+
+        return true
+    }
+
+
+    //EVENTO QUE SE DISPARA CUANDO SE CIERRA EL BUSCADOR
+    override fun onClose(): Boolean {
+        Log.e("SEARCH", "onClose()")
+
+        //RESTABLECE EL BUSCADOR A SU ESTADO INICIAL
+        buscador.onActionViewCollapsed()
+        //MOSTRAMOS EL MENÚ POR SI SE CONGELA EN INVISIBLE AL CERRAR EL BUSCADOR
+        activity?.navigation?.visibility= View.VISIBLE
+
+        return true
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_folder, container, false)
     }
@@ -80,23 +300,7 @@ class FolderFragment : Fragment() {
         fun onFragmentInteraction(uri: Uri)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FolderFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FolderFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
+
+
+
 }

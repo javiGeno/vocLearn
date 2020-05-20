@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), DictionaryFragment.OnFragmentInteracti
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setTheme ( R.style.AppTheme ) QUITAR SI NO SE VA USAR
+
         setContentView(R.layout.activity_main)
 
         //SE COMPRUEBAN LOS PERMISOS DE ALMACENAMIENTO EXTERNO Y MIRCO

@@ -8,7 +8,7 @@
     <string name="delete">Delete</string>
     <string name="audio">Audio</string>
     <string name="nadaLista">Nothing to show</string>
-    <string name="nadaBD">There not stored words</string>
+    <string name="nadaBD">There not stored data</string>
     <string name="marcaBuscar">Search word</string>
     <string name="addEntrada">Add word or expresión in English</string>
     <string name="requerido">You have to fill this fields</string>
@@ -33,4 +33,7 @@
     <string name="galeria">Gallery</string>
     <string name="camara">Cámera</string>
     <string name="opciones">Choose a option</string>
+    <string name="nuevoGrupo">New group</string>
+    <string name="grupoExistente">The name already exists, let`s choose other name</string>
+    <string name="borrarGrupo">Deleting this folder</string>
 </resources>

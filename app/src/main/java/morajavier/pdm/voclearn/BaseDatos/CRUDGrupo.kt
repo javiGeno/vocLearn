@@ -24,7 +24,18 @@ class CRUDGrupo {
             return App.gestorBD.r.where(Grupo::class.java).findAll().sort("fechaCreacion").toList()
         }
 
+        fun hayGrupos() : Boolean{
+            //DEVUELVE VERDADERO SI HAY MAS DE UN GRUPO
+            return App.gestorBD.r.where<Grupo>(Grupo::class.java).count()>0
+        }
 
+        fun existeGrupo(nombreNuevo : String) :Boolean
+        {
+            val existe=obtenerGrupoPorNombre(nombreNuevo)
+
+            existe?.let{return true}?: return false
+
+        }
 
         //BORRA UN GRUPO PASADO POR PARÁMETROS
         fun borrarUnGrupo(borrarGrupo : Grupo){
@@ -43,28 +54,21 @@ class CRUDGrupo {
                 .findFirst()
         }
 
-        //EL MÉTODO COMPRUEBA SI HAY ALGÚN GRUPO CON EL NUEVO NOMBRE, PARA NO MACHACARLO EN ESE CASO
-        //SI LO QUE DEVUELVE EL MÉTODO DE BÚSQUEDA ES NULO ENTONCES SE REALIZA LA OPERACIÓN DE MODIFICACIÓN
-        //DEL NUEVO NOMBRE (ID)
-        /*fun modificarNombreGrupo(grupoAntiguo : String,nuevoNombre:String)
-        {
-            App.gestorBD.r.executeTransaction {
-                if (obtenerGrupoPorNombre(nuevoNombre) == null)
-                    obtenerGrupoPorNombre(grupoAntiguo)?.let {
-                        val nuevoObjeto = Grupo(nuevoNombre, it.palabras, it.listaGrupos)
-                        App.gestorBD.r.copyFromRealm(nuevoObjeto)
-                        nuevoOActualizaGrupo(it)
-                        println("******" + it.nombreGrupo)
-                    }
-            }
+        //EL MÉTODO OBTIENE EL GRUPO CON EL NOMBRE grupoAntiguo , LO COPIA EN grupoNew
+        //LE CAMBIAMOS EL NOMBRE A grupoNew, LO INSERTAMOS, Y BORRAMOS EL ANTIGUO
 
-//asldfkhaskdjfhsalfikhdsalkdshflñsk.jf//
-            val teamRealmObj = realm.where(Team::class.java)?.equalTo("name", oldTeamName)?.findFirst()
-            val newTeamObj = realm.copyFromRealm(teamRealmObj)
-            newTeamObj?.name = newTeamName
-            realm.copyToRealmOrUpdate(newTeamObj)
-            teamRealmObj?.deleteFromRealm()
-        }*/
+        fun modificarNombreGrupo(grupoAntiguo : String,nuevoNombre:String)
+        {
+            App.gestorBD.r.executeTransaction({
+                val grupoOld = App.gestorBD.r.where(Grupo::class.java)?.equalTo("nombreGrupo", grupoAntiguo)?.findFirst()
+                val grupoNew = App.gestorBD.r.copyFromRealm(grupoOld)
+                grupoNew?.nombreGrupo = nuevoNombre
+                App.gestorBD.r.copyToRealmOrUpdate(grupoNew)
+                grupoOld?.deleteFromRealm()
+            })
+
+
+        }
 
 
         //BUSCAMOS LA PALABRA QUE SE QUIERE INSERTAR

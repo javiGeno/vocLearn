@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Environment
 import android.util.Log
+import android.view.ContextThemeWrapper
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import io.realm.Realm
@@ -203,7 +204,8 @@ class SecurityCopy  {
             //EN CASO CONTRARIO SE LE MUESTRA LA SOLICITUD DE PERMISOS DIRECTAMENTE
             if (shouldShowRequestPermissionRationale(act, permisos[0])) {
                 //LECTURA ESCRITURA
-                AlertDialog.Builder(act)
+                AlertDialog.Builder(
+                    ContextThemeWrapper(act, R.style.AlertDialog))
                     .setTitle(R.string.necesidadPermisos)
                     .setMessage(explicacion)
                     .setPositiveButton(
@@ -223,7 +225,7 @@ class SecurityCopy  {
             }
             else if(shouldShowRequestPermissionRationale(act, permisos[2])){
                     //MICROFONO
-                AlertDialog.Builder(act)
+                AlertDialog.Builder(ContextThemeWrapper(act, R.style.AlertDialog))
                     .setTitle(R.string.necesidadPermisos)
                     .setMessage(act.getString(R.string.permisosMicro))
                     .setPositiveButton(

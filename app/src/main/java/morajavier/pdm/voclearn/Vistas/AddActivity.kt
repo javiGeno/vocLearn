@@ -59,8 +59,6 @@ class AddActivity : AppCompatActivity(),  ActivityCompat.OnRequestPermissionsRes
         SecurityCopy.comprobarTodosPermisos(this)
 
 
-
-
         //AL PULSAR EL BOTON ATRÁS VOLVEMOS AL FRAGMENT PADRE
         btn_atras.setOnClickListener{
             finish()

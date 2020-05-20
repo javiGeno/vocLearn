@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- Permisos para grabar audio -->
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -20,14 +19,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Vistas.DetailActivity"
+        <activity android:name=".Vistas.conj_entra_Activity"></activity>
+        <activity
+            android:name=".Vistas.DetailActivity"
             android:configChanges="screenSize|orientation"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".Vistas.AddActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Vistas.AddActivity"
             android:configChanges="screenSize|orientation"
-            android:windowSoftInputMode="stateHidden"
-            /><!--Estas dos líneas android:configChanges="screenSize|orientation"
-            android:windowSoftInputMode="stateHidden"  sirven para que no se muestre el teclado al lanzar el activity-->
+            android:windowSoftInputMode="stateHidden" />
+        <!--
+Estas dos líneas android:configChanges="screenSize|orientation"
+            android:windowSoftInputMode="stateHidden"  sirven para que no se muestre el teclado al lanzar el activity
+        -->
         <activity
             android:name=".MainActivity"
             android:theme="@style/SplashTema"> <!-- Para la pantalla de bienvenida -->
@@ -37,6 +41,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.android.fileprovider"
@@ -44,10 +49,8 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
-
-
     </application>
 
 </manifest>
