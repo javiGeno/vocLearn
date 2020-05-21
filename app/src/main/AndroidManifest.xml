@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="morajavier.pdm.voclearn">
+    <!-- Para poder hacer una copia de seguridad de la base de datos fuera del proyecto -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- Permisos para grabar audio -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".Vistas.Conj_entra_Activity"></activity>
+        <activity
+            android:name=".Vistas.DetailActivity"
+            android:configChanges="screenSize|orientation"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".Vistas.AddActivity"
+            android:configChanges="screenSize|orientation"
+            android:windowSoftInputMode="stateHidden" />
+        <!--
+Estas dos líneas android:configChanges="screenSize|orientation"
+            android:windowSoftInputMode="stateHidden"  sirven para que no se muestre el teclado al lanzar el activity
+        -->
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/SplashTema"> <!-- Para la pantalla de bienvenida -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.android.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+    </application>
+
+</manifest>

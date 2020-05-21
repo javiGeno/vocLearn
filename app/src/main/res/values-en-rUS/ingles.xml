@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VocLearn</string>
+    <string name="folder">Folder</string>
+    <string name="dictionary">Dictionary</string>
+    <string name="Test">Test</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="audio">Audio</string>
+    <string name="nadaLista">Nothing to show</string>
+    <string name="nadaBD">There not stored data</string>
+    <string name="marcaBuscar">Search word</string>
+    <string name="addEntrada">Add word or expresión in English</string>
+    <string name="requerido">You have to fill this fields</string>
+    <string name="addTraduccion">Add translation</string>
+    <string name="addDescr">Add description</string>
+    <string name="addDescrExpl">The description will help you to memorized better the learned word. You can include examples,  grammatical category, syonym...etc</string>
+    <string name="addAudio">you can optionally record its pronounce, keeping push button</string>
+    <string name="adImg">you can optionally add a image to a learning more effective</string>
+    <string name="addLevel">you choose a dificulty level, the system will ask you more times the hard words to a learning more effective</string>
+    <string name="cancelar">CANCELL </string>
+    <string name="aceptar">ACEPT</string>
+    <string name="necesidadPermisos">PERMISSION NEEDED</string>
+    <string name="permisosMicro">"In order to store the pronunciation of the words you need to accept the microphone permissions"</string>
+    <string name="permisos">"To create a backup and save images related to your vocabulary, you need to accept the permissions, so if you uninstall the app, you will not lose what has been advanced"</string>
+    <string name="perMicroDenegados">"You do not have sufficient permissions to record"</string>
+    <string name="perImagenDenegado">"You do not have sufficient permissions to save images"</string>
+    <string name="borrado">DELETED WORD</string>
+    <string name="grabAviso">Press the button to record for a maximum of 20 seconds</string>
+    <string name="grabDetenida">stopped recording</string>
+    <string name="grabTerminada">finished recording</string>
+    <string name="grabFallo">You must press and hold to record</string>
+    <string name="galeria">Gallery</string>
+    <string name="camara">Cámera</string>
+    <string name="opciones">Choose a option</string>
+    <string name="nuevoGrupo">New folder</string>
+    <string name="grupoExistente">The name already exists, let`s choose other name</string>
+    <string name="borrarGrupo">Deleting this folder</string>
+    <string name="nuevo">New</string>
+</resources>

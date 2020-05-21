@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btn_nuevo_conj"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerInParent="true"
+        android:layout_margin="@dimen/margen0"
+        android:background="@drawable/borde_circular"
+        android:clickable="true"
+        android:focusable="true"
+        android:scaleType="centerCrop"
+        android:src="@android:drawable/ic_menu_add" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/nuevo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margen0"
+        android:text="@string/nuevo"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textColorHint="@color/colorBeigh"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:typeface="normal"
+        app:fontFamily="sans-serif-smallcaps" />
+
+</LinearLayout>

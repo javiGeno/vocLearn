@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/barra_search_add"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorIconos"
+    android:orientation="horizontal">
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/buscador"
+        style="@style/SearchViewStyle"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight="3"
+        android:visibility="visible" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/btn_add"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_margin="@dimen/margen1"
+            android:background="@drawable/ic_action_add"
+            android:visibility="gone"/>
+
+        <ImageButton
+            android:id="@+id/btn_add_2"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_margin="@dimen/margen1"
+            android:background="@drawable/ic_action_folder_add"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+
+
+</LinearLayout>

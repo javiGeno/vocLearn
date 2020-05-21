@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorIconos">
+
+    <Button
+        android:id="@+id/btn_atras"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="@dimen/margen1"
+        android:layout_marginLeft="@dimen/margen1"
+        android:layout_marginTop="@dimen/margen1"
+        android:layout_marginEnd="@dimen/margen1"
+        android:layout_marginRight="@dimen/margen1"
+        android:layout_marginBottom="@dimen/margen1"
+        android:background="@drawable/ic_action_back" />
+
+    <Button
+        android:id="@+id/btn_guardar"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="@dimen/margen1"
+        android:layout_marginLeft="@dimen/margen1"
+        android:layout_marginTop="@dimen/margen1"
+        android:layout_marginEnd="@dimen/margen1"
+        android:layout_marginRight="@dimen/margen1"
+        android:layout_marginBottom="@dimen/margen1"
+        android:visibility="gone"
+        android:background="@android:drawable/ic_menu_save"
+        />
+
+</RelativeLayout>

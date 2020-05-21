@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">VocLearn</string>
+    <string name="folder">Carpetas</string>
+    <string name="dictionary">Diccionario</string>
+    <string name="Test">Prueba</string>
+    <string name="edit">Editar</string>
+    <string name="delete">Borrar</string>
+    <string name="audio">Escuchar</string>
+    <string name="nadaLista">Nada para mostrar</string>
+    <string name="nadaBD">No hay datos almacenados</string>
+    <string name="marcaBuscar">Buscar palabra</string>
+    <string name="addEntrada">Introduce palabra o expresión en inglés</string>
+    <string name="addTraduccion">Introduce tradución</string>
+    <string name="requerido">Obligatorio rellenar estos dos campos</string>
+    <string name="addDescr">Introduce una descripción</string>
+    <string name="addDescrExpl">La descripción le ayudará a memorizar mejor la palabra aprendida.Puede incluir ejemplos, sinónimos, categoria gramatical etc</string>
+    <string name="addAudio">opcionalmente puede grabar su pronunciación, manteniendo pulsado el botón</string>
+    <string name="addLevel">Elige un nivel de dificultad, el sistema te preguntará más veces las palabras difíciles para un aprencizaje más efectivo</string>
+    <string name="adImg">Añade una imagen opcionalmente para un aprendizaje más eficaz</string>
+    <string name="cancelar">CANCELAR</string>
+    <string name="aceptar">ACEPTAR</string>
+    <string name="necesidadPermisos">PERMISOS NECESARIOS</string>
+    <string name="permisosMicro">"Para poder almacenar la pronunciación de las palabras necesitas aceptar los permisos de micrófono"</string>
+    <string name="permisos">"Para crear una copia de seguridad y guardar imágenes relacionadas con su  vocabulario, necesita aceptar los permisos, así, si desinstala la app, no perderá lo que ha avanzado"</string>
+    <string name="perMicroDenegados">"No tiene permisos suficientes para grabar"</string>
+    <string name="perImagenDenegado">"No tiene permisos suficientes para guardar imagenes"</string>
+    <string name="borrado">PALABRA BORRADA</string>
+    <string name="grabAviso">Mantén pulsado para grabar durante un máx de 20 segundos</string>
+    <string name="grabDetenida">Grabación detendida</string>
+    <string name="grabTerminada">Grabación terminada</string>
+    <string name="grabFallo">Debe mantener pulsado para grabar</string>
+    <string name="galeria">Galeria</string>
+    <string name="camara">Cámara</string>
+    <string name="opciones">Elige una opción</string>
+    <string name="nuevoGrupo">Nueva carpeta</string>
+    <string name="grupoExistente">El nombre ya existe, elija otro nombre</string>
+    <string name="borrarGrupo">Eliminar esta carpeta</string>
+    <string name="nuevo">Nuevo</string>
+
+</resources>

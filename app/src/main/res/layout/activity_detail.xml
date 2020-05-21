@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_print"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/azulCielo"
+    android:orientation="vertical"
+    android:animateLayoutChanges="true"
+    android:focusable="true"
+    android:clickable="true"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    tools:context=".Vistas.DetailActivity">
+    <!--descendantFocusability Y focusableInTouchMode, PARA QUE CUANDO SE ABRA LA ACTIVIDAD NO ENFOQUE AL TEXT VIEW
+        POR DEFECTO-->
+    <include layout="@layout/barra_guardar_atras"
+        />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+            android:id="@+id/layout_prin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/borde2"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_margin="@dimen/margen3"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margen3"
+                android:layout_marginTop="@dimen/margen3"
+                android:layout_marginRight="@dimen/margen3"
+                android:focusable="true"
+                android:clickable="true"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="5dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/card_imagen"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+            </androidx.cardview.widget.CardView>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:focusable="true"
+                android:clickable="true">
+
+                <EditText
+                    android:id="@+id/field_ingles"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margen3"
+                    android:layout_marginTop="@dimen/margen0"
+                    android:layout_marginRight="@dimen/margen3"
+                    android:layout_marginBottom="@dimen/margen0"
+                    android:background="@android:color/transparent"
+                    android:maxLength="50"
+                    android:textColor="@android:color/black"
+                    android:textSize="40dp"
+                    android:textStyle="bold"
+                    app:fontFamily="sans-serif-smallcaps"
+                     />
+
+                <EditText
+                    android:id="@+id/field_traduccion"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margen3"
+                    android:layout_marginTop="@dimen/margen0"
+                    android:layout_marginRight="@dimen/margen3"
+                    android:layout_marginBottom="@dimen/margen0"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/grisOscuro"
+                    android:maxLength="50"
+                    android:textSize="30dp"
+                    android:textStyle="normal" />
+
+                <EditText
+                    android:id="@+id/field_descriccion"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:maxLength="150"
+                    android:textColor="@color/grisOscuro"
+                    android:layout_marginRight="@dimen/margen3"
+                    android:layout_marginLeft="@dimen/margen3"
+                    android:layout_marginBottom="@dimen/margen0"
+                    android:layout_marginTop="@dimen/margen0"
+                    android:textSize="15dp" />
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margen3"
+                android:focusable="true"
+                android:clickable="true">
+
+                <RelativeLayout
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="@dimen/margen10"
+                    android:gravity="center">
+                    <Button
+                        android:id="@+id/btn_record"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/ic_action_grabar"
+                        android:contentDescription="@string/audio"
+                        android:textColor="@color/grisOscuro" />
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/btn_audio"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/margen10"
+                    android:background="@android:drawable/ic_media_play"
+                    android:contentDescription="@string/audio"
+                    android:visibility="visible" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
