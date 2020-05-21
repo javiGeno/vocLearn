@@ -2,6 +2,7 @@ package morajavier.pdm.voclearn.BaseDatos
 
 import android.util.Log
 import morajavier.pdm.voclearn.App
+import morajavier.pdm.voclearn.Modelo.Conjunto
 import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.Modelo.Grupo
 
@@ -112,6 +113,17 @@ class CRUDGrupo {
 
 
         }
+
+
+        fun insertarConjuntoEnGrupo(grupo:Grupo, conjunto: Conjunto){
+
+
+            App.gestorBD.r.beginTransaction()
+            grupo.listaConjuntos?.add(conjunto)
+            App.gestorBD.r.commitTransaction()
+
+        }
+
 
         //BORRA UNA PALABRA EN UN GRUPO CREADO, SI LA LISTA DE PALABRAS NO ES NULA,
         //BUSCA UN GRUPO Y LE BORRA LA REFERENCIA A ESA PALABRA DE SU LISTA

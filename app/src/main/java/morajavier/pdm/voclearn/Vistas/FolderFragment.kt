@@ -2,7 +2,6 @@ package morajavier.pdm.voclearn.Vistas
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.DialogInterface
 import android.net.Uri
 import android.os.Bundle
@@ -13,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.recyclerview.widget.*
 import kotlinx.android.synthetic.main.fragment_folder.*
@@ -57,6 +55,7 @@ class FolderFragment : Fragment() ,
 
 
     }
+
 
    fun alertaNuevoEditaGrupo(it:View, carpeta: Grupo?, posicionEditar:Int) {
 

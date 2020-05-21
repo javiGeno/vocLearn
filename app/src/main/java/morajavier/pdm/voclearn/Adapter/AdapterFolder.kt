@@ -1,23 +1,15 @@
 package morajavier.pdm.voclearn.Adapter
 
 import android.content.Intent
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import android.widget.Toast
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_folder.*
-import kotlinx.android.synthetic.main.layout_diccionario.view.*
 import kotlinx.android.synthetic.main.layout_folder.view.*
 import morajavier.pdm.voclearn.Modelo.Grupo
 import morajavier.pdm.voclearn.R
-import morajavier.pdm.voclearn.Vistas.AddActivity
-import morajavier.pdm.voclearn.Vistas.DetailActivity
 import morajavier.pdm.voclearn.Vistas.FolderFragment
+import morajavier.pdm.voclearn.Vistas.Conj_entra_Activity
 
 
 //CREAMOS UNA CLASE ADAPTER, PARA LA LISTA DE GRUPOS QUE CREE EL USUARIO
@@ -47,7 +39,9 @@ class AdapterFolder (var items: MutableList<Grupo>,  contenedorPadre : FolderFra
 
         holder.botonCarpeta.setOnClickListener{
 
-            val intent= Intent(contenedorPadre.context, AddActivity::class.java)
+            val intent= Intent(contenedorPadre.context, Conj_entra_Activity::class.java)
+            intent.putExtra("nombreGrupo", grupoActual.nombreGrupo)
+            intent.putExtra("tipo", "grupo")
             contenedorPadre.startActivity(intent)
         }
 

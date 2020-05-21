@@ -33,7 +33,8 @@
     <string name="galeria">Gallery</string>
     <string name="camara">Cámera</string>
     <string name="opciones">Choose a option</string>
-    <string name="nuevoGrupo">New group</string>
+    <string name="nuevoGrupo">New folder</string>
     <string name="grupoExistente">The name already exists, let`s choose other name</string>
     <string name="borrarGrupo">Deleting this folder</string>
+    <string name="nuevo">New</string>
 </resources>

@@ -32,9 +32,9 @@
     <string name="galeria">Galeria</string>
     <string name="camara">Cámara</string>
     <string name="opciones">Elige una opción</string>
-    <string name="nuevoGrupo">Nuevo grupo</string>
+    <string name="nuevoGrupo">Nueva carpeta</string>
     <string name="grupoExistente">El nombre ya existe, elija otro nombre</string>
     <string name="borrarGrupo">Eliminar esta carpeta</string>
-
+    <string name="nuevo">Nuevo</string>
 
 </resources>

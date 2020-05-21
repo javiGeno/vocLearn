@@ -19,7 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Vistas.conj_entra_Activity"></activity>
+        <activity android:name=".Vistas.Conj_entra_Activity"></activity>
         <activity
             android:name=".Vistas.DetailActivity"
             android:configChanges="screenSize|orientation"

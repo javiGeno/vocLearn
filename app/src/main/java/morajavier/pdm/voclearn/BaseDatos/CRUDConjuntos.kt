@@ -44,7 +44,7 @@ class CRUDConjuntos {
 
         fun borrarConjuntoId(filtro: Int): List<Conjunto>
         {
-            //BORRA UNA ENTRADA FILTRADA POR SU ID, Y DEVUELVE  UNA LISTA ACTUALIZADA
+            //BORRA UN CONJUNTO FILTRADO POR SU ID, Y DEVUELVE  UNA LISTA ACTUALIZADA
             val objetivo= obtenerConjunto(filtro)
 
             //SI EL OBJETIVO A BORRAR ES DISTINTO DE NULO
@@ -63,8 +63,8 @@ class CRUDConjuntos {
             return obtenerTodosConjuntos()
         }
 
-        //BORRA LAS REFERENCIAS DEL CONJUNTO EN LA LISTA DE CONJUNTOS DE LOS GRUPOS DE
-        // LA LISTA PASADA POR PARAMETROS "listaGrupos"
+        //BORRA LAS REFERENCIAS DEL CONJUNTO EN LA LISTA DE CONJUNTOS DE LOS GRUPOS, DE
+        //LA LISTA PASADA POR PARAMETROS "listaGrupos"
         fun borrarFkEnGrupos(listaGrupos: List<Grupo>, conjuntoBorrar:Conjunto){
 
             for(g in listaGrupos)
@@ -74,7 +74,7 @@ class CRUDConjuntos {
 
         }
 
-        //BORRA LAS REFERENCIAS DEL CONJUNTO EN LA LISTA DE CONJUNTOS DE LOS CONJUNTOS DE
+        //BORRA LAS REFERENCIAS DEL CONJUNTO EN LA LISTA DE CONJUNTOS DE LOS CONJUNTOS, DE
         //LA LISTA PASADA POR PARAMETROS "listaConjuntos"
         fun borrarFkEnConjunto(listaConjuntos: List<Conjunto>, conjuntoBorrar:Conjunto){
             for(c in listaConjuntos)
@@ -110,6 +110,15 @@ class CRUDConjuntos {
                     }}
                     ?: Log.e("ERROR ", "El grupo "+idConjunto +" no existe")
 
+
+        }
+
+        fun insertarConjuntoEnConjuntos(conjuntoPadre:Conjunto, conjuntoHijo: Conjunto){
+
+
+            App.gestorBD.r.beginTransaction()
+            conjuntoPadre.listaConjuntos?.add(conjuntoHijo)
+            App.gestorBD.r.commitTransaction()
 
         }
 
