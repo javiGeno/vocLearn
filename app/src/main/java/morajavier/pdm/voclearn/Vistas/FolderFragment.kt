@@ -31,6 +31,7 @@ class FolderFragment : Fragment() ,
     androidx.appcompat.widget.SearchView.OnQueryTextListener{
 
     private var listener: OnFragmentInteractionListener? = null
+
     private  var adaptador: AdapterFolder?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,6 +86,7 @@ class FolderFragment : Fragment() ,
                     //SI NO CHECKEA EDITAMOS O INSERTAMOS
                     if(vistaDialogo.check_borrar.isChecked) {
                         carpeta?.let { CRUDGrupo.borrarUnGrupo(it) }
+
                         //SI LA LISTA DEVUELTA NO ESTA VACÍA NO ES NULA CASTEAMOS Y ACTUALIZAMOS ITEMS
                         CRUDGrupo.obtenerTodosLosGrupos()?.let{
                             if(it.isNotEmpty())
@@ -104,12 +106,14 @@ class FolderFragment : Fragment() ,
                               //SE MODIFICA EL NOMBRE, EN CASO CONTRARIO SE INSERTA
                                if(carpetaEditable) {
                                    CRUDGrupo.modificarNombreGrupo(carpeta!!.nombreGrupo, nombreNuevo)
+
                                    adaptador?.items= CRUDGrupo.obtenerTodosLosGrupos() as MutableList<Grupo>
                                    adaptador?.notifyItemChanged(posicionEditar)
 
                                }
                                else {
                                    CRUDGrupo.nuevoOActualizaGrupo(Grupo(nombreNuevo))
+
                                    adaptador?.let{
                                        it.items= CRUDGrupo.obtenerTodosLosGrupos() as MutableList<Grupo>
                                        it.notifyItemInserted((it.itemCount)!!)
@@ -118,6 +122,7 @@ class FolderFragment : Fragment() ,
 
 
                                }
+
 
                             comprobarGrupos()
 
@@ -220,8 +225,9 @@ class FolderFragment : Fragment() ,
         println(""+newText)
 
 
+
         if(this.adaptador?.listaTotalItems?.isNotEmpty()!!)
-        {
+      {
             var listaFiltrada = this.adaptador?.listaTotalItems?.filter{
                 it.nombreGrupo?.toLowerCase()!!.contains(newText.toString())
             }
