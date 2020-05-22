@@ -42,13 +42,28 @@ class AdapterConjuntos( var items: MutableList<Conjunto>, val contenedorPadre : 
         }
 
         holder.nombreConjunto.setText(conjuntoActual.nombreConjunto)
-        println("******************** "+conjuntoActual.nombreConjunto+" ***************************************")
+
+        holder.botonConjunto.setOnLongClickListener{
+
+            contenedorPadre.alertaNuevoEditaConjunto(it,position,conjuntoActual)
+            return@setOnLongClickListener true
+        }
+
+        holder.nombreConjunto.setOnClickListener{
+            contenedorPadre.alertaNuevoEditaConjunto(it,position,conjuntoActual)
+        }
+
     }
 
 
     class ViewHolderDatosConjun(itemView: View): RecyclerView.ViewHolder(itemView){
         val nombreConjunto=itemView.nombre_conjun
         val botonConjunto= itemView.btn_conjunto
+    }
+
+    fun actualizarLista(listaConjuntos:MutableList<Conjunto>)
+    {
+        items= listaConjuntos
     }
 
 }

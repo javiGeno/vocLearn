@@ -103,8 +103,20 @@ class Conj_entra_Activity : AppCompatActivity() {
                 { dialogInterface: DialogInterface, i: Int ->
 
                     if(vistaDialogo.check_borrar.isChecked) {
-                        conjuntoEdit?.let { CRUDConjuntos.borrarConjuntoId(conjuntoEdit.idConjunto) }
+                        if(carpeta is Grupo)
+                        {
+                            CRUDConjuntos.quitarConjuntoDeLista((carpeta as Grupo).listaConjuntos!!, conjuntoEdit!!)
+                            adaptadorCon.items= (carpeta as Grupo).listaConjuntos!!
+                        }
+                        else
+                        {
+                            CRUDConjuntos.quitarConjuntoDeLista((carpeta as Conjunto).listaConjuntos!!, conjuntoEdit!!)
+                            adaptadorCon.items= (carpeta as Conjunto).listaConjuntos!!
+                        }
+                        CRUDConjuntos.borrarUnConjunto(conjuntoEdit!!)
 
+                        adaptadorCon.notifyItemRemoved(posicionEditar)
+                        adaptadorCon.notifyItemChanged(posicionEditar)
 
                     }
                     else {
@@ -115,7 +127,8 @@ class Conj_entra_Activity : AppCompatActivity() {
                         //SE MODIFICA EL NOMBRE, EN CASO CONTRARIO SE INSERTA
                         if(carpetaEditable) {
 
-                            //EDITAR EL NOMBRE DE LA CARPETA
+                            conjuntoEdit?.nombreConjunto=nombreNuevo
+                            adaptadorCon.notifyItemChanged(posicionEditar)
                         }
                         else {
 

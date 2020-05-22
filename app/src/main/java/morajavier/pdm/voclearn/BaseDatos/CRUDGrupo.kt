@@ -39,12 +39,23 @@ class CRUDGrupo {
         }
 
         //BORRA UN GRUPO PASADO POR PARÁMETROS
+        //Y TODAS SUS LISTAS DE CONJUNTOS DESCENDIENTES
         fun borrarUnGrupo(borrarGrupo : Grupo){
 
             App.gestorBD.r.beginTransaction()
+
+            println("CONJUNTO PRINCIPAL "+ borrarGrupo.nombreGrupo)
+            println("CONJUNTO PRINCIPAL TAMAÑO LIS "+ borrarGrupo.listaConjuntos?.size)
+
+
+            CRUDConjuntos.borrarTodosConjuntos(borrarGrupo.listaConjuntos!!)
+
+            println("CONJUNTO PRINCIPAL BORRADO"+ borrarGrupo.nombreGrupo)
+
             borrarGrupo.deleteFromRealm()
             App.gestorBD.r.commitTransaction()
         }
+
 
 
 

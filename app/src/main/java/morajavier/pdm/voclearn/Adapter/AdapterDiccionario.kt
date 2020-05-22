@@ -5,30 +5,21 @@ package morajavier.pdm.voclearn.Adapter
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
-import android.os.Environment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
-import androidx.constraintlayout.solver.widgets.ConstraintWidget.VISIBLE
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_dictionary.*
-import kotlinx.android.synthetic.main.layout_diccionario.*
 import kotlinx.android.synthetic.main.layout_diccionario.view.*
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
 import morajavier.pdm.voclearn.FuncionesExtension.*
-import morajavier.pdm.voclearn.MainActivity
 import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.R
 import morajavier.pdm.voclearn.Sonido
 import morajavier.pdm.voclearn.Vistas.DetailActivity
-import morajavier.pdm.voclearn.Vistas.DictionaryFragment
-import java.io.IOException
-import java.lang.NullPointerException
 
 
 //CREAMOS UNA CLASE ADAPTER, PARA LA LISTA DE ENTRADAS QUE INGRESE EL USUARIO

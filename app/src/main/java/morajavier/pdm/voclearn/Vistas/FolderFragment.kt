@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.navegacion_inferior.*
 import kotlinx.android.synthetic.main.nuevo_grupo.view.*
 import kotlinx.android.synthetic.main.search_and_add.*
 import morajavier.pdm.voclearn.Adapter.AdapterFolder
+import morajavier.pdm.voclearn.BaseDatos.CRUDConjuntos
 import morajavier.pdm.voclearn.BaseDatos.CRUDGrupo
 import morajavier.pdm.voclearn.Modelo.Grupo
 
@@ -53,7 +54,7 @@ class FolderFragment : Fragment() ,
             alertaNuevoEditaGrupo(it, null, -1)
         }
 
-
+        Log.w("CONTROL CONJUNTOS", ""+CRUDConjuntos.obtenerTodosConjuntos())
 
     }
 

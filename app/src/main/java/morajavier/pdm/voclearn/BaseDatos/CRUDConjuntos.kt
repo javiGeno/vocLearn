@@ -1,6 +1,8 @@
 package morajavier.pdm.voclearn.BaseDatos
 
 import android.util.Log
+import io.realm.OrderedRealmCollection
+import io.realm.RealmList
 import morajavier.pdm.voclearn.App
 import morajavier.pdm.voclearn.Modelo.Conjunto
 import morajavier.pdm.voclearn.Modelo.Entrada
@@ -17,8 +19,6 @@ class CRUDConjuntos {
             App.gestorBD.r.executeTransaction({
                 it.insertOrUpdate( nuevo)
             })
-            /*   {Log.i("SUCCESS NUEVO GRUPO", "Un nuevo grupo ha sido introducido o actualizado satifactoriamente")},
-               {error-> Log.e("ERROR NUEVO GRUPO", error.message)})*/
 
         }
 
@@ -42,28 +42,69 @@ class CRUDConjuntos {
 
         }
 
-        fun borrarConjuntoId(filtro: Int): List<Conjunto>
+        private fun borrarConjuntoId(filtro: Int): List<Conjunto>
         {
             //BORRA UN CONJUNTO FILTRADO POR SU ID, Y DEVUELVE  UNA LISTA ACTUALIZADA
             val objetivo= obtenerConjunto(filtro)
 
-            //SI EL OBJETIVO A BORRAR ES DISTINTO DE NULO
-            //BORRA EN CASCADA UTILIZANDO LA LISTA DE LINKING "fkGrupo" y "fkConjunto"
-            objetivo?.let{
-                App.gestorBD.r.beginTransaction()
-                it.fkGrupo?.let{ borrarFkEnGrupos(it, objetivo) }
-                it.fkConjunto?.let{ borrarFkEnConjunto(it, objetivo) }
-                App.gestorBD.r.commitTransaction()
-            }
-
-
             //SI EL OBJETIVO A BORRAR NO ES NULL BORRAMOS
-            objetivo?.let{ borrar(it) }
+            objetivo?.deleteFromRealm()
 
             return obtenerTodosConjuntos()
         }
 
-        //BORRA LAS REFERENCIAS DEL CONJUNTO EN LA LISTA DE CONJUNTOS DE LOS GRUPOS, DE
+        //BORRA UN CONJUNTO PASADO POR PARÁMETROS
+        //Y TODAS SUS LISTAS DE CONJUNTOS DESCENDIENTES
+        fun borrarUnConjunto(borrarConjunto : Conjunto){
+
+
+
+            App.gestorBD.r.beginTransaction()
+
+            println("CONJUNTO PRINCIPAL "+ borrarConjunto.nombreConjunto)
+            println("CONJUNTO PRINCIPAL TAMAÑO LIS "+ borrarConjunto.listaConjuntos?.size)
+
+            borrarTodosConjuntos(borrarConjunto.listaConjuntos!!)
+
+            println("CONJUNTO PRINCIPAL BORRADO"+ borrarConjunto.nombreConjunto)
+            borrarConjunto.deleteFromRealm()
+
+            App.gestorBD.r.commitTransaction()
+        }
+
+
+        //BORRA TODOS LOS CONJUNTOS DE LA LISTA, BORRANDO ANTES TODOS LOS CONJUNTOS  DE LA LISTA
+        //DE CADA CONJUNTO
+        fun borrarTodosConjuntos(lista: RealmList<Conjunto>)
+        {
+
+            var snapshot: OrderedRealmCollection<Conjunto>  = lista.createSnapshot()
+            val iterador=snapshot.iterator()
+
+
+            while(iterador.hasNext())
+            {
+                var conjunto=iterador.next()
+                println("CONJUNTO  "+ conjunto.nombreConjunto)
+                println("CONJUNTO TAMAÑO LIS "+conjunto.nombreConjunto+" "+ conjunto.listaConjuntos?.size)
+                conjunto.listaConjuntos?.let { borrarTodosConjuntos(it) }
+
+                println("CONJUNTO  BORRADO "+ conjunto.nombreConjunto)
+                borrarConjuntoId(conjunto.idConjunto)
+
+            }
+
+        }
+
+        //QUITA UN CONJUNTO DE UNA LISTA
+        fun quitarConjuntoDeLista(lista: RealmList<Conjunto>, conjunAquitar:Conjunto)
+        {
+            App.gestorBD.r.beginTransaction()
+            lista.remove(conjunAquitar)
+            App.gestorBD.r.commitTransaction()
+        }
+
+        /*//BORRA LAS REFERENCIAS DEL CONJUNTO EN LA LISTA DE CONJUNTOS DE LOS GRUPOS, DE
         //LA LISTA PASADA POR PARAMETROS "listaGrupos"
         fun borrarFkEnGrupos(listaGrupos: List<Grupo>, conjuntoBorrar:Conjunto){
 
@@ -81,7 +122,7 @@ class CRUDConjuntos {
             {
                 c.listaConjuntos?.let{it.remove(conjuntoBorrar)}
             }
-        }
+        }*/
 
         private fun borrar(borrar : Conjunto)
         {
