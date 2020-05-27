@@ -11,7 +11,6 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add.*
-import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
 import java.io.File
 import java.io.IOException
 import java.lang.RuntimeException

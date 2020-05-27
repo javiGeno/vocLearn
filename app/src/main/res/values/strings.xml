@@ -8,7 +8,7 @@
     <string name="audio">Escuchar</string>
     <string name="nadaLista">Nada para mostrar</string>
     <string name="nadaBD">No hay datos almacenados</string>
-    <string name="marcaBuscar">Buscar palabra</string>
+    <string name="marcaBuscar">Buscar </string>
     <string name="addEntrada">Introduce palabra o expresión en inglés</string>
     <string name="addTraduccion">Introduce tradución</string>
     <string name="requerido">Obligatorio rellenar estos dos campos</string>
@@ -36,5 +36,10 @@
     <string name="grupoExistente">El nombre ya existe, elija otro nombre</string>
     <string name="borrarGrupo">Eliminar esta carpeta</string>
     <string name="nuevo">Nuevo</string>
+    <string name="add_palabra">Añade palabra</string>
+    <string name="obtenerDeDicc">Obtener palabras de diccionario</string>
+    <string name="añadirNuevaPalabra">Añade nueva palabra</string>
+    <string name="comienzoDrag">Mueva la palabra a alguna carpeta o quítela de la lista sí lo desea</string>
+    <string name="quit_palabra">quitar palabra</string>
 
 </resources>

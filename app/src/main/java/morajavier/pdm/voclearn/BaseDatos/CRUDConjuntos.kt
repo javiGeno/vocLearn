@@ -6,7 +6,6 @@ import io.realm.RealmList
 import morajavier.pdm.voclearn.App
 import morajavier.pdm.voclearn.Modelo.Conjunto
 import morajavier.pdm.voclearn.Modelo.Entrada
-import morajavier.pdm.voclearn.Modelo.Grupo
 
 class CRUDConjuntos {
 
@@ -77,7 +76,8 @@ class CRUDConjuntos {
         //DE CADA CONJUNTO
         fun borrarTodosConjuntos(lista: RealmList<Conjunto>)
         {
-
+            //PARA BORRAR CREAMOS UNA LISTA QUE NO SERA ACTUALIZADA AUTOMÁTICAMENTE POR REALM
+            //Y AL BORRAR EN BUCLE NO DARA PROBLEMAS DE INDEXADO
             var snapshot: OrderedRealmCollection<Conjunto>  = lista.createSnapshot()
             val iterador=snapshot.iterator()
 
@@ -101,6 +101,12 @@ class CRUDConjuntos {
         {
             App.gestorBD.r.beginTransaction()
             lista.remove(conjunAquitar)
+            App.gestorBD.r.commitTransaction()
+        }
+
+        fun quitarEntradaDeLista(lista: RealmList<Entrada>, entradaAQuitar:Entrada) {
+            App.gestorBD.r.beginTransaction()
+            lista.remove(entradaAQuitar)
             App.gestorBD.r.commitTransaction()
         }
 
@@ -146,7 +152,7 @@ class CRUDConjuntos {
                     .findFirst()?.let{it.listaPalabras?.let {
                         App.gestorBD.r.beginTransaction()
                         it.add(palabraAInsertar)
-                        CRUDConjuntos.obtenerConjunto(idConjunto)?.let{ App.gestorBD.r.insertOrUpdate(it)}
+                        obtenerConjunto(idConjunto)?.let{ App.gestorBD.r.insertOrUpdate(it)}
                         App.gestorBD.r.commitTransaction()
                     }}
                     ?: Log.e("ERROR ", "El grupo "+idConjunto +" no existe")
@@ -154,6 +160,7 @@ class CRUDConjuntos {
 
         }
 
+        //INSERTA UN CONJUNTO EN UNA LISTA DE CONJUNTOS
         fun insertarConjuntoEnConjuntos(conjuntoPadre:Conjunto, conjuntoHijo: Conjunto){
 
 
@@ -161,6 +168,14 @@ class CRUDConjuntos {
             conjuntoPadre.listaConjuntos?.add(conjuntoHijo)
             App.gestorBD.r.commitTransaction()
 
+        }
+
+        //INSERTA UNA ENTRADA EN UNA LISTA DE ENTRADAS
+        fun insertarEntradaEnEntradas(conjuntoPadre:Conjunto, entradaHija: Entrada)
+        {
+            App.gestorBD.r.beginTransaction()
+            conjuntoPadre.listaPalabras?.add(entradaHija)
+            App.gestorBD.r.commitTransaction()
         }
 
         //RECORRE UNA LISTA DE CONJUNTOS SI ESTA LLENA, YA QUE AL INSTANCIARSE SE HACE COMO UNA LISTA VACÍA
@@ -184,6 +199,8 @@ class CRUDConjuntos {
 
             }
         }
+
+
 
     }
 }

@@ -4,12 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.RectF
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,18 +14,15 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.view.Window
-import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
+import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.*
-import kotlinx.android.synthetic.main.activity_add.*
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_dictionary.*
-import kotlinx.android.synthetic.main.layout_diccionario.*
 import kotlinx.android.synthetic.main.navegacion_inferior.*
 import kotlinx.android.synthetic.main.search_and_add.*
 import morajavier.pdm.voclearn.Adapter.AdapterDiccionario
-import morajavier.pdm.voclearn.Adapter.EspacioItemRecycler
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
+import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.R
 
 
@@ -107,6 +100,7 @@ open class DictionaryFragment : Fragment(),
 
 
             val intentLista= Intent(activity, AddActivity::class.java)
+            intentLista.putExtra("soloInsertar", true)
             startActivity(intentLista)
             //RESTABLECE EL BUSCADOR A SU ESTADO INICIAL
             buscador.onActionViewCollapsed()
@@ -133,7 +127,7 @@ open class DictionaryFragment : Fragment(),
         }
 
         listaDiccionario.layoutManager = LinearLayoutManager(this.context)
-        this.adaptaor = this.activity?.let { AdapterDiccionario(CRUDEntradas.obtenerTodasEntradas(), it) }
+        this.adaptaor = this.activity?.let { AdapterDiccionario(CRUDEntradas.obtenerTodasEntradas(), it, R.layout.layout_diccionario) }
         listaDiccionario.adapter = this.adaptaor
 
 
@@ -183,7 +177,7 @@ open class DictionaryFragment : Fragment(),
                 val posicionElemento = viewHolder.adapterPosition
                 var entradaActual= adaptaor!!.listaItems.get(posicionElemento)
                 println(posicionElemento)
-                adaptaor!!.borrarElemento(entradaActual,posicionElemento)
+                borrarElemento(entradaActual,posicionElemento)
 
             }
 
@@ -226,6 +220,76 @@ open class DictionaryFragment : Fragment(),
         }
 
         return mySimpleCallback
+    }
+
+    fun borrarElemento(entradaActual: Entrada, position:Int)
+    {
+        //BORRAMOS DE LA BD, Y NOTIFICAMOS CAMBIOS AL VOLVER A OBTENER LA LISTA DE LA BD
+        //HEMOS TENIDO QUE BORRAR ANTES EN LE BD Y VOLVER A OBTENER TODA LA LISTA
+        //BORRAR EN LA BD, Y EN LA LISTA DEL RECYCLER PARALELAMENTE NOS DABA PROBLEMAS
+        //CREAMOS UN OBJETO DE RECUPERACIÓN POR SI EL USUARIO SE ARREPIENTE DE BORRAR, VOLVER A REINSERTARLO
+        val objetoRecovery= Entrada(entradaActual.idEntrada,
+            entradaActual.significado,
+            entradaActual.descripcion,
+            entradaActual.probAcierto,
+            entradaActual.escrituraIngles,
+            entradaActual.imagen,
+            entradaActual.audio)
+        CRUDEntradas.borrarEntradaId(entradaActual.idEntrada)
+        adaptaor?.listaItems= CRUDEntradas.obtenerTodasEntradas()
+        adaptaor?.notifyItemRemoved(position)
+        adaptaor?.notifyItemChanged(position)
+
+        //PRINT DE CONTROL
+        println("LISLOC AFTERDELETE: "+ adaptaor?.listaItems)
+        println("LISIT AFTERDELETE: "+ adaptaor?.items)
+        println("LISLBD AFTERDELETE: "+CRUDEntradas.recorrerListaEntrada(CRUDEntradas.obtenerTodasEntradas()))
+
+        //SI NO HAY ITMES, NOTIFICAMOS TAMBIÉN AL USUARIO
+        if(adaptaor?.itemCount==0)
+        {
+            listaDiccionario.setVisibility(View.GONE)
+            layout_no_almacen.setVisibility(View.VISIBLE)
+
+        }
+
+        //MUESTRA EL SNACKBAR AL BORRAR UN ELEMENTO
+        muestraSnack(position, objetoRecovery)
+
+        //ESCONDEMOS EL TECLADO CUANDO SE MUESTRA EL SNACKBAR
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(listaDiccionario.getWindowToken(), 0)
+
+        //PRINT DE CONTROL
+        println("LISLOC AFTERresultante: "+ adaptaor?.listaItems)
+        println("LISIT AFTERresultante: "+ adaptaor?.items)
+        println("LISLBD AFTERresultante: "+ CRUDEntradas.recorrerListaEntrada(CRUDEntradas.obtenerTodasEntradas()))
+    }
+
+
+    fun muestraSnack(position: Int, objetoRecovery: Entrada)
+    {
+        //ESTE SNACKBAR CANCELA EL BORRADO, REINSERTANDO DE NUEVO EL OBJETO EN LA BASE DE DATOS
+        //LA FORMA DE BORRADO QUE HEMOS USADO NOS OBLIGA A REINSERTAR DE NUEVO EL OBJETO CON LOS DATOS QUE TENEMOS
+        //BORRAR EN LA LISTA DEL RECYCLER ANTES QUE EN LA BASE DE DATOS NOS DABA PROBLEMAS
+        Snackbar.make(listaDiccionario, R.string.borrado, 3000)
+            .setAction(R.string.cancelar, {
+                    _ -> CRUDEntradas.nuevaOActualizarEntrada(objetoRecovery)
+                adaptaor?.listaItems= CRUDEntradas.obtenerTodasEntradas()
+                adaptaor?.notifyItemInserted(position)
+                adaptaor?.notifyItemChanged(position)
+
+                //PRINT DE CONTROL
+                println("LISLOC AFTERreinserccion: "+ adaptaor?.listaItems)
+                println("LISIT AFTERreinserccion: "+ adaptaor?.items)
+                println("LISLBD AFTERreinserccion: "+ CRUDEntradas.recorrerListaEntrada(CRUDEntradas.obtenerTodasEntradas()))
+
+
+                listaDiccionario.setVisibility(View.VISIBLE)
+
+            }).show()
+
+
     }
 
     //MÉTODOS IMPLEMENTADOS AL IMPLEMENTAR LAS INTERFACES DEL SEARCHVIEW (BUSCADOR)

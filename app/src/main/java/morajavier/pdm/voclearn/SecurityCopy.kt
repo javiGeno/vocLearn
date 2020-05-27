@@ -1,23 +1,16 @@
 package morajavier.pdm.voclearn
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.os.Environment
 import android.util.Log
 import android.view.ContextThemeWrapper
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import io.realm.Realm
-import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
-import androidx.core.content.res.TypedArrayUtils.getString
-import androidx.core.content.res.TypedArrayUtils.getText
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
 import morajavier.pdm.voclearn.Modelo.Entrada
 import java.io.File

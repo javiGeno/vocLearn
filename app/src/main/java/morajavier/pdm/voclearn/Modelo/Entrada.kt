@@ -1,6 +1,5 @@
 package morajavier.pdm.voclearn.Modelo
 
-import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.*

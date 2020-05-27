@@ -6,17 +6,9 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.activity_add.*
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_dictionary.*
 import kotlinx.android.synthetic.main.navegacion_inferior.*
-import morajavier.pdm.voclearn.Adapter.AdapterDiccionario
-import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
-import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.Vistas.DictionaryFragment
 import morajavier.pdm.voclearn.Vistas.FolderFragment
 import morajavier.pdm.voclearn.Vistas.TestFragment

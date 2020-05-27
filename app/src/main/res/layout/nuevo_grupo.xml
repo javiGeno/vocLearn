@@ -61,6 +61,7 @@
         android:layout_marginBottom="@dimen/margen3"
         android:textColor="@color/colorPrimary"
         android:text="@string/borrarGrupo"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:checked="false"/>
 
 </LinearLayout>

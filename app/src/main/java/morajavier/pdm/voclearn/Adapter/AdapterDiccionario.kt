@@ -2,21 +2,27 @@ package morajavier.pdm.voclearn.Adapter
 
 
 
-import android.content.Context
+import android.content.ClipData
+import android.content.ClipDescription
 import android.content.Intent
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Point
+import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_dictionary.*
 import kotlinx.android.synthetic.main.layout_diccionario.view.*
+import morajavier.pdm.voclearn.BaseDatos.CRUDConjuntos
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
 import morajavier.pdm.voclearn.FuncionesExtension.*
+import morajavier.pdm.voclearn.Modelo.Conjunto
 import morajavier.pdm.voclearn.Modelo.Entrada
+import morajavier.pdm.voclearn.Modelo.Grupo
 import morajavier.pdm.voclearn.R
 import morajavier.pdm.voclearn.Sonido
 import morajavier.pdm.voclearn.Vistas.DetailActivity
@@ -25,10 +31,11 @@ import morajavier.pdm.voclearn.Vistas.DetailActivity
 //CREAMOS UNA CLASE ADAPTER, PARA LA LISTA DE ENTRADAS QUE INGRESE EL USUARIO
 //IMPLEMENTAMOS LOS MÉTODOS QUE HACEN FALTA AL EXTENDER DE RecyclerView.Adapter<"clase creada interna que extiende de RecyclerView.ViewHolder">
 //RECIBE LA REFERENCIA AL CONTENEDOR PADRE
-class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : FragmentActivity): RecyclerView.Adapter<AdapterDiccionario.ViewHolderDatosDic>() {
+class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : FragmentActivity, val layout:Int): RecyclerView.Adapter<AdapterDiccionario.ViewHolderDatosDic>() {
 
 
-     var listaItems = items
+
+    var listaItems = items
      var contenedorPadre=contenedorPadre
 
 
@@ -36,7 +43,9 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : FragmentAct
     //GUARDAMOS EN UNA VARIABLE QUE PASAREMOS A LA INSTANCIA DE NUESTRA CLASE VIEWHOLDER INTERNA
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderDatosDic {
 
-        val vistaRecycle=LayoutInflater.from(parent.context).inflate(R.layout.layout_diccionario, null, false)
+
+        val vistaRecycle=LayoutInflater.from(parent.context).inflate(layout, null, false)
+
 
         return ViewHolderDatosDic(vistaRecycle)
     }
@@ -113,79 +122,39 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : FragmentAct
             contenedorPadre.startActivity(intent)
         }
 
-    }
+        //SI EL LAYOUT ES IGUAL AL DE LAS ENTRADAS, QUIERE DECIR QUE PUEDE ARRASTRARSE LOS ITEMS, PARA CLASIFICARLOS
+        //EN CARPETAS SI EL USUARIO LO CREE OPORTUNO
+        if(layout==R.layout.layout_entradas){
+            holder.itemView.click_detalle.setOnLongClickListener{
+
+                //SOMBRA POR DEFECTO, QUE ES LA PROPIA VISTA.
+                //MI IDEA ERA HACER LA SOMBRA IGUAL QUE LA VISTA PERO REDUCIDA PERO NO LO CONSEGUÍ
+                val myShadow = View.DragShadowBuilder(it)
 
 
+                //DRAG AND DROP PARA DIFERENTES VERSIONES
+                //ENCONTRADO EN STACKOVERFLOW
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    it.startDragAndDrop( null,
+                        myShadow,
+                        arrayListOf(entradaActual,position, this),
+                        0   )
+                } else {
+                    it.startDrag( null,
+                        myShadow,
+                        arrayListOf(entradaActual,position, this),
+                        0   )
+                }
 
-    fun borrarElemento(entradaActual:Entrada, position:Int)
-    {
-        //BORRAMOS DE LA BD, Y NOTIFICAMOS CAMBIOS AL VOLVER A OBTENER LA LISTA DE LA BD
-        //HEMOS TENIDO QUE BORRAR ANTES EN LE BD Y VOLVER A OBTENER TODA LA LISTA
-        //BORRAR EN LA BD, Y EN LA LISTA DEL RECYCLER PARALELAMENTE NOS DABA PROBLEMAS
-        //CREAMOS UN OBJETO DE RECUPERACIÓN POR SI EL USUARIO SE ARREPIENTE DE BORRAR, VOLVER A REINSERTARLO
-        val objetoRecovery=Entrada(entradaActual.idEntrada,
-            entradaActual.significado,
-            entradaActual.descripcion,
-            entradaActual.probAcierto,
-            entradaActual.escrituraIngles,
-            entradaActual.imagen,
-            entradaActual.audio)
-        CRUDEntradas.borrarEntradaId(entradaActual.idEntrada)
-        this.listaItems= CRUDEntradas.obtenerTodasEntradas()
-        notifyItemRemoved(position)
-        notifyItemChanged(position)
 
-        //PRINT DE CONTROL
-        println("LISLOC AFTERDELETE: "+ listaItems)
-        println("LISIT AFTERDELETE: "+ items)
-        println("LISLBD AFTERDELETE: "+CRUDEntradas.recorrerListaEntrada(CRUDEntradas.obtenerTodasEntradas()))
-
-        //SI NO HAY ITMES, NOTIFICAMOS TAMBIÉN AL USUARIO
-        if(itemCount==0)
-        {
-            contenedorPadre?.let{it.listaDiccionario.setVisibility(View.GONE)}
-            contenedorPadre?.let{it.layout_no_almacen.setVisibility(View.VISIBLE)}
-
+            }
         }
 
-        //MUESTRA EL SNACKBAR AL BORRAR UN ELEMENTO
-        muestraSnack(position, objetoRecovery)
-
-        //ESCONDEMOS EL TECLADO CUANDO SE MUESTRA EL SNACKBAR
-        val imm = contenedorPadre.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(contenedorPadre.listaDiccionario.getWindowToken(), 0)
-
-        //PRINT DE CONTROL
-        println("LISLOC AFTERresultante: "+ listaItems)
-        println("LISIT AFTERresultante: "+ items)
-        println("LISLBD AFTERresultante: "+ CRUDEntradas.recorrerListaEntrada(CRUDEntradas.obtenerTodasEntradas()))
     }
 
 
-    fun muestraSnack(position: Int, objetoRecovery:Entrada)
-    {
-        //ESTE SNACKBAR CANCELA EL BORRADO, REINSERTANDO DE NUEVO EL OBJETO EN LA BASE DE DATOS
-        //LA FORMA DE BORRADO QUE HEMOS USADO NOS OBLIGA A REINSERTAR DE NUEVO EL OBJETO CON LOS DATOS QUE TENEMOS
-        //BORRAR EN LA LISTA DEL RECYCLER ANTES QUE EN LA BASE DE DATOS NOS DABA PROBLEMAS
-        Snackbar.make(contenedorPadre.listaDiccionario, R.string.borrado, 3000)
-            .setAction(R.string.cancelar, {
-                    _ -> CRUDEntradas.nuevaOActualizarEntrada(objetoRecovery)
-                this.listaItems= CRUDEntradas.obtenerTodasEntradas()
-                notifyItemInserted(position)
-                notifyItemChanged(position)
-
-                //PRINT DE CONTROL
-                println("LISLOC AFTERreinserccion: "+ listaItems)
-                println("LISIT AFTERreinserccion: "+ items)
-                println("LISLBD AFTERreinserccion: "+ CRUDEntradas.recorrerListaEntrada(CRUDEntradas.obtenerTodasEntradas()))
 
 
-                    contenedorPadre?.let { it.listaDiccionario.setVisibility(View.VISIBLE) }
-
-            }).show()
-
-
-    }
 
     //CLASE DE LAS VISTAS DEL LAYOUT UTILIZADO PARA ESTE ADAPTADOR
     class ViewHolderDatosDic(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -232,6 +201,21 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : FragmentAct
     fun obtenerListaCompleta():List<Entrada>
     {
         return CRUDEntradas.obtenerTodasEntradas()
+    }
+
+    fun quitarEntradaLista(entradaAQuitar:Entrada, carpetaPadre:Any, posicionQuitado: Int)
+    {
+        if(carpetaPadre is Grupo)
+        {
+            CRUDConjuntos.quitarEntradaDeLista((carpetaPadre as Grupo).palabras!!, entradaAQuitar!!)
+        }
+        else if(carpetaPadre is Conjunto)
+        {
+            CRUDConjuntos.quitarEntradaDeLista((carpetaPadre as Conjunto).listaPalabras!!, entradaAQuitar!!)
+        }
+
+        notifyItemRemoved(posicionQuitado)
+        notifyItemChanged(posicionQuitado)
     }
 
 

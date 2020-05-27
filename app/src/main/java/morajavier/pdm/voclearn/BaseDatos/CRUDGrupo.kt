@@ -15,8 +15,6 @@ class CRUDGrupo {
             App.gestorBD.r.executeTransaction({
                 it.insertOrUpdate( nuevo)
             })
-            /*   {Log.i("SUCCESS NUEVO GRUPO", "Un nuevo grupo ha sido introducido o actualizado satifactoriamente")},
-               {error-> Log.e("ERROR NUEVO GRUPO", error.message)})*/
 
         }
 
@@ -133,6 +131,14 @@ class CRUDGrupo {
             grupo.listaConjuntos?.add(conjunto)
             App.gestorBD.r.commitTransaction()
 
+        }
+
+        //INSERTA UNA ENTRADA EN UNA LISTA DE ENTRADAS DEL GRUPO
+        fun insertarEntradaEnEntradas(grupoPadre:Grupo, entradaHija: Entrada)
+        {
+            App.gestorBD.r.beginTransaction()
+            grupoPadre.palabras?.add(entradaHija)
+            App.gestorBD.r.commitTransaction()
         }
 
 

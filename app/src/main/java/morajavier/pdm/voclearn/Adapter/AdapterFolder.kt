@@ -1,11 +1,13 @@
 package morajavier.pdm.voclearn.Adapter
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.layout_folder.view.*
+import morajavier.pdm.voclearn.BaseDatos.CRUDGrupo
 import morajavier.pdm.voclearn.Modelo.Grupo
 import morajavier.pdm.voclearn.R
 import morajavier.pdm.voclearn.Vistas.FolderFragment
@@ -73,4 +75,36 @@ class AdapterFolder (var items: MutableList<Grupo>,  contenedorPadre : FolderFra
         items=listaFiltrada
         notifyDataSetChanged()
     }
+
+    fun inserccionItem()
+    {
+
+
+        items= CRUDGrupo.obtenerTodosLosGrupos() as MutableList<Grupo>
+        notifyItemInserted((itemCount)!!)
+        notifyItemChanged((itemCount)!!)
+
+
+    }
+
+    fun borradoItem(posicionBorrado :Int)
+    {
+
+
+        //SI LA LISTA DEVUELTA NO ESTA VACÍA NO ES NULA CASTEAMOS Y ACTUALIZAMOS ITEMS
+        CRUDGrupo.obtenerTodosLosGrupos()?.let{
+            if(it.isNotEmpty())
+                items=it as MutableList<Grupo>
+        }
+
+        notifyItemRemoved(posicionBorrado)
+        notifyItemChanged(posicionBorrado)
+    }
+
+    fun editarNombreGrupo(posicionEditar :Int) {
+        items= CRUDGrupo.obtenerTodosLosGrupos() as MutableList<Grupo>
+        notifyItemChanged(posicionEditar)
+    }
+
+
 }

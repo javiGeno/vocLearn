@@ -49,6 +49,7 @@ class FolderFragment : Fragment() ,
 
         comprobarGrupos()
 
+
         btn_add_2.setOnClickListener {
             //EL SEGUNDO Y TERCER PARÁMETRO, ES CUANDO SE QUIERA MODIFICAR
             alertaNuevoEditaGrupo(it, null, -1)
@@ -86,16 +87,10 @@ class FolderFragment : Fragment() ,
                     //BORRAMOS LA CARPETA SI EL USUARIO A CHECKEADO PARA BORRAR
                     //SI NO CHECKEA EDITAMOS O INSERTAMOS
                     if(vistaDialogo.check_borrar.isChecked) {
+
+                        //BORRAMOS DE LA BD
                         carpeta?.let { CRUDGrupo.borrarUnGrupo(it) }
-
-                        //SI LA LISTA DEVUELTA NO ESTA VACÍA NO ES NULA CASTEAMOS Y ACTUALIZAMOS ITEMS
-                        CRUDGrupo.obtenerTodosLosGrupos()?.let{
-                            if(it.isNotEmpty())
-                                adaptador?.items=it as MutableList<Grupo>
-                        }
-
-                        adaptador?.notifyItemRemoved(posicionEditar)
-                        adaptador?.notifyItemChanged(posicionEditar)
+                        adaptador?.borradoItem(posicionEditar)
                         comprobarGrupos()
 
                     }
@@ -107,20 +102,13 @@ class FolderFragment : Fragment() ,
                               //SE MODIFICA EL NOMBRE, EN CASO CONTRARIO SE INSERTA
                                if(carpetaEditable) {
                                    CRUDGrupo.modificarNombreGrupo(carpeta!!.nombreGrupo, nombreNuevo)
-
-                                   adaptador?.items= CRUDGrupo.obtenerTodosLosGrupos() as MutableList<Grupo>
-                                   adaptador?.notifyItemChanged(posicionEditar)
-
+                                   adaptador?.editarNombreGrupo(posicionEditar)
                                }
                                else {
+
+                                   //INSERTAMOS EN LA BD
                                    CRUDGrupo.nuevoOActualizaGrupo(Grupo(nombreNuevo))
-
-                                   adaptador?.let{
-                                       it.items= CRUDGrupo.obtenerTodosLosGrupos() as MutableList<Grupo>
-                                       it.notifyItemInserted((it.itemCount)!!)
-                                       it.notifyItemChanged((it.itemCount)!!)
-                                   }
-
+                                   adaptador?.inserccionItem()
 
                                }
 
@@ -152,6 +140,9 @@ class FolderFragment : Fragment() ,
         //ACTUALIZA EL RECYCLER SOLO SI EXISTEN GRUPOS
         if(CRUDGrupo.hayGrupos()) {
 
+
+
+
             actualizarRecycleView()
             //INDICAMOS EL ESCUCHADOR DEL BUSCADOR, ESTE FRAGMENTO
             buscador.setOnQueryTextListener(this)
@@ -166,6 +157,10 @@ class FolderFragment : Fragment() ,
             //SI NO HAY GRUPOS HACEMOS INVISIBLE EL RECYCLER Y VISIBLE AL LAYOUT QUE INDICA QUE NO HAY NADA EN LA BD
             listaCarpetas.visibility= View.GONE
             layout_no_almacen_folder.visibility= View.VISIBLE
+
+            //Y INSTACIAMOS EL ADAPTER CON UNA LISTA VACÍA
+            this.adaptador = this.activity?.let{AdapterFolder(mutableListOf(),this)}!!
+
         }
 
 

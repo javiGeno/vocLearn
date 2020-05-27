@@ -1,8 +1,6 @@
 package morajavier.pdm.voclearn.Vistas
 
-import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaScannerConnection
@@ -11,16 +9,13 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import kotlinx.android.synthetic.main.activity_add.*
 import kotlinx.android.synthetic.main.barra_guardar_atras.*
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
-import morajavier.pdm.voclearn.FuncionesExtension.cargarImagen
 import morajavier.pdm.voclearn.FuncionesExtension.cargarNotCache
 import morajavier.pdm.voclearn.FuncionesExtension.crearSpinnerCarga
 import morajavier.pdm.voclearn.Imagen
@@ -42,6 +37,13 @@ class AddActivity : AppCompatActivity(),  ActivityCompat.OnRequestPermissionsRes
     var ficheroAlmacenImagen:File?=null
     //OBJETO PARA LA GRABACIÓN DEL AUDIO PASAMOS EL CONTEXTO, Y EL ID DEL NUEVO AUDIO,  QUE SON LOS REQUERIDOS
     var gestionSondio=Sonido(this, CRUDEntradas.nuevoId()!!)
+    //ESTA BANDERA OBTENDRÁ EL RESULTADO DE UN INTENT, QUE PUEDE SER VERDADERO, SI LA ACTIVIDAD SE ABRE DESDE
+    // EL FRAGMENT DICCIONARIO, LO QUE QUIERE DECIR QUE SOLO SE INSERTARÁ EN LAS ENTRADAS DE LA BASE DE DATOS;
+    //Y POR OTRO LADO PUEDE SER FALSO, LO QUE QUIERE DECIR QUE ADEMÁS DE INSERTARSE EN EL DICCIONARIO, SE INSERTARÁ
+    //EN LA LISTA  DEL GRUPO O CONJUNTO QUE SE MUESTRE EN LA ACTIVIDAD LA CUAL LLAMA A ESTA ACTIVIDAD PARA QUE INSERTE
+    // UNA PALABRA NUEVA Y ADEMÁS DEVUELVA EL ID DE LA PALABRA , CON INTENCIÓN DE ALMACENARLA EN LA LISTA DEL GRUPO
+    //O CONJUNTO CORRESPONDIENTE
+    var soloInsertar=true
 
     companion object{
         //CONSTANTES PARA LA ELECCIÓN DE LA FUENTE DE IMAGEN, QUE PUEDE SER DESDE LA GALERIA O DE LA CAMARA
@@ -58,9 +60,11 @@ class AddActivity : AppCompatActivity(),  ActivityCompat.OnRequestPermissionsRes
         //SE COMPRUEBAN LOS PERMISOS DE ALMACENAMIENTO EXTERNO
         SecurityCopy.comprobarTodosPermisos(this)
 
+        soloInsertar=intent.getBooleanExtra("soloInsertar", true)
 
         //AL PULSAR EL BOTON ATRÁS VOLVEMOS AL FRAGMENT PADRE
         btn_atras.setOnClickListener{
+            setResult(RESULT_CANCELED)
             finish()
         }
 
@@ -71,8 +75,9 @@ class AddActivity : AppCompatActivity(),  ActivityCompat.OnRequestPermissionsRes
         //GUARDAMOS EL NUEVO OBJETO Y VOLVEMOS A LA ACTIVITY ANTERIOR
         btn_guardar.setOnClickListener{
 
-            guardarObjetoEnBD()
-            finish()
+            val idPalabra=guardarObjetoEnBD()
+            finalizarActivity(idPalabra)
+
         }
 
         btn_grabar.setOnTouchListener{v, event->
@@ -102,6 +107,22 @@ class AddActivity : AppCompatActivity(),  ActivityCompat.OnRequestPermissionsRes
         }
 
 
+    }
+
+    private fun finalizarActivity(idPalabra:Int) {
+
+        if(soloInsertar)
+        {
+            finish()
+        }
+        else{
+
+            val intent = Intent(this, Conj_entra_Activity::class.java)
+            intent.putExtra("idPalabra", idPalabra)
+
+            setResult(RESULT_OK, intent)
+            finish()
+        }
     }
 
 
@@ -150,7 +171,7 @@ class AddActivity : AppCompatActivity(),  ActivityCompat.OnRequestPermissionsRes
         }
     }
 
-    fun guardarObjetoEnBD()
+    fun guardarObjetoEnBD():Int
     {
         val id=CRUDEntradas.nuevoId()
         val palabraIngles=field_word.text.toString()
@@ -165,7 +186,7 @@ class AddActivity : AppCompatActivity(),  ActivityCompat.OnRequestPermissionsRes
 
         Toast.makeText(this,"Se ha guardado la palabra "+palabraIngles, Toast.LENGTH_SHORT).show()
 
-
+        return id
     }
 
 

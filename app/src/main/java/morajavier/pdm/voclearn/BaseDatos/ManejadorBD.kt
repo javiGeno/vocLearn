@@ -5,9 +5,6 @@ import android.content.Context
 import android.util.Log
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import io.realm.RealmResults
-import io.realm.kotlin.createObject
-import morajavier.pdm.voclearn.Modelo.*
 import morajavier.pdm.voclearn.SecurityCopy
 
 class ManejadorBD (appContext:Context){
