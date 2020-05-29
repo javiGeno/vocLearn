@@ -109,9 +109,11 @@ class AdapterConjuntos( var items: MutableList<Conjunto>, val contenedorPadre : 
 
                     //INSERTAMOS EN LA LISTA DEL CONJUNTO ACTUAL EL CUAL HA ESCUCHADO EL EVENTO
                     CRUDConjuntos.insertarEntradaEnEntradas(conjuntoEscucha, objetoMovido!!)
+
                     //QUITAMOS DE LA LISTA DE LA CARPETA, LA ENTRADA MOVIDA "objetoMovido"
                     //contenedorPadre.carpeta PUEDE SER UN Grupo O UN Conjunto
-                    adapter.quitarEntradaLista( objetoMovido, contenedorPadre.carpeta, posicionEntrada)
+                    //*********comentamos la línea por que es interesante que se mantenga en la carpeta padre también*******
+                   //adapter.quitarEntradaLista( objetoMovido, contenedorPadre.carpeta, posicionEntrada)
 
                     // CAMBIAMOS EL FONDO CUANDO EL OBJETO SE ARROJA ENCIMA DEL OBJETO QUE ESCUCHA
                     v.setBackgroundResource(R.drawable.borde_circular)

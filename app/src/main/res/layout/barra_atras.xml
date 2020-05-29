@@ -20,7 +20,6 @@
         android:id="@+id/texto_nombre_carpeta"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:layout_alignParentRight="true"
         android:layout_marginStart="@dimen/margen1"
         android:layout_marginLeft="@dimen/margen1"
         android:layout_marginTop="@dimen/margen1"
@@ -28,13 +27,11 @@
         android:layout_marginRight="@dimen/margen1"
         android:layout_marginBottom="@dimen/margen1"
         android:layout_toRightOf="@id/btn_atras"
-        android:gravity="end"
+        android:gravity="center"
         android:text="HOLA"
-        android:textAlignment="textEnd"
         android:textColor="@android:color/holo_orange_dark"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_alignParentEnd="true"
         android:layout_toEndOf="@id/btn_atras" />
 
 </RelativeLayout>

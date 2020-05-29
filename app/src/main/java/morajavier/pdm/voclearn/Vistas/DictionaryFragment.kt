@@ -17,12 +17,17 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.*
 import com.google.android.material.snackbar.Snackbar
+import io.realm.RealmResults
 import kotlinx.android.synthetic.main.fragment_dictionary.*
 import kotlinx.android.synthetic.main.navegacion_inferior.*
 import kotlinx.android.synthetic.main.search_and_add.*
 import morajavier.pdm.voclearn.Adapter.AdapterDiccionario
+import morajavier.pdm.voclearn.BaseDatos.CRUDConjuntos
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
+import morajavier.pdm.voclearn.BaseDatos.CRUDGrupo
+import morajavier.pdm.voclearn.Modelo.Conjunto
 import morajavier.pdm.voclearn.Modelo.Entrada
+import morajavier.pdm.voclearn.Modelo.Grupo
 import morajavier.pdm.voclearn.R
 
 
@@ -228,22 +233,39 @@ open class DictionaryFragment : Fragment(),
         //HEMOS TENIDO QUE BORRAR ANTES EN LE BD Y VOLVER A OBTENER TODA LA LISTA
         //BORRAR EN LA BD, Y EN LA LISTA DEL RECYCLER PARALELAMENTE NOS DABA PROBLEMAS
         //CREAMOS UN OBJETO DE RECUPERACIÓN POR SI EL USUARIO SE ARREPIENTE DE BORRAR, VOLVER A REINSERTARLO
-        val objetoRecovery= Entrada(entradaActual.idEntrada,
+        var objetoRecovery= Entrada(entradaActual.idEntrada,
             entradaActual.significado,
             entradaActual.descripcion,
             entradaActual.probAcierto,
             entradaActual.escrituraIngles,
             entradaActual.imagen,
-            entradaActual.audio)
+            entradaActual.audio
+            )
+
+        //OBTENEMO LAS LISTA DE LAS FK, PARA CUANDO EL USUARIO DESHAGA LA OPERACIÓN BORRAR, SE AÑADA A LA
+        val listaFkConjuntos:ArrayList<Conjunto> =ArrayList()
+        val listaFkGrupo:ArrayList<Grupo> =ArrayList()
+
+        //GUARDAMOS LAS REFERENCIAS EN LAS LISTAS LOCALES CREADAS QUE LUEGO UTILIZAREMOS EN LA RECUPERACIÓN
+        //SI EL USUARIO DESAHCE LA OPERACIÓN
+        entradaActual.fkConjunto?.let {
+            for(fk in it) {
+                listaFkConjuntos.add(fk)
+            }
+        }
+        entradaActual.fkGrupo?.let {
+            for(fk in it) {
+                listaFkGrupo.add(fk)
+            }
+
+        }
+
+
         CRUDEntradas.borrarEntradaId(entradaActual.idEntrada)
         adaptaor?.listaItems= CRUDEntradas.obtenerTodasEntradas()
         adaptaor?.notifyItemRemoved(position)
         adaptaor?.notifyItemChanged(position)
 
-        //PRINT DE CONTROL
-        println("LISLOC AFTERDELETE: "+ adaptaor?.listaItems)
-        println("LISIT AFTERDELETE: "+ adaptaor?.items)
-        println("LISLBD AFTERDELETE: "+CRUDEntradas.recorrerListaEntrada(CRUDEntradas.obtenerTodasEntradas()))
 
         //SI NO HAY ITMES, NOTIFICAMOS TAMBIÉN AL USUARIO
         if(adaptaor?.itemCount==0)
@@ -254,7 +276,7 @@ open class DictionaryFragment : Fragment(),
         }
 
         //MUESTRA EL SNACKBAR AL BORRAR UN ELEMENTO
-        muestraSnack(position, objetoRecovery)
+        muestraSnack(position, objetoRecovery,listaFkConjuntos,listaFkGrupo)
 
         //ESCONDEMOS EL TECLADO CUANDO SE MUESTRA EL SNACKBAR
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -267,7 +289,11 @@ open class DictionaryFragment : Fragment(),
     }
 
 
-    fun muestraSnack(position: Int, objetoRecovery: Entrada)
+
+
+
+
+    fun muestraSnack(position: Int, objetoRecovery: Entrada, listaFkConjuntos:ArrayList<Conjunto>, listaFkGrupos:ArrayList<Grupo>)
     {
         //ESTE SNACKBAR CANCELA EL BORRADO, REINSERTANDO DE NUEVO EL OBJETO EN LA BASE DE DATOS
         //LA FORMA DE BORRADO QUE HEMOS USADO NOS OBLIGA A REINSERTAR DE NUEVO EL OBJETO CON LOS DATOS QUE TENEMOS
@@ -284,6 +310,17 @@ open class DictionaryFragment : Fragment(),
                 println("LISIT AFTERreinserccion: "+ adaptaor?.items)
                 println("LISLBD AFTERreinserccion: "+ CRUDEntradas.recorrerListaEntrada(CRUDEntradas.obtenerTodasEntradas()))
 
+
+                //VOLVEMOS A INSERTAR LAS FK QUE TENIA EL USUARIO ALMACENADAS EN LAS DISTINTAS CARPETAS (Grupo o Conjunto)
+               listaFkConjuntos.apply {
+                    this?.let{for(fk in it)
+                        CRUDConjuntos.insertarEntradaEnEntradas(fk, objetoRecovery)}
+                }
+
+                listaFkGrupos.apply {
+                    this?.let{for(fk in it)
+                        CRUDGrupo.insertarEntradaEnEntradas(fk, objetoRecovery)}
+                }
 
                 listaDiccionario.setVisibility(View.VISIBLE)
 

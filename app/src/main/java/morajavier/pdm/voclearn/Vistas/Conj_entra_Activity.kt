@@ -14,6 +14,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_conj_entra_.*
@@ -112,14 +113,14 @@ class Conj_entra_Activity : AppCompatActivity() {
                 carpeta=CRUDConjuntos.obtenerConjunto(idConjunto)as Conjunto
                 adaptadorCon= (carpeta as Conjunto)?.listaConjuntos?.let { AdapterConjuntos(it,this)}!!
                 adaptadorEntr=(carpeta as Conjunto)?.listaPalabras?.let{AdapterDiccionario(it, this, R.layout.layout_entradas)}!!
-                texto_nombre_carpeta.setText((carpeta as Conjunto)?.nombreConjunto)
+                texto_nombre_carpeta.setText((carpeta as Conjunto)?.nombreConjunto.toUpperCase())
             }
             "grupo"->{
                 val nombreGrupo=intent.getStringExtra("nombreGrupo")
                 carpeta= CRUDGrupo.obtenerGrupoPorNombre(nombreGrupo)as Grupo
                 adaptadorCon= (carpeta as Grupo)?.listaConjuntos?.let { AdapterConjuntos(it,this)}!!
                 adaptadorEntr=(carpeta as Grupo)?.palabras?.let{AdapterDiccionario(it, this, R.layout.layout_entradas)}!!
-                texto_nombre_carpeta.setText((carpeta as Grupo)?.nombreGrupo)
+                texto_nombre_carpeta.setText((carpeta as Grupo)?.nombreGrupo.toUpperCase())
 
             }
         }
@@ -218,6 +219,8 @@ class Conj_entra_Activity : AppCompatActivity() {
             //SI ELIGE LA OPCION DE GALERIA
             if(opciones[i].equals(getString(R.string.obtenerDeDicc)))
             {
+                val d =DialogoFragment()
+                d.show(getSupportFragmentManager(), "SimpleDialog")
 
                 println("OBTENER DE DICCIONARIO")
             }
