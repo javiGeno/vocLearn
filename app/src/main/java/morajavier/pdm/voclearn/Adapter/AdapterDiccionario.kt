@@ -64,10 +64,10 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : FragmentAct
         val entradaActual=listaItems.get(position)
         holder.cambiarColor(entradaActual.probAcierto)
         entradaActual.imagen?.let {
-            if(!(it.isEmpty())) {
-                println("RUTA IMAGEN ADAPTER " + it)
-                holder.circuloColor.cargarImagenCircleNoCache(it, contenedorPadre.crearSpinnerCarga(5f, 30f))
-            }
+
+            println("RUTA IMAGEN ADAPTER " + it)
+            holder.circuloColor.cargarImagenCircleNoCache(it, contenedorPadre.crearSpinnerCarga(5f, 30f),entradaActual.fondoImg())
+
         }
 
 
@@ -189,6 +189,8 @@ class AdapterDiccionario(val items: List<Entrada>, contenedorPadre : FragmentAct
 
 
     }
+
+
     //AÑADIMOS LA LISTA FILTRADA A LA LISTA PRINCIPAL Y NOTIFICAMOS LOS CAMBIOS
     fun actualizaLista(listanueva :List<Entrada>)
     {

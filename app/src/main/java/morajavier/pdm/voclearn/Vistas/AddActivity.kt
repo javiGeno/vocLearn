@@ -109,6 +109,9 @@ class AddActivity : AppCompatActivity(),  ActivityCompat.OnRequestPermissionsRes
 
     }
 
+    //FINALIZA EL ACTIVITY DESPUES DE GUARDAR, SI HA AÑADIDO DESDE EL DICCIONARIO, SOLO VA A INSERTAR
+    //LLAMAMOS PUES A finish(); SI HA AÑADIDO DESDE UNA CARPETA, DEVOLVEMOS EL ID QUE SE HA AÑADIDO PARA AÑADIRLO LA ENTRADA
+    //A LA CARPETA TAMBIÉN.
     private fun finalizarActivity(idPalabra:Int) {
 
         if(soloInsertar)
@@ -144,7 +147,7 @@ class AddActivity : AppCompatActivity(),  ActivityCompat.OnRequestPermissionsRes
                 println("IMAGEN RESPUESTA GALERIA "+rutaImagen)
 
                 //FUNCIÓN DE EXTENSION QUE CARGA LA IMAGEN CON GLIDE(LIBRERIA)
-                img_click.cargarNotCache(rutaImagen, this.crearSpinnerCarga(5f, 30f))
+                img_click.cargarNotCache(rutaImagen, this.crearSpinnerCarga(5f, 30f),R.mipmap.ic_launcher_no_image)
 
 
 
@@ -164,7 +167,7 @@ class AddActivity : AppCompatActivity(),  ActivityCompat.OnRequestPermissionsRes
 
                 //FUNCIÓN DE EXTENSION QUE CARGA LA IMAGEN CON GLIDE(LIBRERIA)
                 rutaImagen=ficheroAlmacenImagen!!.absolutePath
-                img_click.cargarNotCache(rutaImagen, this.crearSpinnerCarga(5f, 30f))
+                img_click.cargarNotCache(rutaImagen, this.crearSpinnerCarga(5f, 30f), R.mipmap.ic_launcher_no_image)
 
 
             }

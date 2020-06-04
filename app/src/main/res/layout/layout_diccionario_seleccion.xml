@@ -8,13 +8,14 @@
 
 
     <LinearLayout
-        android:id="@+id/click_detalle"
+        android:id="@+id/click_Check"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/azulCielo"
         android:clickable="true"
         android:focusable="true"
         android:orientation="horizontal">
+
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
@@ -24,8 +25,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_centerVertical="true"
-                android:layout_margin="@dimen/margen1"
-                />
+                android:layout_margin="@dimen/margen1" />
 
 
         </RelativeLayout>

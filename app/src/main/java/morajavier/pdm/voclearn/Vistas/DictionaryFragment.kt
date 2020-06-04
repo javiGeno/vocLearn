@@ -55,8 +55,6 @@ open class DictionaryFragment : Fragment(),
         super.onCreate(savedInstanceState)
 
 
-
-
     }
 
 
@@ -287,9 +285,6 @@ open class DictionaryFragment : Fragment(),
         println("LISIT AFTERresultante: "+ adaptaor?.items)
         println("LISLBD AFTERresultante: "+ CRUDEntradas.recorrerListaEntrada(CRUDEntradas.obtenerTodasEntradas()))
     }
-
-
-
 
 
 

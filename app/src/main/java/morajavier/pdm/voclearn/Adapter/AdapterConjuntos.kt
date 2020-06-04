@@ -208,7 +208,7 @@ class AdapterConjuntos( var items: MutableList<Conjunto>, val contenedorPadre : 
     fun editarNombreConjunto(posicionEditar :Int, conjuntoEdit: Conjunto, nombreNuevo:String) {
 
 
-        conjuntoEdit?.nombreConjunto=nombreNuevo
+        CRUDConjuntos.modificarNombreConjunto(conjuntoEdit, nombreNuevo)
         notifyItemChanged(posicionEditar)
     }
 

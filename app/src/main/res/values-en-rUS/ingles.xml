@@ -42,6 +42,9 @@
     <string name="añadirNuevaPalabra">Add new word</string>
     <string name="comienzoDrag">Move the word to a folder or remove it from the list if you want</string>
     <string name="quit_palabra">Remove word</string>
+    <string name="addTo">ADD TO</string>
+    <string name="nombreInvalido">The name must container some character</string>
+
 
 
 

@@ -7,6 +7,14 @@
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
+    <!--Para la activitiy "activity_seleccion" buscador y check en blancos-->
+    <style name="TemaActivities" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+
     <!--Tema para la pantalla de bienvenida-->
     <style name="SplashTema" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_inicio</item>
@@ -25,8 +33,6 @@
         <item name="searchHintIcon">@null</item>
         <!-- Marca de agua del buscador -->
         <item name="queryHint">@string/marcaBuscar</item>
-
-
     </style>
 
     <!--Tema Para Barra opciones-->

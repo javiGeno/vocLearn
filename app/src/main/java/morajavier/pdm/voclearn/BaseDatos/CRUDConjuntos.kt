@@ -170,6 +170,13 @@ class CRUDConjuntos {
 
         }
 
+        fun modificarNombreConjunto(conjunto:Conjunto, nombreNuevo: String)
+        {
+            App.gestorBD.r.beginTransaction()
+            conjunto.nombreConjunto=nombreNuevo
+            App.gestorBD.r.commitTransaction()
+        }
+
         //INSERTA UNA ENTRADA EN UNA LISTA DE ENTRADAS
         fun insertarEntradaEnEntradas(conjuntoPadre:Conjunto, entradaHija: Entrada)
         {

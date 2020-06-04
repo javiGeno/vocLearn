@@ -29,7 +29,7 @@
     <string name="grabDetenida">Grabación detendida</string>
     <string name="grabTerminada">Grabación terminada</string>
     <string name="grabFallo">Debe mantener pulsado para grabar</string>
-    <string name="galeria">Galeria</string>
+    <string name="galeria">Galería</string>
     <string name="camara">Cámara</string>
     <string name="opciones">Elige una opción</string>
     <string name="nuevoGrupo">Nueva carpeta</string>
@@ -41,5 +41,7 @@
     <string name="añadirNuevaPalabra">Añade nueva palabra</string>
     <string name="comienzoDrag">Mueva la palabra a alguna carpeta o quítela de la lista sí lo desea</string>
     <string name="quit_palabra">quitar palabra</string>
+    <string name="addTo">AÑADE A</string>
+    <string name="nombreInvalido">El nombre debe contener algún carácter</string>
 
 </resources>

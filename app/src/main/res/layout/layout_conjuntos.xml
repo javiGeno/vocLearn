@@ -24,16 +24,19 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/nombre_conjun"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/margen0"
             android:maxLength="25"
             android:textAlignment="center"
             android:textColor="@color/colorPrimary"
             android:textColorHint="@color/colorBeigh"
-            android:textSize="12sp"
+            app:autoSizeTextType="none"
+            app:autoSizePresetSizes="@array/autosize_values"
+            android:autoSizeStepGranularity="6sp"
             android:typeface="normal"
-            app:fontFamily="sans-serif-smallcaps" />
+            app:fontFamily="sans-serif-smallcaps"
+          />
+
 
 </LinearLayout>

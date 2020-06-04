@@ -18,6 +18,7 @@ import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
 import morajavier.pdm.voclearn.FuncionesExtension.cambioImagen
 import morajavier.pdm.voclearn.FuncionesExtension.cargarNotCache
 import morajavier.pdm.voclearn.FuncionesExtension.crearSpinnerCarga
+import morajavier.pdm.voclearn.FuncionesExtension.fondoImg
 import morajavier.pdm.voclearn.Modelo.Entrada
 import java.io.File
 
@@ -200,15 +201,9 @@ class DetailActivity : AppCompatActivity() {
             field_descriccion.setText(objetoDetalle.descripcion)
         }
 
-        //SI LA IMAGEN ESTA VACÍA PONEMOS DE FONDO EL RECURSO QUE TENEMOS PARA ELLO
-        if(objetoDetalle.imagen!!.isEmpty())
-        {
-            card_imagen.setBackgroundResource(R.mipmap.ic_launcher_no_image)
-        }
-        else
-        {
-           card_imagen.cargarNotCache(objetoDetalle.imagen!!, this.crearSpinnerCarga(8f, 40f))
-        }
+        //CARGAMOS LA IMAGEN, SI DA ERROR DE CARGA SE PONDRÁ EL DIBUJO LA CÁMARA
+        card_imagen.cargarNotCache(objetoDetalle.imagen!!, this.crearSpinnerCarga(8f, 40f), R.mipmap.ic_launcher_no_image)
+
 
         cargaAudio()
     }
@@ -317,7 +312,7 @@ class DetailActivity : AppCompatActivity() {
 
                 CRUDEntradas.actualizarPropiedadObjeto(objetoDetalle, "imagen", rutaImagen)
                 //FUNCIÓN DE EXTENSION QUE CARGA LA IMAGEN CON GLIDE(LIBRERIA)
-                card_imagen.cargarNotCache(rutaImagen, this.crearSpinnerCarga(8f, 40f))
+                card_imagen.cargarNotCache(rutaImagen, this.crearSpinnerCarga(8f, 40f),  R.mipmap.ic_launcher_no_image)
 
 
             }
@@ -330,13 +325,14 @@ class DetailActivity : AppCompatActivity() {
                     { path, uri ->
 
                         println("IMAGEN RESPUESTA FOTO "+ path)
+                        rutaImagen=path
                     })
 
-
+                rutaImagen=ficheroAlmacenImagen!!.absolutePath
+                println("IMAGEN MODIFICADA OBJETO "+ rutaImagen)
                 CRUDEntradas.actualizarPropiedadObjeto(objetoDetalle, "imagen", rutaImagen)
                 //FUNCIÓN DE EXTENSION QUE CARGA LA IMAGEN CON GLIDE(LIBRERIA)
-                rutaImagen=ficheroAlmacenImagen!!.absolutePath
-                card_imagen.cargarNotCache(rutaImagen, this.crearSpinnerCarga(8f, 40f))
+                card_imagen.cargarNotCache(rutaImagen, this.crearSpinnerCarga(8f, 40f), R.mipmap.ic_launcher_no_image)
 
 
             }

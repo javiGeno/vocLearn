@@ -22,7 +22,6 @@ import morajavier.pdm.voclearn.Adapter.AdapterFolder
 import morajavier.pdm.voclearn.BaseDatos.CRUDConjuntos
 import morajavier.pdm.voclearn.BaseDatos.CRUDGrupo
 import morajavier.pdm.voclearn.Modelo.Grupo
-
 import morajavier.pdm.voclearn.R
 
 
@@ -62,8 +61,6 @@ class FolderFragment : Fragment() ,
 
    fun alertaNuevoEditaGrupo(it:View, carpeta: Grupo?, posicionEditar:Int) {
 
-
-
         val inflater= requireActivity().layoutInflater
         val vistaDialogo=inflater.inflate(R.layout.nuevo_grupo, null)
         //SI SE VA A AÑADIR NUEVA CARPETA SE MANTIENE EN FALSO, EN CASO DE QUE CARPETA
@@ -78,6 +75,18 @@ class FolderFragment : Fragment() ,
                         vistaDialogo.check_borrar.visibility=VISIBLE
                      carpetaEditable=true}?:let{carpetaEditable=false}
 
+       //SI CHECKEA LA OPCIÓN DE BORRAR CAMBIAMOS EL NOMBRE DE LA CARPETA AL QUE TENÍA PARA NO CREAR CONFUSIÓN AL USUARIO
+       //Y DESHABILITAMOS LA EDICIÓN DE LA CARPETA
+       vistaDialogo.check_borrar.setOnClickListener{
+          if(vistaDialogo.check_borrar.isChecked) {
+              vistaDialogo.nombre_carp_nuevo.setText(carpeta!!.nombreGrupo)
+              vistaDialogo.nombre_carp_nuevo.setEnabled(false)
+          }
+           else{
+              vistaDialogo.nombre_carp_nuevo.setEnabled(true)
+          }
+       }
+
         AlertDialog.Builder(ContextThemeWrapper(it.context, R.style.AlertDialog))
             .setView(vistaDialogo)
             .setPositiveButton(
@@ -88,6 +97,7 @@ class FolderFragment : Fragment() ,
                     //SI NO CHECKEA EDITAMOS O INSERTAMOS
                     if(vistaDialogo.check_borrar.isChecked) {
 
+
                         //BORRAMOS DE LA BD
                         carpeta?.let { CRUDGrupo.borrarUnGrupo(it) }
                         adaptador?.borradoItem(posicionEditar)
@@ -96,27 +106,44 @@ class FolderFragment : Fragment() ,
                     }
                     else {
                         val nombreNuevo = vistaDialogo.nombre_carp_nuevo.text.toString()
-                        if (!CRUDGrupo.existeGrupo(nombreNuevo)) {
+                        if(nombreNuevo.isNotEmpty()) {
+                            if (!CRUDGrupo.existeGrupo(nombreNuevo)) {
 
-                              //SI EL MÉTODO SE HA LLAMADO PARA EDITAR, COMO INDICA LA VARIABLE carpetaEditable,
-                              //SE MODIFICA EL NOMBRE, EN CASO CONTRARIO SE INSERTA
-                               if(carpetaEditable) {
-                                   CRUDGrupo.modificarNombreGrupo(carpeta!!.nombreGrupo, nombreNuevo)
-                                   adaptador?.editarNombreGrupo(posicionEditar)
-                               }
-                               else {
+                                //SI EL MÉTODO SE HA LLAMADO PARA EDITAR, COMO INDICA LA VARIABLE carpetaEditable,
+                                //SE MODIFICA EL NOMBRE, EN CASO CONTRARIO SE INSERTA
+                                if (carpetaEditable) {
+                                    CRUDGrupo.modificarNombreGrupo(
+                                        carpeta!!.nombreGrupo,
+                                        nombreNuevo
+                                    )
+                                    adaptador?.editarNombreGrupo(posicionEditar)
+                                } else {
 
-                                   //INSERTAMOS EN LA BD
-                                   CRUDGrupo.nuevoOActualizaGrupo(Grupo(nombreNuevo))
-                                   adaptador?.inserccionItem()
+                                    //INSERTAMOS EN LA BD
+                                    CRUDGrupo.nuevoOActualizaGrupo(Grupo(nombreNuevo))
+                                    adaptador?.inserccionItem()
 
-                               }
+                                }
 
 
-                            comprobarGrupos()
+                                comprobarGrupos()
 
-                        } else {
-                            Toast.makeText(it.context, R.string.grupoExistente, Toast.LENGTH_LONG)
+                            } else {
+                                Toast.makeText(
+                                    it.context,
+                                    R.string.grupoExistente,
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                            }
+                        }
+                        else
+                        {
+                            Toast.makeText(
+                                it.context,
+                                R.string.nombreInvalido,
+                                Toast.LENGTH_LONG
+                            )
                                 .show()
                         }
                     }
@@ -130,7 +157,6 @@ class FolderFragment : Fragment() ,
                 })
             .create().show()
 
-
     }
 
 
@@ -139,8 +165,6 @@ class FolderFragment : Fragment() ,
     {
         //ACTUALIZA EL RECYCLER SOLO SI EXISTEN GRUPOS
         if(CRUDGrupo.hayGrupos()) {
-
-
 
 
             actualizarRecycleView()
@@ -164,11 +188,6 @@ class FolderFragment : Fragment() ,
         }
 
 
-
-
-
-
-
     }
 
 
@@ -179,11 +198,6 @@ class FolderFragment : Fragment() ,
         listaCarpetas.layoutManager = GridLayoutManager(this.context, 2)
         this.adaptador = this.activity?.let{AdapterFolder(CRUDGrupo.obtenerTodosLosGrupos() as MutableList<Grupo>,this)}!!
         listaCarpetas.adapter = this.adaptador
-
-
-
-        //ASIGNAMOS LA CONFIGURACIÓN DEL ItemTouchHelper AL NUESTRO RECYCLER
-       // ItemTouchHelper(getConfiguracionSwiped()).attachToRecyclerView(listaDiccionario)
 
 
 

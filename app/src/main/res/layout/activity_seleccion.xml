@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:orientation="vertical"
+    android:background="@color/colorBeighLight"
+    tools:context=".Vistas.ActivitySeleccion">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        tools:context=".Vistas.ActivitySeleccion">
+
+            <include layout="@layout/search_and_add" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listaSeleccDiccionario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margen2" />
+
+            <include
+                android:id="@+id/layout_nothing"
+                layout="@layout/not_item_found"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+    </LinearLayout>
+
+    <TableLayout
+        android:id="@+id/btns_cancel_acept"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        >
+
+            <!--Transformamos dos textView en botones porque es mas facil ajustar el texto del interior para hacerlo variable en tiempo de ejecucion-->
+         <TableRow>
+            <Button
+                    android:id="@+id/btn_cancel_selec"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/margen0"
+                    android:gravity="center"
+                    android:text="@string/cancelar"
+                    android:textColor="@color/design_default_color_primary"
+                    android:layout_alignParentLeft="true"
+                    android:background="@drawable/borde1"/>
+
+
+            <Button
+                    android:id="@+id/btn_add_selec"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:padding="@dimen/margen0"
+                    app:autoSizeTextType="none"
+                    app:autoSizePresetSizes="@array/autosize_values_boton"
+                    android:textColor="@color/design_default_color_primary"
+                    android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                    android:background="@drawable/borde1"
+                    >
+
+            </Button>
+        </TableRow>
+
+    </TableLayout>
+
+
+</RelativeLayout>

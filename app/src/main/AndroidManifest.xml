@@ -19,13 +19,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Vistas.Conj_entra_Activity"></activity>
+        <activity android:name=".Vistas.ActivitySeleccion"
+            android:screenOrientation="portrait"
+            android:theme="@style/TemaActivities"></activity>
+        <activity android:name=".Vistas.Conj_entra_Activity"
+           ></activity>
         <activity
             android:name=".Vistas.DetailActivity"
+            android:screenOrientation="portrait"
             android:configChanges="screenSize|orientation"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".Vistas.AddActivity"
+            android:screenOrientation="portrait"
             android:configChanges="screenSize|orientation"
             android:windowSoftInputMode="stateHidden" />
         <!--
@@ -34,6 +40,7 @@ Estas dos líneas android:configChanges="screenSize|orientation"
         -->
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/SplashTema"> <!-- Para la pantalla de bienvenida -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

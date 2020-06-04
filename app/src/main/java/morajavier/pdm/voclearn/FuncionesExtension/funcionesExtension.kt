@@ -7,9 +7,10 @@ import android.widget.ImageView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.signature.MediaStoreSignature
 import com.bumptech.glide.signature.StringSignature
 import jp.wasabeef.glide.transformations.CropCircleTransformation
+import morajavier.pdm.voclearn.Modelo.Entrada
+import morajavier.pdm.voclearn.R
 import java.io.File
 
 fun View.cambioImagen(media: MediaPlayer){
@@ -40,7 +41,7 @@ fun ImageView.cargarImagenCircle(url:String)
     }
 }
 
-fun ImageView.cargarImagenCircleNoCache(url:String, spinner: CircularProgressDrawable)
+fun ImageView.cargarImagenCircleNoCache(url:String, spinner: CircularProgressDrawable,  imgError:Int)
 {
 
 
@@ -51,6 +52,7 @@ fun ImageView.cargarImagenCircleNoCache(url:String, spinner: CircularProgressDra
             .diskCacheStrategy(DiskCacheStrategy.NONE)//MANEJO DE LA MEMORIA CACHE
             .skipMemoryCache(true)//OMISIÓN CACHÉ
             .placeholder(spinner)
+            .error(imgError)
             .into( this)
     }
 }
@@ -81,7 +83,7 @@ fun Activity.crearSpinnerCarga(recuadroSpinner:Float, radioSpinner:Float):Circul
     return circularProgressDrawable
 }
 
-fun ImageView.cargarNotCache(url:String, spinner: CircularProgressDrawable)
+fun ImageView.cargarNotCache(url:String, spinner: CircularProgressDrawable, imgError: Int)
 {
 
 
@@ -93,6 +95,29 @@ fun ImageView.cargarNotCache(url:String, spinner: CircularProgressDrawable)
             .skipMemoryCache(true)//OMISIÓN CACHÉ
             .centerCrop()
             .placeholder(spinner)
+            .error(imgError)
             .into( this)
+    }
+}
+
+//FUNCION DE EXTENSION QUE DEVUELVE EL RECURSO DRAWABLE PARA PONER EN CASO DE DAR ERROR AL CARGAR LA IMAGEN QUE LE CORRESPONDER
+fun Entrada.fondoImg():Int{
+
+
+    when (this.probAcierto) {
+        1 -> {
+
+            return R.drawable.circulo_dif1
+        }
+        2 -> {
+            return R.drawable.circulo_dif2
+        }
+        3 -> {
+            return R.drawable.circulo_dif3
+        }
+        else -> {
+            return R.drawable.circulo_dif1
+        }
+
     }
 }

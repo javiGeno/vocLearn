@@ -38,12 +38,19 @@ import kotlin.collections.ArrayList
 class Conj_entra_Activity : AppCompatActivity() {
 
     private lateinit var adaptadorCon: AdapterConjuntos
+    //COMO PUEDE SER UN CONJUNTO O GRUPO LA DECLARAMOS COMO Any
     lateinit var carpeta:Any
+    //PARA ALMACENAR EL NOMBRE DEL Grupo o Conjunto  QUE NOS HARÁ FALTA
+    //PARA ENVIARLO A ALGUNA ACTIVIDAD
+    private var nombreCarpeta=""
     private lateinit var adaptadorEntr: AdapterDiccionario
     companion object{
         //CONSTANTE PARA LA RESPUESTA DE LA ACTIVIDAD QUE AÑADE UNA PALABRA
         //QUE SE AÑADIRÁ A EL GRUPO O CONJUNTO ACTUAL
         const val RESPUESTA_PALABRA_NUEVA = 1
+        //CONSTANTE PARA LA RESPUESTA DE LA ACTIVIDAD QUE AÑADE UNA LISTA  DE PALABRAS
+        //OBTENIDAS DEL DICCIONARIO QUE SE AÑADIRÁ A EL GRUPO O CONJUNTO ACTUAL
+        const val RESPUESTA_LISTA_PALABRAS_NUEVAS=2
     }
 
 
@@ -113,6 +120,7 @@ class Conj_entra_Activity : AppCompatActivity() {
                 carpeta=CRUDConjuntos.obtenerConjunto(idConjunto)as Conjunto
                 adaptadorCon= (carpeta as Conjunto)?.listaConjuntos?.let { AdapterConjuntos(it,this)}!!
                 adaptadorEntr=(carpeta as Conjunto)?.listaPalabras?.let{AdapterDiccionario(it, this, R.layout.layout_entradas)}!!
+                nombreCarpeta= (carpeta as Conjunto).nombreConjunto
                 texto_nombre_carpeta.setText((carpeta as Conjunto)?.nombreConjunto.toUpperCase())
             }
             "grupo"->{
@@ -120,6 +128,7 @@ class Conj_entra_Activity : AppCompatActivity() {
                 carpeta= CRUDGrupo.obtenerGrupoPorNombre(nombreGrupo)as Grupo
                 adaptadorCon= (carpeta as Grupo)?.listaConjuntos?.let { AdapterConjuntos(it,this)}!!
                 adaptadorEntr=(carpeta as Grupo)?.palabras?.let{AdapterDiccionario(it, this, R.layout.layout_entradas)}!!
+                nombreCarpeta= (carpeta as Grupo).nombreGrupo
                 texto_nombre_carpeta.setText((carpeta as Grupo)?.nombreGrupo.toUpperCase())
 
             }
@@ -158,7 +167,19 @@ class Conj_entra_Activity : AppCompatActivity() {
             vistaDialogo.check_borrar.visibility= View.VISIBLE
             carpetaEditable=true}?:let{carpetaEditable=false}
 
+        //SI CHECKEA LA OPCIÓN DE BORRAR CAMBIAMOS EL NOMBRE DE LA CARPETA AL QUE TENÍA PARA NO CREAR CONFUSIÓN AL USUARIO
+        //Y DESHABILITAMOS LA EDICIÓN DE LA CARPETA
+        vistaDialogo.check_borrar.setOnClickListener{
+            if(vistaDialogo.check_borrar.isChecked) {
+                vistaDialogo.nombre_carp_nuevo.setText(conjuntoEdit!!.nombreConjunto)
+                vistaDialogo.nombre_carp_nuevo.setEnabled(false)
+            }
+            else
+            {
+                vistaDialogo.nombre_carp_nuevo.setEnabled(true)
+            }
 
+        }
 
         AlertDialog.Builder(ContextThemeWrapper(vista.context, R.style.AlertDialog))
             .setView(vistaDialogo)
@@ -174,18 +195,30 @@ class Conj_entra_Activity : AppCompatActivity() {
                     else {
                         val nombreNuevo = vistaDialogo.nombre_carp_nuevo.text.toString()
 
+                        if(nombreNuevo.isNotEmpty()) {
+                            //SI EL MÉTODO SE HA LLAMADO PARA EDITAR, COMO INDICA LA VARIABLE carpetaEditable,
+                            //SE MODIFICA EL NOMBRE, EN CASO CONTRARIO SE INSERTA
+                            if (carpetaEditable) {
 
-                        //SI EL MÉTODO SE HA LLAMADO PARA EDITAR, COMO INDICA LA VARIABLE carpetaEditable,
-                        //SE MODIFICA EL NOMBRE, EN CASO CONTRARIO SE INSERTA
-                        if(carpetaEditable) {
+                                adaptadorCon.editarNombreConjunto(
+                                    posicionEditar,
+                                    conjuntoEdit!!,
+                                    nombreNuevo
+                                )
+                            } else {
 
-                            adaptadorCon.editarNombreConjunto(posicionEditar, conjuntoEdit!!, nombreNuevo)
+
+                                adaptadorCon.inserccionConjunto(carpeta, nombreNuevo)
+
+                            }
                         }
-                        else {
-
-
-                            adaptadorCon.inserccionConjunto(carpeta, nombreNuevo)
-
+                        else{
+                            Toast.makeText(
+                                vista.context,
+                                R.string.nombreInvalido,
+                                Toast.LENGTH_LONG
+                            )
+                                .show()
                         }
 
                     }
@@ -206,10 +239,8 @@ class Conj_entra_Activity : AppCompatActivity() {
     //OBTENIENDO UNA SELECCIÓN DEL DICCIONARIO O UNA NUEVA PALABRA
     fun seleccionarFuenteEntradas()
     {
-        //ARRAY CON LAS TRES OPCIONES QUE LE PASAREMOS AL AlertDialog
-        val opciones =arrayOf<CharSequence>(resources.getString(R.string.obtenerDeDicc),
-            resources.getString(R.string.añadirNuevaPalabra),
-            resources.getString(R.string.cancelar))
+
+        val opciones=obtenerOpciones()
 
 
         val ventanDialogo= androidx.appcompat.app.AlertDialog.Builder(this)
@@ -219,9 +250,9 @@ class Conj_entra_Activity : AppCompatActivity() {
             //SI ELIGE LA OPCION DE GALERIA
             if(opciones[i].equals(getString(R.string.obtenerDeDicc)))
             {
-                val d =DialogoFragment()
-                d.show(getSupportFragmentManager(), "SimpleDialog")
-
+                val intent=Intent(this, ActivitySeleccion::class.java)
+                intent.putExtra("nombreCarpeta", nombreCarpeta )
+                startActivityForResult(intent, RESPUESTA_LISTA_PALABRAS_NUEVAS)
                 println("OBTENER DE DICCIONARIO")
             }
             //SI ELIGE LA OPCION DE CÁMARA
@@ -284,10 +315,71 @@ class Conj_entra_Activity : AppCompatActivity() {
                 }
 
             }
+            if(requestCode== RESPUESTA_LISTA_PALABRAS_NUEVAS)
+            {
+                val idsEntradas=data?.getIntArrayExtra("listaIdPalabras")
+
+                //SI LA LISTA DE ID NO VIENE VACIA, AÑADIMOS EN EL GRUPO O CONJUNTO
+                if(idsEntradas!!.isNotEmpty()) {
+
+                    //RECORREMOS LA LISTA DE IDS Y HACEMOS LA MISMA OPERACION QUE CON UNA PALABRA
+                    //VAMOS OPTENIENDO LA PALABRA E INSERTANDOLA EN LA LISTA DE ESTA CARPETA Grupo o Conjunto
+
+                    if (carpeta is Grupo) {
+
+                        for(id in idsEntradas) {
+                            var entradaParaAddEnLista=CRUDEntradas.obtenerEntradaPorId(id)
+                            CRUDGrupo.insertarEntradaEnEntradas((carpeta as Grupo), entradaParaAddEnLista!!)
+                        }
+                        adaptadorEntr.listaItems= (carpeta as Grupo).palabras!!
+
+                    } else if (carpeta is Conjunto) {
+                        for(id in idsEntradas) {
+                            var entradaParaAddEnLista = CRUDEntradas.obtenerEntradaPorId(id)
+                            CRUDConjuntos.insertarEntradaEnEntradas((carpeta as Conjunto), entradaParaAddEnLista!!)
+                        }
+                        adaptadorEntr.listaItems=(carpeta as Conjunto).listaPalabras!!
+                    }
+
+                    adaptadorEntr.notifyItemInserted(adaptadorEntr.itemCount)
+                    adaptadorEntr.notifyItemChanged(adaptadorEntr.itemCount)
+
+                }
+
+            }
         }
     }
 
-    //CÓDIGO OBTENIDO Y MODIFICADO DE LA PÁGINA DE ANDROID
+
+
+    //DEVUELVE LAS OPCIONES DE AÑADIR PALABRA A UNA CARPETA, SEGÚN SI HAY O NO HAY ENTRADAS EN LA BD
+    //SI HAY SE MUESTRAN 2 OPCIONES MAS LA DE CANCELAR
+    //SI NO HAY SOLO SE MUESTRA LA OPCIÓN DE INSERTAR UNA NUEVA PALABRA ,AS LA DE CANCELAR
+    fun obtenerOpciones():Array<CharSequence>
+    {
+        var opciones:Array<CharSequence>
+
+        //ARRAY CON LAS TRES OPCIONES QUE LE PASAREMOS AL AlertDialog
+        if(CRUDEntradas.hayEntradas()) {
+            opciones = arrayOf(
+                resources.getString(R.string.obtenerDeDicc),
+                resources.getString(R.string.añadirNuevaPalabra),
+                resources.getString(R.string.cancelar)
+            )
+        }
+        else
+        {
+            //ARRAY CON LAS DOS OPCIONES QUE LE PASAREMOS AL AlertDialog
+            opciones = arrayOf(
+                resources.getString(R.string.añadirNuevaPalabra),
+                resources.getString(R.string.cancelar)
+            )
+        }
+
+        return opciones
+    }
+
+    //CÓDIGO OBTENIDO Y MODIFICADO DE LA PÁGINA DE ANDROID PARA EL EL ARRASTRE DE ENTRADAS
     fun eventosEscuchaMovimiento(v:View, event: DragEvent):Boolean
     {
         when (event.action) {
