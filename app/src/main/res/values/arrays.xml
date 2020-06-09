@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--ESTOS ARRAYS SIRVEN PARA LOS AUTOSIZE DE LOS TEXTOS EN LOS WIDGET-->
 <resources>
     <array name="autosize_values">
         <item>8sp</item>
@@ -15,6 +16,14 @@
         <item>14sp</item>
         <item>16sp</item>
         <item>18sp</item>
+    </array>
+
+    <array name="autosize_values_big">
+        <item>10sp</item>
+        <item>14sp</item>
+        <item>16sp</item>
+        <item>18sp</item>
+        <item>24sp</item>
     </array>
 
 </resources>

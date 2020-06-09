@@ -1,4 +1,4 @@
-package morajavier.pdm.voclearn
+package morajavier.pdm.voclearn.Modelo
 
 import android.app.Activity
 import android.content.DialogInterface
@@ -12,6 +12,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
+import morajavier.pdm.voclearn.R
 import morajavier.pdm.voclearn.Vistas.AddActivity
 import java.io.File
 
@@ -48,7 +49,10 @@ class Imagen {
                     if(pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY))
                     {
 
-                        abrirActivityCamara(act, ficheroImagen!!)
+                        abrirActivityCamara(
+                            act,
+                            ficheroImagen!!
+                        )
 
                     }
 

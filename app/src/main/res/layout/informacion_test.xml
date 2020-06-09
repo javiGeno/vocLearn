@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/borde2">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorIconos"
+        android:text="@string/finTest"
+        android:textColor="@color/colorBlanco"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:textStyle="bold"
+        app:fontFamily="@font/vast_shadow" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+                 <TextView
+                     android:text="@string/aciertos"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:padding="@dimen/margen3"
+                     android:layout_marginRight="@dimen/margen3"
+                     android:layout_marginLeft="@dimen/margen3"
+                     android:layout_marginBottom="@dimen/margen0"
+                     android:layout_marginTop="@dimen/margen1"
+                     android:textStyle="bold"
+                     android:textColor="@color/colorPrimary"
+                     app:fontFamily="@font/vast_shadow"
+                     />
+
+
+                 <TextView
+                     android:id="@+id/campo_aciertos"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:gravity="center"
+                     android:text="0"
+                     android:textColor="@color/dif_center_3"
+                     android:textSize="50sp"
+                     android:textStyle="bold" />
+
+
+                 <TextView
+                     android:text="@string/fallos"
+                     android:padding="@dimen/margen3"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:textStyle="bold"
+                     android:layout_marginRight="@dimen/margen3"
+                     android:layout_marginLeft="@dimen/margen3"
+                     android:layout_marginBottom="@dimen/margen0"
+                     android:layout_marginTop="@dimen/margen1"
+                     android:textColor="@color/colorPrimary"
+                     app:fontFamily="@font/vast_shadow"/>
+
+                 <TextView
+                     android:id="@+id/campo_fallos"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:gravity="center"
+                     android:text="0"
+                     android:textColor="@color/dif_center_1"
+                     android:textSize="50sp"
+                     android:textStyle="bold" />
+
+
+            <LinearLayout
+                android:id="@+id/caja_words_fallos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margen1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/necesita_mejorar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/margen3"
+                    android:text="@string/pocosFallos"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:autoSizePresetSizes="@array/autosize_values_boton"
+                    app:autoSizeTextType="none"
+                    app:fontFamily="@font/vast_shadow" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

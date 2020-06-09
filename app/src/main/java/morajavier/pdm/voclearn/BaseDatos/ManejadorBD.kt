@@ -5,7 +5,7 @@ import android.content.Context
 import android.util.Log
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import morajavier.pdm.voclearn.SecurityCopy
+import morajavier.pdm.voclearn.Modelo.SecurityCopy
 
 class ManejadorBD (appContext:Context){
 

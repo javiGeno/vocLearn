@@ -5,19 +5,19 @@
     <color name="colorBeigh">#D6D4D4</color>
     <color name="colorBeighLight">#F1F0F0</color>
     <color name="grisOscuro">#504F4F</color>
-    <color name="colorIconos">#3F51B5</color>
+    <color name="colorIconos">#5E6CBB</color>
     <color name="azulCielo">#C0C9F7</color>
 
 
     <color name="dif_start_1">#ef9a9a</color>
-    <color name="dif_center_1">#ef5350</color>
+    <color name="dif_center_1">#EF5350</color>
     <color name="dif_end_1">#b71c1c</color>
 
     <color name="dif_start_2">#ffe082</color>
     <color name="dif_center_2">#ffca28</color>
-    <color name="dif_end_2">#ff6f00</color>
+    <color name="dif_end_2">#FF6F00</color>
 
     <color name="dif_start_3">#81c784</color>
-    <color name="dif_center_3">#4caf50</color>
+    <color name="dif_center_3">#4CAF50</color>
     <color name="dif_end_3">#1b5e20</color>
 </resources>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+            <androidx.cardview.widget.CardView
+                android:id="@+id/grupoTest"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margen1"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/azulCielo">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/icono_pregunta"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginLeft="@dimen/margen1"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/ic_launcher_interrogacion_emoti"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/nombre_carpeta"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="@dimen/margen10"
+                    android:layout_marginTop="@dimen/margen0"
+                    android:layout_marginRight="@dimen/margen0"
+                    android:layout_marginBottom="@dimen/margen0"
+                    android:gravity="center"
+                    android:text="@string/dictionary"
+                    android:textColor="@color/grisOscuro"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:autoSizePresetSizes="@array/autosize_values_big"
+                    app:autoSizeTextType="uniform"
+                    app:fontFamily="@font/londrina_shadow" />
+
+            </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorIconos">
+
+    <TextView
+        android:id="@+id/texto_nombre_carpeta"
+        android:layout_width="300dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="@dimen/margen1"
+        android:layout_marginTop="@dimen/margen1"
+        android:layout_marginRight="@dimen/margen2"
+        android:layout_marginBottom="@dimen/margen1"
+        android:layout_alignParentLeft="true"
+        android:autoSizeStepGranularity="6sp"
+        android:gravity="center"
+        android:text="@string/aprende"
+        android:textColor="@android:color/holo_orange_dark"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:autoSizePresetSizes="@array/autosize_values_boton"
+        app:autoSizeTextType="none"
+        app:fontFamily="@font/vast_shadow" />
+
+    <ImageButton
+        android:id="@+id/btn_com_test"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/margen2"
+        android:layout_marginTop="@dimen/margen1"
+        android:layout_marginRight="@dimen/margen1"
+        android:layout_marginBottom="@dimen/margen1"
+        android:background="@drawable/borde_boton_test"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher_interrogacion_cubi"
+        android:visibility="gone" />
+
+
+
+</RelativeLayout>

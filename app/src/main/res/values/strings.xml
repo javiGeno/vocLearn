@@ -43,5 +43,16 @@
     <string name="quit_palabra">quitar palabra</string>
     <string name="addTo">AÑADE A</string>
     <string name="nombreInvalido">El nombre debe contener algún carácter</string>
-
+    <string name="testSinWord">Añade palabras al diccionario para comenzar la prueba</string>
+    <string name="aprende">PRÁCTICA TU VOCABULARIO</string>
+    <string name="contesta">LA RESPUESTA ES...</string>
+    <string name="ok">OK</string>
+    <string name="preguntaTest">¿CÓMO SE TRADUCE \"</string>
+    <string name="noTest">La carpeta seleccionada no tiene ninguna palabra para realizar el test</string>
+    <string name="pocosFallos">Necesitas mejorar un poco más con estas palabras:</string>
+    <string name="muchosFallos">Necesitas mejorar mucho con estas palabras:</string>
+    <string name="aciertos">Número de aciertos: </string>
+    <string name="fallos">Número de fallos: </string>
+    <string name="finTest">FIN PRUEBA</string>
+    <string name="congrat">¡HAS ACERTADO TODAS LAS PALABRAS!</string>
 </resources>

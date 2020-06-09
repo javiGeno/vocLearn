@@ -44,8 +44,17 @@
     <string name="quit_palabra">Remove word</string>
     <string name="addTo">ADD TO</string>
     <string name="nombreInvalido">The name must container some character</string>
-
-
-
+    <string name="testSinWord">Add words to dictionary to begin te test</string>
+    <string name="aprende">PRACTICE YOUR VOCABULARY</string>
+    <string name="contesta">THE REQUEST IS...</string>
+    <string name="ok">OK</string>
+    <string name="preguntaTest">WHAT DOES IT MEAN \"</string>
+    <string name="noTest">The selected folder does not have any words to perform the test</string>
+    <string name="pocosFallos">You need to improve a little more with these words:</string>
+    <string name="muchosFallos">You need to improve a lot with these words:</string>
+    <string name="aciertos">Number of right answers: </string>
+    <string name="fallos">Number of failures:</string>
+    <string name="finTest">TEST END</string>
+    <string name="congrat">YOU HAVE MATCHED ALL THE WORDS!</string>
 
 </resources>

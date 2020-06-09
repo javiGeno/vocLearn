@@ -18,8 +18,10 @@ import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
 import morajavier.pdm.voclearn.FuncionesExtension.cambioImagen
 import morajavier.pdm.voclearn.FuncionesExtension.cargarNotCache
 import morajavier.pdm.voclearn.FuncionesExtension.crearSpinnerCarga
-import morajavier.pdm.voclearn.FuncionesExtension.fondoImg
 import morajavier.pdm.voclearn.Modelo.Entrada
+import morajavier.pdm.voclearn.Modelo.Imagen
+import morajavier.pdm.voclearn.Modelo.SecurityCopy
+import morajavier.pdm.voclearn.Modelo.Sonido
 import java.io.File
 
 class DetailActivity : AppCompatActivity() {

@@ -71,6 +71,7 @@ class FolderFragment : Fragment() ,
         //SI NOMBRE NO ES NULO QUIERE DECIR QUE VA A INSERTAR UNA NUEVA CARPETA, NO EDITAR SU NOMBRE
         //SI NO ES NULO LLENAMOS EL CAMPO CON EL NOMBRE ACTUAL, ADEMÁS VISIBILIZAMOS EL CHECKBOS QUE PERMITE BORRAR
         //LA CARPETA
+
         carpeta?.let{vistaDialogo.nombre_carp_nuevo.setText(it.nombreGrupo)
                         vistaDialogo.check_borrar.visibility=VISIBLE
                      carpetaEditable=true}?:let{carpetaEditable=false}

@@ -18,11 +18,11 @@ import kotlinx.android.synthetic.main.barra_guardar_atras.*
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
 import morajavier.pdm.voclearn.FuncionesExtension.cargarNotCache
 import morajavier.pdm.voclearn.FuncionesExtension.crearSpinnerCarga
-import morajavier.pdm.voclearn.Imagen
+import morajavier.pdm.voclearn.Modelo.Imagen
 import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.R
-import morajavier.pdm.voclearn.SecurityCopy
-import morajavier.pdm.voclearn.Sonido
+import morajavier.pdm.voclearn.Modelo.SecurityCopy
+import morajavier.pdm.voclearn.Modelo.Sonido
 import java.io.File
 
 
@@ -36,7 +36,7 @@ class AddActivity : AppCompatActivity(),  ActivityCompat.OnRequestPermissionsRes
     //FICHERO DONDE SE ALMACENARA LA IMAGEN OBTENIDA POR LA CAMARA O GALERIA
     var ficheroAlmacenImagen:File?=null
     //OBJETO PARA LA GRABACIÓN DEL AUDIO PASAMOS EL CONTEXTO, Y EL ID DEL NUEVO AUDIO,  QUE SON LOS REQUERIDOS
-    var gestionSondio=Sonido(this, CRUDEntradas.nuevoId()!!)
+    var gestionSondio= Sonido(this, CRUDEntradas.nuevoId()!!)
     //ESTA BANDERA OBTENDRÁ EL RESULTADO DE UN INTENT, QUE PUEDE SER VERDADERO, SI LA ACTIVIDAD SE ABRE DESDE
     // EL FRAGMENT DICCIONARIO, LO QUE QUIERE DECIR QUE SOLO SE INSERTARÁ EN LAS ENTRADAS DE LA BASE DE DATOS;
     //Y POR OTRO LADO PUEDE SER FALSO, LO QUE QUIERE DECIR QUE ADEMÁS DE INSERTARSE EN EL DICCIONARIO, SE INSERTARÁ
@@ -98,7 +98,7 @@ class AddActivity : AppCompatActivity(),  ActivityCompat.OnRequestPermissionsRes
             if(SecurityCopy.perAceptados) {
                 //OBTENEMOS EL FICHERO DONDE SE ALMACENARÁ LA IMAGEN OBTENIDA POR GALERIA O CÁMARA
                 //PASÁNDOLE UN NUEVO ID
-                ficheroAlmacenImagen=Imagen.creacionFicheroImagen(CRUDEntradas.nuevoId()!!)
+                ficheroAlmacenImagen= Imagen.creacionFicheroImagen(CRUDEntradas.nuevoId()!!)
                 Imagen.seleccionarFuenteImagen(this, ficheroAlmacenImagen!!)
             }else{
                 Toast.makeText(it.context,  getString(R.string.perImagenDenegado), Toast.LENGTH_SHORT).show()
@@ -143,7 +143,7 @@ class AddActivity : AppCompatActivity(),  ActivityCompat.OnRequestPermissionsRes
 
                 //COPIAMOS LA IMAGEN EN EL ALMACENAMIENTO EXTERNO PARA NO DEPENDER DE LA GALERIA
                 //GUARDAMOS LA RUTA EN LA VARIABLE QUE UTILIZAREMOS PARA EL OBJETO QUE GUARDEMOS
-               rutaImagen=SecurityCopy.volcarFichero(ficheroAlmacenImagen!!, ficheroEntrada)
+               rutaImagen= SecurityCopy.volcarFichero(ficheroAlmacenImagen!!, ficheroEntrada)
                 println("IMAGEN RESPUESTA GALERIA "+rutaImagen)
 
                 //FUNCIÓN DE EXTENSION QUE CARGA LA IMAGEN CON GLIDE(LIBRERIA)

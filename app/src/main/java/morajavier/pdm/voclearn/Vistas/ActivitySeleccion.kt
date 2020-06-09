@@ -148,9 +148,6 @@ class ActivitySeleccion : AppCompatActivity(),
 
         return true
 
-
-
-
-        return true    }
+        }
 
 }

@@ -323,7 +323,7 @@ class Conj_entra_Activity : AppCompatActivity() {
                 if(idsEntradas!!.isNotEmpty()) {
 
                     //RECORREMOS LA LISTA DE IDS Y HACEMOS LA MISMA OPERACION QUE CON UNA PALABRA
-                    //VAMOS OPTENIENDO LA PALABRA E INSERTANDOLA EN LA LISTA DE ESTA CARPETA Grupo o Conjunto
+                    //VAMOS OBTENIENDO LA PALABRA E INSERTANDOLA EN LA LISTA DE ESTA CARPETA Grupo o Conjunto
 
                     if (carpeta is Grupo) {
 

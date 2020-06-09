@@ -1,4 +1,4 @@
-package morajavier.pdm.voclearn
+package morajavier.pdm.voclearn.Modelo
 
 import android.app.Activity
 import android.media.MediaPlayer
@@ -11,6 +11,7 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add.*
+import morajavier.pdm.voclearn.R
 import java.io.File
 import java.io.IOException
 import java.lang.RuntimeException
@@ -31,7 +32,9 @@ class Sonido(var actividad: Activity, var idAudio:Int, var grabacion: MediaRecor
             if (event.action == MotionEvent.ACTION_DOWN ) {
                 grabacion = MediaRecorder()
                 v.setBackgroundResource(R.drawable.ic_action_grabando)
-                var animacionMicro = AnimationUtils.loadAnimation(actividad, R.anim.anim_micro)
+                var animacionMicro = AnimationUtils.loadAnimation(actividad,
+                    R.anim.anim_micro
+                )
                 v.startAnimation(animacionMicro)
 
                 grabacion?.let { grabandoAudio(it) }
@@ -119,7 +122,7 @@ class Sonido(var actividad: Activity, var idAudio:Int, var grabacion: MediaRecor
             //COMIENZA A GRABAR
             grabacion.start()
 
-            Toast.makeText(actividad,R.string.grabAviso, Toast.LENGTH_SHORT).show()
+            Toast.makeText(actividad, R.string.grabAviso, Toast.LENGTH_SHORT).show()
 
         }catch(e: IOException)
         {
@@ -137,7 +140,7 @@ class Sonido(var actividad: Activity, var idAudio:Int, var grabacion: MediaRecor
             //LIBERAMOS RECURSOS
             grabacion.release()
 
-            Toast.makeText(actividad,R.string.grabTerminada, Toast.LENGTH_SHORT).show()
+            Toast.makeText(actividad, R.string.grabTerminada, Toast.LENGTH_SHORT).show()
 
         }
         catch (e: RuntimeException)

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:clickable="true"
+        android:layout_centerInParent="true">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btn_test_no_entradas"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/borde_circular_test"
+            android:scaleType="centerCrop"
+            android:focusable="true"
+            android:clickable="true"
+            android:src="@mipmap/ic_launcher_interrogacion"/>
+
+        <TextView
+            android:id="@+id/click_no_entradas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="@dimen/margen1"
+            android:textColor="@color/colorIconos"
+            android:text="Añade palabras al diccionario para comenzar la prueba"
+            android:focusable="true"
+            android:clickable="true"
+            android:textSize="30dp"
+            android:textStyle="bold"/>
+    </RelativeLayout>
+
+
+</RelativeLayout>

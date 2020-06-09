@@ -51,6 +51,16 @@ class CRUDEntradas {
             })
         }
 
+        //CAMBIA LA DIFICULTAD DE LA PALABRA. MÉTODO UTILIZADO PARA EL TEST CUANDO EL USUARIO ACIERTA O
+        //FALLA UNA PREGUNTA
+        fun actualizacionDificultad(entradaMod:Entrada, probNueva:Int)
+        {
+
+            App.gestorBD.r.beginTransaction()
+            entradaMod.probAcierto=probNueva
+            App.gestorBD.r.commitTransaction()
+        }
+
         fun borrarEntradaId(filtro: Int): List<Entrada>
         {
             //BORRA UNA ENTRADA FILTRADA POR SU ID, Y DEVUELVE  UNA LISTA ACTUALIZADA
@@ -137,6 +147,21 @@ class CRUDEntradas {
 
         }
 
+        fun obtenerTodosIdsEntradas(): IntArray {
+            //OBTENEMOS UNA LISTA CON TODOS LOS IDS DE LAS ENTRADAS
+            var lista=ArrayList<Int>()
+            val listaEntradas= obtenerTodasEntradas()
+
+            for(e in listaEntradas){
+
+                lista.add(e.idEntrada)
+            }
+
+            return lista.toIntArray()
+
+
+        }
+
         //DEVUELVE UN ID NUEVO PARA LA BD
         fun nuevoId(): Int?
         {
@@ -159,8 +184,11 @@ class CRUDEntradas {
                         i.escrituraIngles+" "+
                         i.probAcierto+" "+
                         i.fechaCreacion)
+
             }
         }
+
+
 
         fun hayEntradas() : Boolean{
             //DEVUELVE VERDADERO SI HAY MAS DE UNA ENTRADA

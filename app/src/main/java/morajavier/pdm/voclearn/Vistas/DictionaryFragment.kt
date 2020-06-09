@@ -25,6 +25,7 @@ import morajavier.pdm.voclearn.Adapter.AdapterDiccionario
 import morajavier.pdm.voclearn.BaseDatos.CRUDConjuntos
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
 import morajavier.pdm.voclearn.BaseDatos.CRUDGrupo
+import morajavier.pdm.voclearn.MainActivity
 import morajavier.pdm.voclearn.Modelo.Conjunto
 import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.Modelo.Grupo
@@ -100,7 +101,6 @@ open class DictionaryFragment : Fragment(),
 
 
         btn_add.setOnClickListener{
-
 
             val intentLista= Intent(activity, AddActivity::class.java)
             intentLista.putExtra("soloInsertar", true)
@@ -277,8 +277,9 @@ open class DictionaryFragment : Fragment(),
         muestraSnack(position, objetoRecovery,listaFkConjuntos,listaFkGrupo)
 
         //ESCONDEMOS EL TECLADO CUANDO SE MUESTRA EL SNACKBAR
-        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(listaDiccionario.getWindowToken(), 0)
+         esconderTeclado()
+
+
 
         //PRINT DE CONTROL
         println("LISLOC AFTERresultante: "+ adaptaor?.listaItems)
@@ -286,7 +287,11 @@ open class DictionaryFragment : Fragment(),
         println("LISLBD AFTERresultante: "+ CRUDEntradas.recorrerListaEntrada(CRUDEntradas.obtenerTodasEntradas()))
     }
 
-
+    fun esconderTeclado()
+    {
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(listaDiccionario.getWindowToken(), 0)
+    }
 
     fun muestraSnack(position: Int, objetoRecovery: Entrada, listaFkConjuntos:ArrayList<Conjunto>, listaFkGrupos:ArrayList<Grupo>)
     {

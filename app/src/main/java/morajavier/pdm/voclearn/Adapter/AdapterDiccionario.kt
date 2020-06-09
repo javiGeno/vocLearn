@@ -2,13 +2,7 @@ package morajavier.pdm.voclearn.Adapter
 
 
 
-import android.content.ClipData
-import android.content.ClipDescription
 import android.content.Intent
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Point
-import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.os.Build
 import android.view.LayoutInflater
@@ -24,7 +18,7 @@ import morajavier.pdm.voclearn.Modelo.Conjunto
 import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.Modelo.Grupo
 import morajavier.pdm.voclearn.R
-import morajavier.pdm.voclearn.Sonido
+import morajavier.pdm.voclearn.Modelo.Sonido
 import morajavier.pdm.voclearn.Vistas.DetailActivity
 
 

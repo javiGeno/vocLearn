@@ -27,15 +27,15 @@
         android:layout_marginEnd="@dimen/margen1"
         android:layout_marginRight="@dimen/margen1"
         android:layout_marginBottom="@dimen/margen1"
+        android:layout_toEndOf="@id/btn_atras"
         android:layout_toRightOf="@id/btn_atras"
-        android:gravity="center"
-        android:text="HOLAAAAAAA"
-        app:autoSizeTextType="none"
-        app:autoSizePresetSizes="@array/autosize_values_boton"
         android:autoSizeStepGranularity="6sp"
+        android:gravity="center"
         android:textColor="@android:color/holo_orange_dark"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_toEndOf="@id/btn_atras" />
+        app:autoSizePresetSizes="@array/autosize_values_boton"
+        app:autoSizeTextType="none"
+        app:fontFamily="@font/vast_shadow" />
 
 </RelativeLayout>
