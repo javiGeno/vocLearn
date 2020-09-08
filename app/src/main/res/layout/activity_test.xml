@@ -40,6 +40,7 @@
                 android:layout_marginLeft="@dimen/margen3"
                 android:layout_marginTop="@dimen/margen3"
                 android:layout_marginRight="@dimen/margen3"
+                android:visibility="invisible"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="5dp">
 
@@ -49,7 +50,7 @@
                     android:layout_height="250dp"
                     android:clickable="true"
                     android:focusable="true"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/field_pregunta"

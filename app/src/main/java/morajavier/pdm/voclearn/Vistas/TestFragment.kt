@@ -55,7 +55,9 @@ class TestFragment : Fragment() {
         //COMPROBAMOS SI HAY ENTRADAS POR SI HAY QUE VISIBILIZAR UN LAYOUT U OTRO
         comprobarEntradas()
 
-        inicializarRecycler()
+        //SI HAY GRUPOS "carpetas" INICIALIZAMOS EL RECYCLERVIEW
+        if(CRUDGrupo.hayGrupos())
+            inicializarRecycler()
 
         grupoTest.setOnClickListener{
             seleccionar(it as CardView)

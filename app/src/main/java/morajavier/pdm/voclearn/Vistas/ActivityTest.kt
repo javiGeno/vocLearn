@@ -102,26 +102,16 @@ class ActivityTest : AppCompatActivity() {
         val respuesta=field_respuesta.text.toString()
         val pregunta=test.entradaPregunta.escrituraIngles
 
-
+        //COMPROBAMOS SI HA ACERTADO LA PALABRA CON LA QUE HA SALIDO ALEATORIAMENTE
         if(respuesta.toLowerCase().trim() == pregunta?.toLowerCase()?.trim())
         {
             cambioEstilo(R.drawable.borde_respuesta_acertada, R.color.dif_center_2)
 
 
-            if(test.entradaPregunta.probAcierto!=ClassTest.PROBABILIDADVERDE)
-            {
-                var probabilidadActu=test.entradaPregunta.probAcierto
-                println("NUEVA PROBABILIDAD "+(probabilidadActu+1))
-                CRUDEntradas.actualizacionDificultad(test.entradaPregunta, probabilidadActu+1 )
-            }
+            println("LISTA ACIERTO"+test.entradaPregunta)
 
-            //REPRODUCIMOS EL AUDIO, SI TIENE,  DE LA PALABRA SI ACIERTA
-            if(test.entradaPregunta.audio!!.isNotEmpty()) {
-                audio=MediaPlayer()
-                Sonido.preparacionAudio(audio, test.entradaPregunta.idEntrada)
-                audio.start()
+            actualizacionProbPalabra(listOf(test.entradaPregunta))
 
-            }
 
             test.numeroAcertadas++
 
@@ -129,21 +119,98 @@ class ActivityTest : AppCompatActivity() {
         }
         else
         {
-            CRUDEntradas.actualizacionDificultad(test.entradaPregunta, ClassTest.PROBABILIDADROJA )
-            test.añadirFalloAPalabra(test.entradaPregunta)
+            //EN CASO DE QUE NO HAYA ACERTADO CON LA QUE HA SALIDO ALEATORIAMENTE, BUSCAMOS SI HAY ALGUNA
+            //CON ALGUN SIGNIFICADO EN ESPAÑOL IGUAL A LA QUE HA SALIDO ALEATORIAMENTE
+            if(test.masDeUnaConElMismoSignificado(test.entradaPregunta.significado))
+            {
+
+                var palabrasDistintoSig = test.listaTest.filter {
+                    it.escrituraIngles?.toLowerCase()?.trim() == respuesta.toLowerCase()?.trim()
+                            && it.significado.toLowerCase()?.trim() == test.entradaPregunta.significado
+                }
+                println("LISTA ACIERTO" + palabrasDistintoSig)
 
 
-            //HACEMOS TEMBLAR EL CAMPO CUANDO FALLA
-            AnimaWidget.rotacion(field_respuesta,0.0f,5.0f, 100)
-            AnimaWidget.rotacion(field_respuesta,1.0f,-5.0f, 100)
-            AnimaWidget.rotacion(field_respuesta,-5.0f,0.0f, 100)
-            cambioEstilo(R.drawable.borde_respuesta_fallida, R.color.dif_end_1)
+                //SI HAY MAS PALABRAS, Y HA ACERTADO CON ALMENOS UNA, LA LISTA NO ESTARÁ VACÍA, POR LO TANTO
+                //REALIZAMOS LA OPERACIÓN DE ACIERTO CON ESA PALABRA/S EN CONCRETO
+                //POR EL CONTRARIO, SI ESTÁ VACÍA FALLAMOS EN TODAS LAS PALABRAS CON ESE SIGNIFICADO EN ESPAÑOL
+                if(palabrasDistintoSig.isNotEmpty()) {
+                    cambioEstilo(R.drawable.borde_respuesta_acertada, R.color.dif_center_2)
+                    actualizacionProbPalabra(palabrasDistintoSig)
+                    test.numeroAcertadas++
+
+                    return false
+                }
+                else
+                {
+                    var palabrasFalladas= test.listaTest.filter {
+                        it.significado.toLowerCase()?.trim() == test.entradaPregunta.significado
+                    }
+
+                    haFallado(palabrasFalladas)
+
+                    oportunidad--
+                    test.numeroFallidas++
+
+                    return true
+                }
 
 
-            oportunidad--
-            test.numeroFallidas++
+            }
+            else
+            {
+                haFallado(listOf(test.entradaPregunta))
 
-            return true
+                oportunidad--
+                test.numeroFallidas++
+
+                return true
+            }
+
+
+        }
+    }
+
+    fun haFallado(entradasRespuesta:List<Entrada>)
+    {
+        //HACEMOS TEMBLAR EL CAMPO CUANDO FALLA
+        AnimaWidget.rotacion(field_respuesta, 0.0f, 5.0f, 100)
+        AnimaWidget.rotacion(field_respuesta, 1.0f, -5.0f, 100)
+        AnimaWidget.rotacion(field_respuesta, -5.0f, 0.0f, 100)
+        cambioEstilo(R.drawable.borde_respuesta_fallida, R.color.dif_end_1)
+
+        for(entradaRespuesta in entradasRespuesta) {
+            CRUDEntradas.actualizacionDificultad(entradaRespuesta, ClassTest.PROBABILIDADROJA)
+            test.añadirFalloAPalabra(entradaRespuesta)
+
+        }
+
+
+    }
+
+
+    fun actualizacionProbPalabra(entradasRespuesta:List<Entrada>)
+    {
+        var contVeces=0
+
+        for (entradaRespuesta in entradasRespuesta) {
+            if (entradaRespuesta.probAcierto != ClassTest.PROBABILIDADVERDE) {
+                var probabilidadActu = entradaRespuesta.probAcierto
+                println("NUEVA PROBABILIDAD " + (probabilidadActu + 1))
+                CRUDEntradas.actualizacionDificultad(entradaRespuesta, probabilidadActu + 1)
+            }
+
+            if(contVeces==0)
+                //REPRODUCIMOS EL AUDIO, SI TIENE,  DE LA PALABRA SI ACIERTA
+                //SOLO UNA VEZ, EN EL CASO DE QUE HAYA PALABRAS IGUALES EN SIGNIFICADO Y ESCRITURA EN INGLES
+                if (entradaRespuesta.audio!!.isNotEmpty()) {
+                    audio = MediaPlayer()
+                    Sonido.preparacionAudio(audio, entradaRespuesta.idEntrada)
+                    audio.start()
+
+                }
+
+            contVeces++
         }
     }
 
@@ -172,27 +239,30 @@ class ActivityTest : AppCompatActivity() {
         do {
             test.entradaPregunta = test.obtenerPalabra(test.listaTest)
 
-            //VUELVE A PEDIR OTRA PALABRA SI LA ANTERIOR ES IGUAL, QUE LA UE ACABA DE PEDIR
+            //VUELVE A PEDIR OTRA PALABRA SI LA ANTERIOR ES IGUAL, QUE LA QUE ACABA DE PEDIR
         }while(test.entradaPregunta.escrituraIngles==test.ultimaMostrada && test.listaTest.size>1)
 
-        AnimaWidget.transiccion(cardView,0.0f, 1.0f, AnimaWidget.UNSEGUNDO.toLong())
+
+        oportunidad=2
+
+        //ASIGNAMOS A LA ULTIMA PALABRA LA PALABRA QUE ACABA DE SALIR
+        test.ultimaMostrada = test.entradaPregunta.escrituraIngles!!
+
 
         //ESPERAMOS PARA CAMBIAR EL ESTILO DEL CAMPO RESPUESTA
         //ASÍ HACEMOS VER AL USUARIO QUE HA ACERTADO O FALLADO ANTES DE CAMBIAR LA PALABRA
+        //Y ACTUALIZAMOS PARA LA NUEVA PREGUNTA
         handler.postDelayed( {
 
+            cardView.visibility= VISIBLE
+            field_pregunta.setText(getString(R.string.preguntaTest)+test.entradaPregunta.significado?.toUpperCase()+"\" ?")
+            AnimaWidget.transiccion(cardView,0.0f, 1.0f, AnimaWidget.UNSEGUNDO.toLong())
             cambioEstilo(R.drawable.borde_respuesta_test, R.color.colorPrimary)
             field_respuesta.setText("")
 
         }, 800)
 
 
-        oportunidad=2
-
-        //ASIGNAMOS A LA ULITIMA PALABRA LA PALABRA QUE ACABA DE SALIR
-        test.ultimaMostrada = test.entradaPregunta.escrituraIngles!!
-
-        field_pregunta.setText(getString(R.string.preguntaTest)+test.entradaPregunta.significado?.toUpperCase()+"\" ?")
         //ESCONDEMOS EL TECLADO CADA VEZ QUE SE MUESTRA UNA NUEVA PALABRA
         esconderTeclado()
         //QUITAMOS EL FOCO DE LA RESPUESTA

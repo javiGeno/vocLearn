@@ -91,6 +91,14 @@ class AddActivity : AppCompatActivity(),  ActivityCompat.OnRequestPermissionsRes
 
         }
 
+        btn_traductorGoogle.setOnClickListener{
+
+            val intent= Intent(this, ActivityTraducGoogle::class.java)
+            intent.putExtra("palabraTraducir",field_word.text.toString())
+            this.startActivity(intent)
+
+        }
+
 
 
         //EVENTO PARA CUANDO PULSE EL IMAGEVIEW PARA ELLO DEBE TENER PERMISOS

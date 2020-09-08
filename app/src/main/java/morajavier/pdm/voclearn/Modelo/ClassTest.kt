@@ -19,6 +19,7 @@ class ClassTest(listaPalabras:MutableList<Entrada>) {
         const val PROBABILIDADVERDE=3
         const val MUCHOSFALLOS=3
         const val POCOSFALLOS=2
+
     }
 
     fun añadirFalloAPalabra(entrada:Entrada)
@@ -45,46 +46,46 @@ class ClassTest(listaPalabras:MutableList<Entrada>) {
         var entradaObtenida:Entrada?=null
         var porcentaje=generacionNumeroAleatorio(1,100)
         //SI HA SALIDO UNA ROJA
-        if(porcentaje>30)
+        if(porcentaje>25)
         {
-            var l=lista.filter{it.probAcierto ==1}
-            if(l.isNotEmpty())
+            var listaPalabrasDificiles=lista.filter{it.probAcierto == PROBABILIDADROJA}
+            if(listaPalabrasDificiles.isNotEmpty())
             {
-                var index=generacionNumeroAleatorio(0,l.size-1)
-                var p=l[index]
+                var index=generacionNumeroAleatorio(0,listaPalabrasDificiles.size-1)
+                var p=listaPalabrasDificiles[index]
                 println("Devuelve "+p.escrituraIngles)
-                println("Lista filtro rojo "+l)
+                println("Lista filtro rojo "+listaPalabrasDificiles)
                 return p
             }
             else
                 return obtenerPalabra(lista)
         }
         //SI HA SALIDO UNA AMARILLA
-        if(porcentaje>11 && porcentaje<=30)
+        if(porcentaje>10 && porcentaje<=25)
         {
-            var l=lista.filter{it.probAcierto ==2}
-            if(l.isNotEmpty())
+            var listaPalabraMedias=lista.filter{it.probAcierto == PROBABILIDADAMARILLA}
+            if(listaPalabraMedias.isNotEmpty())
             {
-                var index=generacionNumeroAleatorio(0,l.size-1)
-                var p=l[index]
+                var index=generacionNumeroAleatorio(0,listaPalabraMedias.size-1)
+                var p=listaPalabraMedias[index]
                 println("Devuelve "+p.escrituraIngles)
-                println("Lista filtro amarillo "+l)
+                println("Lista filtro amarillo "+listaPalabraMedias)
                 return p
             }
             else
                 return obtenerPalabra(lista)
         }
         //SI HA SALIDO UNA VERDE
-        if(porcentaje<=11)
+        if(porcentaje<=10)
         {
 
-            var l=lista.filter{it.probAcierto ==3}
-            if(l.isNotEmpty())
+            var listaPalabrasFaciles=lista.filter{it.probAcierto == PROBABILIDADVERDE}
+            if(listaPalabrasFaciles.isNotEmpty())
             {
-                var index=generacionNumeroAleatorio(0,l.size-1)
-                var p=l[index]
+                var index=generacionNumeroAleatorio(0,listaPalabrasFaciles.size-1)
+                var p=listaPalabrasFaciles[index]
                 println("Devuelve "+p.escrituraIngles)
-                println("Lista filtro verde "+l)
+                println("Lista filtro verde "+listaPalabrasFaciles)
                 return p
             }
             else
@@ -114,6 +115,17 @@ class ClassTest(listaPalabras:MutableList<Entrada>) {
         }
 
         return palabrasMasFallos
+    }
+
+    fun masDeUnaConElMismoSignificado(pregunta:String):Boolean
+    {
+        //BUSCAMOS LAS PALABRAS QUE PUEDAN REPETIRSE SU SIGNIFICADO, POR EJEMPLO "actualizar" SE ESCRIBE "update" Y "actualize"
+        var listaPalabrasIguales=listaTest.filter{it.significado.toLowerCase().trim() == pregunta.toLowerCase().trim()}
+
+        if(listaPalabrasIguales.size>1)
+            return true
+        else
+            return false
     }
 
 }

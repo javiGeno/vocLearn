@@ -4,10 +4,12 @@ package morajavier.pdm.voclearn
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_dictionary.*
@@ -69,7 +71,7 @@ class MainActivity : AppCompatActivity(), DictionaryFragment.OnFragmentInteracti
         //AÑADIMOS FRAGMENT POR DEFECTO AL PULSAR AUTOMÁTICAMENTE EL BOTON
         navigation.selectedItemId=R.id.dictionary
 
-
+        println("VERSION SDK "+ Build.VERSION.SDK_INT)
         Log.i("MAIN", "La app entra en on create")
 
 

@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Environment
 import android.util.Log
 import android.view.ContextThemeWrapper
@@ -199,31 +200,31 @@ class SecurityCopy  {
             val permisosAudio = ActivityCompat.checkSelfPermission(act, Manifest.permission.RECORD_AUDIO)
 
 
-            if ((permisosEscritura != PackageManager.PERMISSION_GRANTED
-                && permisosLectura != PackageManager.PERMISSION_GRANTED)
-                || permisosAudio != PackageManager.PERMISSION_GRANTED) {
+                if ((permisosEscritura != PackageManager.PERMISSION_GRANTED
+                    && permisosLectura != PackageManager.PERMISSION_GRANTED)
+                    || permisosAudio != PackageManager.PERMISSION_GRANTED) {
 
-                permisosSiNo(
-                    act,
-                    act.getString(R.string.permisos),
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
-                )
+                    permisosSiNo(
+                        act,
+                        act.getString(R.string.permisos),
+                        PERMISSIONS_STORAGE,
+                        REQUEST_EXTERNAL_STORAGE
+                    )
 
-                Log.e("PERMISOS", "permisos asignados en tiempo de ejecucion para escribir")
+                    Log.e("PERMISOS", "permisos asignados en tiempo de ejecucion para escribir")
 
 
-            } else {
-                Log.e("PERMISOS", "Todos los permisos fueron concedidos")
-                perAceptados =true
+                } else {
+                    Log.e("PERMISOS", "Todos los permisos fueron concedidos")
+                    perAceptados =true
 
-            }
+                }
         }
 
 
         fun permisosSiNo(act: Activity, explicacion:String, permisos:Array<String>, codigoPermiso:Int) {
 
-            //IF UNO DE LOS PERMISOS DEL CONJUNTO DE PERMISOS PEDIDOS AL USUARIO, FUE DENEGADO SE LE DA UNA EXPLICACIÓN
+            //SI UNO DE LOS PERMISOS DEL CONJUNTO DE PERMISOS PEDIDOS AL USUARIO, FUE DENEGADO SE LE DA UNA EXPLICACIÓN
             //ANTES DE LA SOLICITUD DE PERMISOS
             //EN CASO CONTRARIO SE LE MUESTRA LA SOLICITUD DE PERMISOS DIRECTAMENTE
             if (shouldShowRequestPermissionRationale(act, permisos[0])) {

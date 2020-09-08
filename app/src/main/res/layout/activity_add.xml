@@ -209,7 +209,21 @@
                     android:textSize="12sp"
                     android:textStyle="italic" />
 
+                <Button
+                    android:id="@+id/btn_traductorGoogle"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="@dimen/margen3"
+                    android:layout_marginRight="@dimen/margen3"
+                    android:layout_marginBottom="@dimen/margen1"
+                    android:background="@mipmap/ic_launcher_transalate"
+                    android:contentDescription="@string/audio"
+                    android:textColor="@color/grisOscuro" />
+
             </LinearLayout>
+
+
 
 
         </LinearLayout>

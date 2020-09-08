@@ -15,6 +15,8 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.*
 import com.google.android.material.snackbar.Snackbar
 import io.realm.RealmResults
@@ -192,10 +194,11 @@ open class DictionaryFragment : Fragment(),
                 var translationX = dX
 
                 //OBTENEMOS EL ICONO QUE PONDREMOS DE FONDO
-                val trashBinIcon =resources.getDrawable(R.drawable.ic_delete_black_50dp)
+                val trashBinIcon=ContextCompat.getDrawable(recyclerView.context, R.drawable.ic_delete_black_50dp)
+
 
                 //ASIGNAMOS LA POSICION QUE TENDRÁ DENTRO DEL CANVAS
-                trashBinIcon.setBounds(
+                trashBinIcon!!.setBounds(
                     itemView.right-trashBinIcon.intrinsicWidth,
                     itemView.top +itemView.height/4,
                     itemView.right+0,

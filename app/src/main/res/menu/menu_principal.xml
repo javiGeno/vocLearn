@@ -2,17 +2,17 @@
 
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/folder"
-        android:icon="@drawable/ic_action_folder"
-        android:title="@string/folder" />
+<item
+    android:id="@+id/folder"
+    android:icon="@drawable/ic_action_folder"
+    android:title="@string/folder" />
 
-    <item
-        android:id="@+id/Test"
-        android:icon="@drawable/ic_action_examen"
-        android:title="@string/Test" />
-    <item
-        android:id="@+id/dictionary"
-        android:icon="@drawable/ic_action_dictionary"
-        android:title="@string/dictionary" />
+<item
+    android:id="@+id/Test"
+    android:icon="@drawable/ic_action_examen"
+    android:title="@string/Test" />
+<item
+    android:id="@+id/dictionary"
+    android:icon="@drawable/ic_action_dictionary"
+    android:title="@string/dictionary" />
 </menu>
