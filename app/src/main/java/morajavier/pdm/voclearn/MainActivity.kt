@@ -129,7 +129,17 @@ class MainActivity : AppCompatActivity(), DictionaryFragment.OnFragmentInteracti
 
     }
 
-    
+    override fun onDestroy() {
+        super.onDestroy()
+
+        //LIMPIAMOS DISCO DE ARCHIVOS INSERVIBLES
+        SecurityCopy.limpiezaDisco()
+        //CREAMOS UNA COPIA DE SEGURIDAD CADA VEZ QUE EL USUARIO SALGA DE LA APP
+        //SI TIENE PERMISOS
+        if(SecurityCopy.perAceptados)
+            SecurityCopy.hacerCopiaSeguridad(App.gestorBD.r, this)
+
+    }
 
 
 
