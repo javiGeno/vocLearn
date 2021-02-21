@@ -53,6 +53,19 @@ class AdapterSeleccion(var items: MutableList<Entrada>, contenedorPadre : Fragme
         holder.palabra.text=entradaActual.escrituraIngles
         holder.traduccion.text=entradaActual.significado
 
+        //COMPROBAMOS SI LA PALABRA ESTA EN LA LISTA, Y CONTROLAMOS EL CHECKEO DE LO CHECKBOX
+        if(listaCheckeada.contains(entradaActual.idEntrada)) {
+            println("La palabra " + entradaActual.significado + " esta en la lista sin check")
+            holder.check.setChecked(true);
+        }
+        else{
+            if(holder.check.isChecked) {
+                println("La palabra " + entradaActual.significado + " NO esta en la lista y está check ")
+                holder.check.setChecked(false);
+            }
+        }
+
+
         //SI PINCHAMOS ENCIMA DEL ELEMENTO TB CHECKEAMOS
         holder.itemView.click_Check.setOnClickListener{
            if (holder.check.isChecked)

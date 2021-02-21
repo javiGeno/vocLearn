@@ -26,18 +26,19 @@
         android:layout_height="match_parent">
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/nombre_carp"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margen0"
-            android:text="Hola"
+            android:layout_margin="@dimen/margen0"
+            android:text="22222222222222222222222222"
             android:textAlignment="center"
             android:textColor="@color/colorPrimary"
             android:textColorHint="@color/colorBeigh"
             android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
-            android:textSize="18sp"
             android:textStyle="bold"
             android:typeface="normal"
+            app:autoSizeTextType="none"
+            app:autoSizePresetSizes="@array/autosize_values_boton"
             app:fontFamily="sans-serif-smallcaps" />
     </RelativeLayout>
 

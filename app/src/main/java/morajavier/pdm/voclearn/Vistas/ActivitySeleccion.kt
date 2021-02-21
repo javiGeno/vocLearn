@@ -79,7 +79,7 @@ class ActivitySeleccion : AppCompatActivity(),
 
             val botones= btns_cancel_acept
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                Log.e("SCROLL RECYCLE", "eje y: "+dy)
+
                 if (dy > 0 && botones!!.isShown()) {
                     botones.setVisibility(View.GONE)
                 } else if (dy <= 0) {

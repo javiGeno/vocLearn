@@ -24,7 +24,12 @@ class AdapterSeleccTest (var items: MutableList<Grupo>, contenedorPadre : TestFr
 
     var contenedorPadre=contenedorPadre
     //MAP QUE GUARDARÁ LOS ID DE LAS ENTRADAS DE CADA GRUPO Y TODAS LAS QUE LLEVA ANIDADAS
-    var listaEntradasTest = mutableMapOf<Int, Int>()
+    var listaGruposTest = mutableListOf<Grupo>()
+    companion object{
+        const val ELEVACIONMAX=25.0f
+        const val SINELEVACION=0.0f
+
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderDatosFol {
         val vistaRecycle=
@@ -43,13 +48,33 @@ class AdapterSeleccTest (var items: MutableList<Grupo>, contenedorPadre : TestFr
         val grupo=items.get(position)
         holder.carpeta.text=grupo.nombreGrupo.toUpperCase()
 
-        holder.itemView.grupoTest.setOnClickListener{
-            contenedorPadre.seleccionar(it as CardView)
-            obtenerIdsEntrada(grupo.palabras!!)
-            recorrerConjuntos(grupo.listaConjuntos!!)
-            controlMap()
+        //COMPRUEBA SI REALMENTE LA SELECCION DE LA INTERFAZ CAZA CON LA SELECCIÓN DE GRUPOS PARA EL TEST
+        if(listaGruposTest.contains(grupo))
+        {
+            if( holder.itemView.grupoTest.cardElevation== SINELEVACION) {
+                println("El grupo " + grupo.nombreGrupo + " esta en la lista test pero no está seleccionado")
+                holder.itemView.grupoTest.cardElevation = ELEVACIONMAX
+            }
+        }
+        else{
+            if( holder.itemView.grupoTest.cardElevation== ELEVACIONMAX) {
+                println("El grupo " + grupo.nombreGrupo + " NO esta en la lista test pero está seleccionado")
+                holder.itemView.grupoTest.cardElevation = SINELEVACION
+            }
         }
 
+
+        holder.itemView.grupoTest.setOnClickListener{
+            contenedorPadre.seleccionar(it as CardView)
+            if(it.cardElevation== ELEVACIONMAX) {
+               listaGruposTest.add(grupo)
+            }
+            else {
+               listaGruposTest.remove(grupo)
+            }
+
+            controlMap()
+        }
 
 
     }
@@ -62,57 +87,21 @@ class AdapterSeleccTest (var items: MutableList<Grupo>, contenedorPadre : TestFr
 
     }
 
-    fun recorrerConjuntos(lista : List<Conjunto>)
-    {
-
-        for(i in lista){
-
-            i.listaPalabras?.let { obtenerIdsEntrada(it) }
-
-            i.listaConjuntos?.let{  recorrerConjuntos(it) }
-
-        }
-    }
-
-    fun obtenerIdsEntrada(lista : List<Entrada>)
-    {
-        //MAPEAMOS EL ID CON SU ID PARA QUE NO HAYA PALABRAS REPETIDAS EN LA LISTA DEL TEST CUANDO VAYAMOS A BUSCARLA A LA BD
-        //AQUÍ OBTENDREMOS UNA LISTA MAPEADA DE IDS, QUE LUEGO USAREMOS EN EL TEST PARA EXTRAER TODAS LAS PALABRAS
-        //Y PREGUNTARLE AL USUARIO
-        for(i in lista){
-
-            listaEntradasTest[i.idEntrada]=i.idEntrada
-
-        }
-
-
-    }
 
     fun controlMap()
     {
+        var orden =0;
+
         //CONTROL DE LA LISTA MAP
-        for(i in listaEntradasTest.keys){
+        for(i in listaGruposTest){
 
-            println("KEY MAP "+ i)
-            println("VALOR MAP"+ listaEntradasTest.getValue(i))
+            println(""+(orden+1)+"-GRUPOS ELEGIDO "+ i.nombreGrupo)
+            orden++
 
         }
     }
 
-    //VA A DEVOLVER UNA LISTA USANDO LAS KEYS DEL MAP, QUE SERÍA LAS ID DE LAS ENTRADAS SELECCIONADAS DE UNA CARPETA
-    //Y PASAREMOS AL INTENT PARA HACER EL TEST
-    fun obtenerIdsEntradas(): IntArray {
 
-        var lista=ArrayList<Int>()
-
-        for(i in listaEntradasTest.keys){
-
-            lista.add(i)
-
-        }
-
-        return lista.toIntArray()
-    }
 
 
 }

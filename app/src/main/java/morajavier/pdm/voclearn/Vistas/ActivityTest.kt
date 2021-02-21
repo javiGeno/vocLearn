@@ -45,12 +45,13 @@ class ActivityTest : AppCompatActivity() {
 
         test=ClassTest(obtenerListaParaTest(intent.getIntArrayExtra("listaIdsTest")))
 
+        mostrarPalabrasConsola(test);
+
         mostrarPalabra()
 
         sigPregunta.setOnClickListener{
 
-            var fallado=comprobarRespuesta()
-
+            var fallado=comprobarRespuesta(it)
 
             //SI NO TIENE AUDIO Y NO HA FALLADO O FALLA LA PREGUNTA, SIN TENER MÁS OPORTUNIDADES, SE MUESTRA OTRA PALABRA
             if((fallado && oportunidad==0)||(test.entradaPregunta.audio!!.isEmpty() && !fallado))
@@ -60,15 +61,20 @@ class ActivityTest : AppCompatActivity() {
             else{
                 //SI EL AUDIO TERMINA MOSTRAMOS PALABRA, DESPUÉS DE QUE TERMINE NO ANTES
                 if(::audio.isInitialized) {
-                    audio?.setOnCompletionListener { mostrarPalabra() }
+
+                    audio?.setOnCompletionListener {
+
+                        sigPregunta.setEnabled(true)
+                        mostrarPalabra()
+
+                    }
                 }
+
             }
 
 
 
         }
-
-
 
         btn_atras.setOnClickListener{
 
@@ -76,6 +82,14 @@ class ActivityTest : AppCompatActivity() {
             estadisticas()
             alertafinEstadisticas()
 
+        }
+    }
+
+    private fun mostrarPalabrasConsola(test: ClassTest) {
+
+        for(i in test.listaTest)
+        {
+            println("PALABRAS TEST :"+i.escrituraIngles)
         }
     }
 
@@ -97,7 +111,7 @@ class ActivityTest : AppCompatActivity() {
 
     }
 
-    fun comprobarRespuesta():Boolean
+    fun comprobarRespuesta(botonSig : View):Boolean
     {
         val respuesta=field_respuesta.text.toString()
         val pregunta=test.entradaPregunta.escrituraIngles
@@ -107,6 +121,11 @@ class ActivityTest : AppCompatActivity() {
         {
             cambioEstilo(R.drawable.borde_respuesta_acertada, R.color.dif_center_2)
 
+            if(!(test.entradaPregunta.audio!!.isEmpty()))
+                sigPregunta.setEnabled(false)
+            else{
+                sigPregunta.setEnabled(true)
+            }
 
             println("LISTA ACIERTO"+test.entradaPregunta)
 
@@ -139,6 +158,12 @@ class ActivityTest : AppCompatActivity() {
                     actualizacionProbPalabra(palabrasDistintoSig)
                     test.numeroAcertadas++
 
+                    if(!(test.entradaPregunta.audio!!.isEmpty()))
+                        sigPregunta.setEnabled(false)
+                    else{
+                        sigPregunta.setEnabled(true)
+                    }
+
                     return false
                 }
                 else
@@ -148,6 +173,9 @@ class ActivityTest : AppCompatActivity() {
                     }
 
                     haFallado(palabrasFalladas)
+
+                    sigPregunta.setEnabled(true)
+                    println("BOTON HABILITADo int")
 
                     oportunidad--
                     test.numeroFallidas++
@@ -161,6 +189,9 @@ class ActivityTest : AppCompatActivity() {
             {
                 haFallado(listOf(test.entradaPregunta))
 
+                sigPregunta.setEnabled(true)
+                println("BOTON HABILITADo erxt")
+
                 oportunidad--
                 test.numeroFallidas++
 
@@ -170,6 +201,8 @@ class ActivityTest : AppCompatActivity() {
 
         }
     }
+
+
 
     fun haFallado(entradasRespuesta:List<Entrada>)
     {

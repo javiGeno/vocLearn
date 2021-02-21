@@ -26,7 +26,19 @@ class AdapterFolder (var items: MutableList<Grupo>,  contenedorPadre : FolderFra
         val vistaRecycle=
             LayoutInflater.from(parent.context).inflate(R.layout.layout_folder, null, false)
 
+
+
         return ViewHolderDatosFol(vistaRecycle)
+    }
+
+    private fun recortarNombreCarpeta(nombreCarpeta: String): String {
+
+        if(nombreCarpeta.length>25){
+            return nombreCarpeta.substring(0, 20)+"..."
+        }
+        else{
+            return nombreCarpeta
+        }
     }
 
     override fun getItemCount(): Int {
@@ -38,6 +50,9 @@ class AdapterFolder (var items: MutableList<Grupo>,  contenedorPadre : FolderFra
 
         val grupoActual=items.get(position)
         holder.nombreCarpeta.setText(grupoActual.nombreGrupo)
+
+        //PASAMOS EL NOMBRE DE LA CARPETA PARA RECORTARLO EN CASO DE QUE TENGA MUCHOS CARACTERES
+        holder.nombreCarpeta.setText(recortarNombreCarpeta(holder.nombreCarpeta.text.toString()));
 
         holder.botonCarpeta.setOnClickListener{
 

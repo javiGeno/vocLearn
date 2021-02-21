@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.nothing_to_test.*
 import morajavier.pdm.voclearn.Adapter.AdapterSeleccTest
 import morajavier.pdm.voclearn.BaseDatos.CRUDEntradas
 import morajavier.pdm.voclearn.BaseDatos.CRUDGrupo
+import morajavier.pdm.voclearn.Modelo.Conjunto
 import morajavier.pdm.voclearn.Modelo.Entrada
 import morajavier.pdm.voclearn.Modelo.Grupo
 
@@ -36,7 +37,8 @@ class TestFragment : Fragment() {
     //CONTADOR QUE SIRVE PARA SABER CUANTAS CARPETAS SE HAN SELECCIONADO Y ASI PODER OFRECER
     //AL USUARIO ACCEDER AL TEST
     var seleccionados=0
-
+    //LISTA DE ENTRADAS QUE SE RELLENARAN RECORRIENDO RECURSIVAMENTE LOS CONJUNTOS SELECCIONADOS
+    var listaEntradasTest = mutableMapOf<Int, Int>()
 
     companion object{
         const val ELEVACIONMAX=25.0f
@@ -79,9 +81,56 @@ class TestFragment : Fragment() {
         btn_com_test.setOnClickListener{
             if(todasLasEntradas)
                 irATest(CRUDEntradas.obtenerTodosIdsEntradas())
-            else
-                irATest(adaptador!!.obtenerIdsEntradas())
+            else {
+
+                for(grupo in adaptador!!.listaGruposTest) {
+                    obtenerIdsEntrada(grupo.palabras!!)
+                    recorrerConjuntos(grupo.listaConjuntos!!)
+                }
+                irATest(obtenerIdsEntradas())
+            }
         }
+
+    }
+
+    fun recorrerConjuntos(lista : List<Conjunto>)
+    {
+
+        for(i in lista){
+
+            i.listaPalabras?.let { obtenerIdsEntrada(it) }
+
+            i.listaConjuntos?.let{  recorrerConjuntos(it) }
+
+        }
+    }
+
+    //VA A DEVOLVER UNA LISTA USANDO LAS KEYS DEL MAP, QUE SERÍA LAS ID DE LAS ENTRADAS SELECCIONADAS DE UNA CARPETA
+    //Y PASAREMOS AL INTENT PARA HACER EL TEST
+    fun obtenerIdsEntradas(): IntArray {
+
+        var lista=ArrayList<Int>()
+
+        for(i in listaEntradasTest.keys){
+
+            lista.add(i)
+
+        }
+
+        return lista.toIntArray()
+    }
+
+    fun obtenerIdsEntrada(lista : List<Entrada>)
+    {
+        //MAPEAMOS EL ID CON SU ID PARA QUE NO HAYA PALABRAS REPETIDAS EN LA LISTA DEL TEST CUANDO VAYAMOS A BUSCARLA A LA BD
+        //AQUÍ OBTENDREMOS UNA LISTA MAPEADA DE IDS, QUE LUEGO USAREMOS EN EL TEST PARA EXTRAER TODAS LAS PALABRAS
+        //Y PREGUNTARLE AL USUARIO
+        for(i in lista){
+
+            listaEntradasTest[i.idEntrada]=i.idEntrada
+
+        }
+
 
     }
 

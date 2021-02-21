@@ -40,7 +40,7 @@
                 android:layout_marginLeft="@dimen/margen3"
                 android:layout_marginTop="@dimen/margen3"
                 android:layout_marginRight="@dimen/margen3"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="5dp">
 
@@ -61,6 +61,7 @@
                     android:focusable="true"
                     android:gravity="center"
                     android:text="@string/preguntaTest"
+                    android:padding="@dimen/margen3"
                     android:textColor="@android:color/black"
                     android:textSize="30sp"
                     android:textStyle="bold"
