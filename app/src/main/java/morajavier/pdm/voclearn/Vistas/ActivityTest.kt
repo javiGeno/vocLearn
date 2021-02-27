@@ -45,9 +45,10 @@ class ActivityTest : AppCompatActivity() {
 
         test=ClassTest(obtenerListaParaTest(intent.getIntArrayExtra("listaIdsTest")))
 
+
         mostrarPalabrasConsola(test);
 
-        mostrarPalabra()
+        mostrarPrimeraPalabra()
 
         sigPregunta.setOnClickListener{
 
@@ -250,10 +251,13 @@ class ActivityTest : AppCompatActivity() {
     fun obtenerListaParaTest(listaIds: IntArray):MutableList<Entrada>
     {
         var palabras= mutableListOf<Entrada>()
+        var palabra:Entrada
 
         for(id in listaIds )
         {
-            palabras.add(CRUDEntradas.obtenerEntradaPorId(id)!!)
+            palabra=CRUDEntradas.obtenerEntradaPorId(id)!!
+            println("PALABRA OBTENIDA DEL ID: "+palabra.escrituraIngles)
+            palabras.add(palabra)
         }
 
         return palabras
@@ -263,6 +267,16 @@ class ActivityTest : AppCompatActivity() {
     {
         field_respuesta.setBackgroundResource(fondo)
         field_respuesta.setTextColor(ContextCompat.getColor(this, colorTexto))
+    }
+
+    fun mostrarPrimeraPalabra(){
+
+        test.entradaPregunta = test.obtenerPalabra(test.listaTest)
+        //ASIGNAMOS A LA ULTIMA PALABRA LA PALABRA QUE ACABA DE SALIR
+        test.ultimaMostrada = test.entradaPregunta.escrituraIngles!!
+        cardView.visibility = VISIBLE
+        field_pregunta.setText(getString(R.string.preguntaTest)+test.entradaPregunta.significado?.toUpperCase()+"\" ?")
+
     }
 
     fun mostrarPalabra()
@@ -287,7 +301,8 @@ class ActivityTest : AppCompatActivity() {
         //Y ACTUALIZAMOS PARA LA NUEVA PREGUNTA
         handler.postDelayed( {
 
-            cardView.visibility= VISIBLE
+            println("PALABRA QUE SE VA A MOSTRAR: "+test.entradaPregunta.significado?.toUpperCase())
+            cardView.visibility = VISIBLE
             field_pregunta.setText(getString(R.string.preguntaTest)+test.entradaPregunta.significado?.toUpperCase()+"\" ?")
             AnimaWidget.transiccion(cardView,0.0f, 1.0f, AnimaWidget.UNSEGUNDO.toLong())
             cambioEstilo(R.drawable.borde_respuesta_test, R.color.colorPrimary)
@@ -318,19 +333,31 @@ class ActivityTest : AppCompatActivity() {
 
 
         rellenarCamposVistaInformacion()
+        alertaFinTest()
 
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        test.listaTest.clear()
+    }
+
+    fun alertaFinTest()
+    {
         AlertDialog.Builder(ContextThemeWrapper(this, R.style.AlertDialog))
             .setView(vistaInformacion)
             .setPositiveButton(
                 R.string.aceptar,
                 { dialogInterface: DialogInterface, i: Int ->
+                    test.listaTest.clear()
+                    mostrarPalabrasConsola(test)
                     finish()
                 })
             .setNegativeButton(R.string.cancelar, {dialogInterface: DialogInterface, i: Int ->
                 dialogInterface.dismiss()
             })
             .create().show()
-
     }
 
 

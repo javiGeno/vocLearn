@@ -5,9 +5,11 @@ import android.content.Context
 import android.util.Log
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import morajavier.pdm.voclearn.App
 import morajavier.pdm.voclearn.Modelo.SecurityCopy
 
-class ManejadorBD (appContext:Context){
+class ManejadorBD
+    (appContext:Context){
 
     //INSTANCIA BD
     lateinit var r: Realm
@@ -37,6 +39,8 @@ class ManejadorBD (appContext:Context){
                 .build()
 
             Realm.setDefaultConfiguration(config)
+
+
 
 
             Log.w("MAIN", "Hay bd en local")

@@ -59,22 +59,31 @@ class MainActivity : AppCompatActivity(), DictionaryFragment.OnFragmentInteracti
         //PASAMOS EL CONTEXTO DEL MAINACTIVITY, NOS SERVIRA PARA COMPROBAR
         // LOS PERMISOS DE ESCRITURA Y LECTURA EXTERNA
         App.gestorBD.inyeccionContexto(this)
-        //COMPROBAMOS Y ACTUALIZAMOS LA BD LOCAL
-        App.gestorBD.actualizacionBD()
-        //OBTENEMOS LA INSTANCIA DE LA BD
-        App.gestorBD.crearInstanciaBD()
 
+        //SI HA BASE DE DATOS EN LOCAL HACEMOS LA OPERATIVA PARA CARGAR EL FRAGMENTS
+        //Y CARGAMOS LA INSTANCIA DE LA BD EXISTENTE
+        // SI NO LA HAY, ESPERAMOS A QUE SE ACTUALICE CUANDO EL USUARIO ACEPTE PERMISOS
+        if(SecurityCopy.hayBDLocal(this))
+        {
+            //COMPROBAMOS Y ACTUALIZAMOS LA BD LOCAL
+            App.gestorBD.actualizacionBD()
+            App.gestorBD.crearInstanciaBD()
+            cargarFrgamentPrincipal()
+        }
 
-
-        //PASAMOS EL RECEPTOR DE NAVEGACION A LA BARRA DE NAVEGACIÓN INFERIOR (navigation) PARA QUE ACTUE SEGUÚN LO QUE PULSE
-        navigation.setOnNavigationItemSelectedListener(receptorNavigation)
-        //AÑADIMOS FRAGMENT POR DEFECTO AL PULSAR AUTOMÁTICAMENTE EL BOTON
-        navigation.selectedItemId=R.id.dictionary
 
         println("VERSION SDK "+ Build.VERSION.SDK_INT)
         Log.i("MAIN", "La app entra en on create")
 
 
+    }
+
+    private fun cargarFrgamentPrincipal()
+    {
+        //PASAMOS EL RECEPTOR DE NAVEGACION A LA BARRA DE NAVEGACIÓN INFERIOR (navigation) PARA QUE ACTUE SEGUÚN LO QUE PULSE
+        navigation.setOnNavigationItemSelectedListener(receptorNavigation)
+        //AÑADIMOS FRAGMENT POR DEFECTO AL PULSAR AUTOMÁTICAMENTE EL BOTON
+        navigation.selectedItemId=R.id.dictionary
     }
 
     private fun cambiarFragmento(fragPrin: Fragment)
@@ -83,6 +92,8 @@ class MainActivity : AppCompatActivity(), DictionaryFragment.OnFragmentInteracti
         val fragmentTransaction=supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragmentsPrincipal, fragPrin, fragPrin.javaClass.getSimpleName())
         fragmentTransaction.commit()
+
+
     }
 
     //RESPUESTA PERMISOS
@@ -110,6 +121,13 @@ class MainActivity : AppCompatActivity(), DictionaryFragment.OnFragmentInteracti
 
                     SecurityCopy.perAceptados=false
                     Log.e("PERMISOS DENEGADOS ","permiso denegado")
+                    //COMPROBAMOS Y ACTUALIZAMOS LA BD LOCAL
+                    App.gestorBD.actualizacionBD()
+                    //OBTENEMOS LA INSTANCIA DE LA BD
+                    App.gestorBD.crearInstanciaBD()
+
+                    cargarFrgamentPrincipal()
+
 
                 }
                 else
@@ -117,6 +135,15 @@ class MainActivity : AppCompatActivity(), DictionaryFragment.OnFragmentInteracti
 
                     SecurityCopy.perAceptados=true
                     Log.e("PERMISOS ACEPTADOS ","permiso aceptado")
+                    //COMPROBAMOS Y ACTUALIZAMOS LA BD LOCAL
+                    App.gestorBD.actualizacionBD()
+                    //OBTENEMOS LA INSTANCIA DE LA BD
+                    App.gestorBD.crearInstanciaBD()
+
+                    cargarFrgamentPrincipal()
+
+
+
                 }
                 return
             }

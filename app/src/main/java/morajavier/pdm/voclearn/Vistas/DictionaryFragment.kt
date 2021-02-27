@@ -148,7 +148,7 @@ open class DictionaryFragment : Fragment(),
 
             val barraNavegacion= activity?.navigation
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                Log.e("SCROLL RECYCLE", "eje y: "+dy)
+
                 if (dy > 0 && barraNavegacion!!.isShown()) {
                     barraNavegacion.setVisibility(View.GONE)
                 } else if (dy <= 0) {

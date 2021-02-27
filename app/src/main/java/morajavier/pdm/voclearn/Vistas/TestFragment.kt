@@ -93,6 +93,13 @@ class TestFragment : Fragment() {
 
     }
 
+    override fun onStop() {
+        super.onStop()
+
+        //VACIAMOS LA LISTA DE IDS, PARA CUANDO VUELVA NO TENGA LOS ANTERIORES
+        listaEntradasTest.clear()
+    }
+
     fun recorrerConjuntos(lista : List<Conjunto>)
     {
 

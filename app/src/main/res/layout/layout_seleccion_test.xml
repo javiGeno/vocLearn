@@ -38,6 +38,8 @@
                     android:layout_marginTop="@dimen/margen0"
                     android:layout_marginRight="@dimen/margen0"
                     android:layout_marginBottom="@dimen/margen0"
+                    android:paddingLeft="@dimen/margen1"
+                    android:paddingRight="@dimen/margen1"
                     android:gravity="center"
                     android:text="@string/dictionary"
                     android:textColor="@color/grisOscuro"
